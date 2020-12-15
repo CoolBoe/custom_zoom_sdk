@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/screens/favourite.dart';
 import 'package:wooapp/screens/home.dart';
@@ -29,6 +30,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
     FavouriteScreen(),
     ProfileView(),
   ];
+
   List<ByCatgories> sortBy = [
     ByCatgories("Home", 0,'assets/icons/ic_home.svg'),
     ByCatgories("Shop", 1, 'assets/icons/ic_shop.svg'),
@@ -55,6 +57,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductsProvider>(context, listen: false);
+    final app= Provider.of<AppProvider>(context, listen: false);
     return Scaffold(
       body: PageStorage(
         child: currentScreen(currentTab),

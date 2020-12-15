@@ -50,6 +50,7 @@ class CategoriesScreenState extends State<CategoriesScreen>{
   final categoryProvider = Provider.of<CategoriesProvider>(context, listen: false);
   final productProvider = Provider.of<ProductsProvider>(context);
   final app= Provider.of<AppProvider>(context);
+
     return Scaffold(
      body: Container(
        decoration: BoxDecoration(color: Colors.white),
@@ -94,10 +95,14 @@ class CategoriesScreenState extends State<CategoriesScreen>{
                      ),
                      delegate: SliverChildBuilderDelegate(
                              (BuildContext context, int index){
+                               var imageUrl='https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg';
+                               if(categoryProvider.categories[index].image!=null){
+                                 imageUrl =categoryProvider.categories[index].image.src;
+                               }
                            return GestureDetector(onTap: ()async{
                              setState(() {
                                _selectItem  =index;
-                               _selectedItemID = categoryProvider.categories[index].id;
+                               _selectedItemID = categoryProvider.categories[index].id.toString();
                              });
                            },
                                child: Card(
@@ -114,7 +119,7 @@ class CategoriesScreenState extends State<CategoriesScreen>{
                                          mainAxisAlignment: MainAxisAlignment.center,
                                          crossAxisAlignment: CrossAxisAlignment.center,
                                          children: <Widget>[
-                                           // SvgPicture.asset(categoryProvider.categories[index].icon, alignment: Alignment.center, height: 30, width: 30, color: _selectItem==index ? Colors.white: Colors.black,),
+                                           Image.network(imageUrl, alignment: Alignment.center, height: 55, width: 60),
                                            Padding(
                                              padding: const EdgeInsets.all(8.0),
                                              child: Text(categoryProvider.categories[index].name, style: TextStyle( color: _selectItem==index ? Colors.white: Colors.black,
@@ -138,9 +143,8 @@ class CategoriesScreenState extends State<CategoriesScreen>{
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector (onTap: ()async{
-              BasePrefs.setString(CATEGORY_ID, _selectedItemID);
-
-             await productProvider.loadProductsByCategory(sort: 'default', page:'1', per_pag:'10',category: _selectedItemID);
+              BasePrefs.setString(PRODUCT_BY, CATEGORY);
+              await productProvider.loadProductsByCategory(sort: 'default', page:'1', per_page:'10',category: _selectedItemID);
               changeScreen(context, MainPageScreen(currentTab: 1,));
             },
             child:  Container(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,15 +8,23 @@ import 'package:provider/provider.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
+import 'package:wooapp/models/app.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/app.dart';
+import 'package:wooapp/providers/category.dart';
 import 'package:wooapp/providers/product.dart';
+import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/category.dart';
+import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/loading.dart';
+import 'package:wooapp/widgets/sortBy_ColorPicker.dart';
+import 'package:wooapp/widgets/sortBy_Dialog.dart';
+import 'package:wooapp/widgets/sortBy_DropMenu.dart';
+import 'package:wooapp/widgets/sortBy_SizeBuilder.dart';
 class ShopView extends StatefulWidget {
 
   ShopView({Key key}) : super(key: key);
@@ -25,7 +35,10 @@ class ShopView extends StatefulWidget {
 class ShopState extends State<ShopView>{
   String categoryID;
   int pageCount = 4;
+  Map<String, dynamic> priceRange;
   int sortByIndex = 0;
+  String minPrice = '0';
+  String maxPrice = '0';
 
   List<SortBy> sortBy = [
     SortBy('Popularity', 0),
@@ -35,17 +48,22 @@ class ShopState extends State<ShopView>{
     SortBy("Price: high to low", 4)
 
   ];
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   int currentTab = 0;
   @override
   void initState() {
   BasePrefs.init();
-    super.initState();
+  AppProvider.initialize();
+  CategoriesProvider.initialize();
+  super.initState();
   }
   @override
   Widget build(BuildContext context) {
   final productProvider = Provider.of<ProductsProvider>(context, listen: false);
   final app = Provider.of<AppProvider>(context);
+
     return Scaffold(
+      key: scaffoldKey,
       body:
       Container(
           decoration: BoxDecoration(color: Colors.white),
@@ -64,7 +82,10 @@ class ShopState extends State<ShopView>{
         left: 30,
         right: 30
       ),
-      child: GestureDetector(onTap: (){},
+      child: GestureDetector(onTap: (){
+        BasePrefs.setString(PRODUCT_BY, PRICE);
+        changeScreen(context, MainPageScreen(currentTab: 1,));
+      },
         child:  Container(
           height: 40.0,
           color: Colors.transparent,
@@ -307,21 +328,9 @@ class ShopState extends State<ShopView>{
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
     final double itemWidth = size.width / 2;
-    final productProvider =  Provider.of<ProductsProvider>(context, listen: false);
-    final app = Provider.of<AppProvider>(context, listen: false);
-    categoryID= BasePrefs.getString(CATEGORY_ID);
-    List<ProductModel> productList =[];
-      switch(app.product){
-        case 'Default':
-
-      }
-      productList = productProvider.products.where((i) => i.inStock).toList();
-
     SliverGrid grid= new SliverGrid(  delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index){
           return GestureDetector(onTap: () async{
-            ProductModel model= await productList[index];
-
           }, child: Container(
             height: 200,
             alignment: Alignment.topLeft,
@@ -333,7 +342,7 @@ class ShopState extends State<ShopView>{
                       height: 180,
                       child: FadeInImage(
                         placeholder: AssetImage('assets/images/bg_lock.png'),
-                        image: NetworkImage(productList.length >= 0 ? productList[index].images[0].src : 'assets/images/bg_lock.png'),
+                        image: NetworkImage(productList().length >= 0 ? productList()[index].images[0].src : 'assets/images/bg_lock.png'),
                       ),
                     ),
                     new Align(alignment: Alignment.topRight,
@@ -353,7 +362,7 @@ class ShopState extends State<ShopView>{
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(top:3.0, left: 5, bottom: 3, right: 5),
-                              child: Text(productList.length > 0 ?productList[index].ratingCount.toString(): "5",
+                              child: Text(productList().length > 0 ?productList()[index].ratingCount.toString(): "5",
                                 style: TextStyle( color: Colors.white,  fontFamily: 'Poppins', fontSize: 8.0,
                                   fontWeight: FontWeight.w600,),),
                             ),
@@ -363,7 +372,7 @@ class ShopState extends State<ShopView>{
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(productList.length >= 0 ? productProvider.products[index].name : "Woo App",
+                  child: Text(productList().length >= 0 ? productList()[index].name : "Woo App",
                     style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
                       fontWeight: FontWeight.w600,),),
                 ),
@@ -375,11 +384,11 @@ class ShopState extends State<ShopView>{
                         text: '',
                         children: <TextSpan>[
                           new TextSpan(
-                            text:productList.length >= 0 ?"₹ "+productProvider.products[index].price+"   ": "₹ 200 ",
+                            text:productList().length >= 0 ?"₹ "+productList()[index].price+"   ": "₹ 200 ",
                             style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
                               fontWeight: FontWeight.w600,),),
                           new TextSpan(
-                            text:  productList.length >= 0 ? "₹"+ productProvider.products[index].regularPrice: "₹ 250",
+                            text:  productList().length >= 0 ? "₹"+ productList()[index].regularPrice: "₹ 250",
                             style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0, decoration: TextDecoration.lineThrough,
                               fontWeight: FontWeight.w300,),),
                         ],
@@ -392,7 +401,7 @@ class ShopState extends State<ShopView>{
                   children:<Widget>[
                     RatingBar(
                         itemSize: 20,
-                        initialRating:double.parse(productList.length >= 0 ?productProvider.products[index].ratingCount.toString(): "5"),
+                        initialRating:double.parse(productList().length >= 0 ?productList()[index].ratingCount.toString(): "5"),
                         minRating: 1,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
@@ -416,7 +425,7 @@ class ShopState extends State<ShopView>{
                           print(rating);
                         }
                     ),
-                    Text(productList.length >= 0 ? " {"+productProvider.products[index].averageRating+"}" : "5",
+                    Text(productList().length >= 0 ? " {"+productList()[index].averageRating+"}" : "5",
                       style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
                         fontWeight: FontWeight.w600,),),
                   ],
@@ -424,7 +433,7 @@ class ShopState extends State<ShopView>{
               ],
             ),
           ),);
-        },childCount: productList.length
+        },childCount: productList().length
     ), gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
       maxCrossAxisExtent: 200.0,
       mainAxisSpacing: 10.0,
@@ -437,7 +446,35 @@ class ShopState extends State<ShopView>{
     );
   }
 
+  List<ProductModel> productList(){
+    final productProvider =  Provider.of<ProductsProvider>(context, listen: false);
+
+    List<ProductModel> list = [];
+      var productBy =BasePrefs.getString(PRODUCT_BY);
+      if(productBy!=null)return list=productProvider.products;
+      switch(productBy){
+        case "1":
+          list.clear();
+          list= productProvider.productsByCategory;
+          break;
+        case "2":
+          list.clear();
+          list= productProvider.productsByPrice;
+          printLog("productsByPrice", list.toString());
+          break;
+        case "3":
+          list.clear();
+          list= productProvider.productsByAttribute;
+          break;
+        default:
+          list.clear();
+          list= productProvider.products;
+          break;
+      }
+      return list;
+  }
   void SortByDialog(){
+    printLog('SortByDialog', 'SortByDialog');
   showGeneralDialog(
       barrierLabel: "label",
       barrierDismissible: true,
@@ -507,9 +544,9 @@ class ShopState extends State<ShopView>{
                         ),
                       ],),
                   ),
-                  // Expanded(
-                  //     child: sortByDialog(1)
-                  //     )
+                  Expanded(
+                      child: sortByDialog(1)
+                  )
                 ],
               ),
             ),
@@ -520,8 +557,12 @@ class ShopState extends State<ShopView>{
         return SlideTransition(position: Tween(begin: Offset(0,1), end: Offset(0,0)).animate(anim1),child: child,);
   });
   }
-
   void filterByDialog(){
+    final app = Provider.of<AppProvider>(context, listen: false);
+    final category = Provider.of<CategoriesProvider>(context, listen: false);
+   priceRange = app.priceRangeModel;
+   PriceRangeModel model= PriceRangeModel.fromJson(priceRange);
+   printLog("moddd", model.toJson());
     showGeneralDialog(
         barrierLabel: "label",
         barrierDismissible: true,
@@ -602,27 +643,26 @@ class ShopState extends State<ShopView>{
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black)),
-
                       ],),),
                     Padding(
-                      padding: const EdgeInsets.only(left:20.0, right: 20, top: 0),
+                      padding: const EdgeInsets.only(left:20.0, right: 20, top: 10),
                       child: FlutterSlider(
                           values: [40, 90],
                           handlerHeight: 19,
                           rangeSlider: true,
-                          max: 100,
-                          min: 0,
+                          min: model.min.toDouble(),
+                          max: model.max.toDouble(),
                           step: FlutterSliderStep(step: 1),
                           hatchMark: FlutterSliderHatchMark(
-                            labelsDistanceFromTrackBar: -15,
+                            labelsDistanceFromTrackBar: -30,
                             labels:[
-                              FlutterSliderHatchMarkLabel(percent: 3, label: Text('min',style: TextStyle(
+                              FlutterSliderHatchMarkLabel(percent: 0, label: Text('min',style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 10,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w400
                               ),)),
-                              FlutterSliderHatchMarkLabel(percent: 97, label: Text('max', style: TextStyle(
+                              FlutterSliderHatchMarkLabel(percent: 100, label: Text('max', style: TextStyle(
                                   fontSize: 10,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
@@ -683,22 +723,9 @@ class ShopState extends State<ShopView>{
                         ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 30, top: 0, bottom: 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Categories",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black)),
-
-                        ],),),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 5),
-                    //   child: sortByDropMenu(),
-                    // ),
+                      padding: const EdgeInsets.only(top: 5),
+                      child: sortByDropMenu(categoryList: category.categories,),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(left: 30, top: 8, bottom: 0),
                       child: Row(
@@ -711,7 +738,7 @@ class ShopState extends State<ShopView>{
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black)),
                         ],),),
-                 //   sortByColorPicker(),
+                    sortByColorPicker(),
                     Padding(
                       padding: EdgeInsets.only(left: 30, top: 8, bottom: 0),
                       child: Row(
@@ -724,7 +751,7 @@ class ShopState extends State<ShopView>{
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black)),
                         ],),),
-                    // sortBySizeBuilder(),
+                    sortBySizeBuilder(),
                     _filterbutton()
                   ],
                 ),

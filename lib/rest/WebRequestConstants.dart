@@ -25,6 +25,7 @@ class WebRequestConstants{
   static const String ALL_CATEGORIES="products/all-categories";
   static const String PRODUCT="products";
   static const String CUSTOM_PRODUCT="custom-products";
+  static const String PRICE_RANGE="products/price-range";
   static const String PRODUCT_BY_ID ="get-product-by-id";
   static const String CART = "cart";
   static const String ADD_CART = "cart/add";

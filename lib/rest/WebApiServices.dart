@@ -13,41 +13,7 @@ class WebApiServices {
   static const String BaseAuthId = "ck_182712e047bc83b22974476388360fca763c0005";
   static const String BaseAuthPass = "cs_3351fba7577bb78534600af478007e73f8babd4e";
   String BaseAuth =  'Basic ' + base64Encode(utf8.encode('$BaseAuthId:$BaseAuthPass'));
-  // @Post(path: 'login')
-  // Future<Response>userLogin(
-  //       @Path('email') String email,
-  //       @Path('password') String password,
-  //       @Path('mobile') String mobile,
-  //       @Path('country_code') String country_code,
-  //     );
-  //
-  // @Get(path: 'logout')
-  // Future<Response> userLogout(
-  // Future<Response> getPost(@Path('user_id') int user_id)
-  //     );
-  //
-  // @Post(path: 'register')
-  // Future<Response>userRegister(
-  //     @Body()Map<String, dynamic>body,
-  //     );
-  //
-  // @Post(path: 'forget-password')
-  // Future<Response> forgotPassword(@Path('user_id') int user_id);
-  //
-  // @Post(path: 'change-password')
-  // Future<Response>  changePassword(@Path('user_id') int user_id);
-  //
-  // static WebApiServices create(){
-  //   final client =ChopperClient(
-  //     baseUrl: WebRequestConstants.getBaseUrl,
-  //         services: [
-  //           _$WebApiServices();
-  //       ],
-  //   converter: JsonConverter(),
-  //   );
-  //   return _$WebApiServices(client);
-  // }
-  //
+
   Future<http.Response> userLogin(String email, String password){
     return http.post(WebRequestConstants.getBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.LOGIN, body:  {
       'email': email,
@@ -81,6 +47,7 @@ class WebApiServices {
     });
   }
   Future<http.Response> getCategories() {
+    printLog("imageURLL", WebRequestConstants.getBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.ALL_CATEGORIES);
     return http.get(WebRequestConstants.getBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.ALL_CATEGORIES);
   }
   Future<http.Response> getProducts(String sort, String page, String per_page) async {
@@ -95,6 +62,15 @@ class WebApiServices {
        var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CUSTOM_PRODUCT
         +'?sort=$sort&page=$page&per_page=$per_page&category=$category'
     );
+    return response;
+  }
+  Future<http.Response> getProductByPrice(String sort, String page, String per_page, String min_price, String max_price) async {
+    var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CUSTOM_PRODUCT
+        +'?sort=$sort&page=$page&per_page=$per_page&min_price=$min_price&max_price=$max_price');
+    return response;
+  }
+  Future<http.Response> getPriceRange() async {
+    var response=  await http.get(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.PRICE_RANGE);
     return response;
   }
 }

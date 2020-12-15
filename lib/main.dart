@@ -15,7 +15,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
       providers: [
-      ChangeNotifierProvider.value(value: AppProvider()),
+      ChangeNotifierProvider.value(value: AppProvider.initialize()),
       ChangeNotifierProvider.value(value: UserProvider.initialize()),
       ChangeNotifierProvider.value(value: CategoriesProvider.initialize()),
       ChangeNotifierProvider.value(value: ProductsProvider.initialize())

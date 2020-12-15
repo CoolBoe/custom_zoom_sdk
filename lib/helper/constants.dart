@@ -21,7 +21,11 @@ const String SOCIAL_LOGIN_MODE='mode';
 const String CATEGORY_ID='category_id';
 const String PIC_URL ='pic_url';
 const String LOGIN_STATUS_TRUE ='User Logged in Successfully';
+const String PRODUCT_BY='product_By';
 
+/*------------PriceRangeModel-------------------*/
+const String MIN_PRICE='min_price';
+const String MAX_PRICE ='max_price';
 
 /*------------Product Listing----------------------*/
 const String DEFAULT ='0';
