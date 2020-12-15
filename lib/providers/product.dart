@@ -10,8 +10,6 @@ class ProductsProvider with ChangeNotifier{
   String per_page = '10';
   List<ProductModel> products = [];
   List<ProductModel> productsByCategory = [];
-  List<ProductModel> productsByRestaurant = [];
-  List<ProductModel> productsSearched = [];
   ProductServices _productServices = ProductServices();
 
   ProductsProvider.initialize(){
@@ -23,9 +21,8 @@ class ProductsProvider with ChangeNotifier{
     products = await _productServices.getProducts(sort: sort, page: page, per_page: per_page);
     notifyListeners();
   }
-  Future loadProductsBySort({String sort, String page, String per_page }) async{
-    products = await _productServices.getProducts();
+  Future loadProductsByCategory({String sort, String page, String per_pag, String category }) async{
+    productsByCategory = await _productServices.getProductsByCategory();
     notifyListeners();
   }
-
 }

@@ -86,7 +86,14 @@ class WebApiServices {
   Future<http.Response> getProducts(String sort, String page, String per_page) async {
     printLog('loadProducts', sort+"=="+page+"=="+per_page);
     var response=  await http.get(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CUSTOM_PRODUCT
-        +"?"+"sort="+sort+"&"+"page="+page+"&"+"per_page="+per_page
+        +'?sort=$sort&page=$page&per_page=$per_page'
+    );
+    return response;
+  }
+
+  Future<http.Response> getProductByCategory(String sort, String page, String per_page, String category) async {
+       var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CUSTOM_PRODUCT
+        +'?sort=$sort&page=$page&per_page=$per_page&category=$category'
     );
     return response;
   }

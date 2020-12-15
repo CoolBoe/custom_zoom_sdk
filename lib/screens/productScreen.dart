@@ -6,17 +6,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/models/mockdata/item_colorpicker.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
+import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/product.dart';
 
 class ProductScreen extends StatefulWidget {
 
-  const ProductScreen({Key key}) : super(key: key);
+  ProductModel productModel;
+   ProductScreen({Key key, this.productModel}) : super(key: key);
   @override
   ProductScreenState createState()=>ProductScreenState();
 
 }
 
 class ProductScreenState extends State<ProductScreen>{
+  ProductModel productModel;
 
   Widget _cartDone(){
     return Padding(
@@ -49,7 +52,7 @@ class ProductScreenState extends State<ProductScreen>{
     return CustomScrollView(
       slivers: [
         SliverPersistentHeader(
-          delegate: MySliverAppBar(expandedHeight: 550),
+          delegate: MySliverAppBar(expandedHeight: 550, productModel: productModel),
           pinned: true,
         ),
         SliverPadding(
@@ -90,7 +93,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text('Clothing, Tshirts, women', style: TextStyle(
+                                child: Text(productModel.categories[0].name, style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -110,7 +113,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text('29', style: TextStyle(
+                                child: Text(productModel.totalSales.toString(), style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -130,7 +133,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text('Flats Brown', style: TextStyle(
+                                child: Text(productModel.sku, style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -150,7 +153,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text('Gray', style: TextStyle(
+                                child: Text(productModel.attributes[0], style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -167,7 +170,6 @@ class ProductScreenState extends State<ProductScreen>{
       ],
     );
   }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -176,7 +178,8 @@ class ProductScreenState extends State<ProductScreen>{
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return
+      Scaffold(
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
         child: RefreshIndicator(
@@ -206,7 +209,7 @@ class ProductScreenState extends State<ProductScreen>{
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('₹ 350.00', style: TextStyle(
+                Text('₹ '+productModel.price, style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 24)),
                 Row(
@@ -400,8 +403,9 @@ class ProductScreenState extends State<ProductScreen>{
 }
 class MySliverAppBar extends SliverPersistentHeaderDelegate{
   final double expandedHeight;
+  ProductModel productModel;
 
-  MySliverAppBar({@required this.expandedHeight});
+  MySliverAppBar({@required this.expandedHeight, this.productModel});
   List<ColorBy> sortByColor = [
     ColorBy(Colors.green, Colors.green[100],false),
     ColorBy(Colors.orange, Colors.orange[100], false),
@@ -432,7 +436,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
                ),
                child: Padding(
                  padding: const EdgeInsets.only(top: 60.0, bottom: 30),
-                 child: Image.network('https://app.tutiixx.com/wp-content/uploads/2019/01/T_6_front.jpg'),
+                 child: Image.network(productModel.images[0].src),
                ),
              ),
              Positioned(
@@ -479,7 +483,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
                              Row(
                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                children: <Widget>[
-                                 Text("Women Pink Top",
+                                 Text(productModel.name,
                                      style: TextStyle(
                                          fontFamily: 'Poppins',
                                          fontSize: 16.0,
@@ -491,7 +495,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                      children: <Widget>[
                                        Icon( Icons.star, color: Colors.orange,size: 20,),
-                                       Text("{5.0}",
+                                       Text("{"+ productModel.ratingCount.toString()+ "}",
                                            style: TextStyle(
                                                fontFamily: 'Poppins',
                                                fontSize: 10.0,
@@ -501,7 +505,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
                                    ),
                                  ),
                                ],),
-                             Text("Baby pink color top for women",
+                             Text(productModel.description,
                                  style: TextStyle(
                                      fontFamily: 'Poppins',
                                      fontSize: 10.0,

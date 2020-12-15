@@ -32,4 +32,26 @@ class ProductServices{
     }
     return products;
   });
+
+  Future<List<ProductModel>>getProductsByCategory({String sort, String page, String per_page, String category}) => WebApiServices().getProductByCategory(sort,page, per_page, category ).then((data){
+    if(data.statusCode==HTTP_CODE_200){
+      printLog("API getProductByCategory200 =>", data.body.toString());
+      List<dynamic> values = new List<dynamic>();
+      if(data.body.isNotEmpty){
+        values =json.decode(data.body);
+        if(values.length>0){
+          for(int i=0; i<values.length; i++ ){
+            if(values[i]!=null){
+              Map<String,dynamic> map = values[i];
+              products.add(ProductModel.fromJson(map));
+            }
+          }
+        }
+      }
+    }else{
+      printLog("API getProduct Errorr Massage", data.body);
+      toast(NETWORK_ERROR);
+    }
+    return products;
+  });
 }

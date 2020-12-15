@@ -2,11 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/category.dart';
+import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/mainpage.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 class CategoriesScreen extends StatefulWidget {
 
@@ -17,7 +22,7 @@ class CategoriesScreen extends StatefulWidget {
 }
 class CategoriesScreenState extends State<CategoriesScreen>{
   int _selectItem = 0;
-
+  String _selectedItemID ;
   List<ByCatgories> productbycategories = [
     ByCatgories('Glasses', 0, "assets/icons/ic_eyeglasses.svg"),
     ByCatgories('Hoodies', 1, "assets/icons/ic_hoodie.svg"),
@@ -31,6 +36,7 @@ class CategoriesScreenState extends State<CategoriesScreen>{
   ];
 @override
   void initState() {
+  BasePrefs.init();
   CategoriesProvider.initialize();
   // TODO: implement initState
     super.initState();
@@ -42,7 +48,8 @@ class CategoriesScreenState extends State<CategoriesScreen>{
     final double itemWidth = size.width / 2;
 
   final categoryProvider = Provider.of<CategoriesProvider>(context, listen: false);
-
+  final productProvider = Provider.of<ProductsProvider>(context);
+  final app= Provider.of<AppProvider>(context);
     return Scaffold(
      body: Container(
        decoration: BoxDecoration(color: Colors.white),
@@ -67,7 +74,6 @@ class CategoriesScreenState extends State<CategoriesScreen>{
                    floating: true,
                    leading: GestureDetector(
                        onTap: (){
-                         changeScreenReplacement(context, MainPageScreen());
                        },
                        child: Icon(
                          Icons.arrow_back, color: Colors.black,
@@ -88,9 +94,10 @@ class CategoriesScreenState extends State<CategoriesScreen>{
                      ),
                      delegate: SliverChildBuilderDelegate(
                              (BuildContext context, int index){
-                           return GestureDetector(onTap: (){
+                           return GestureDetector(onTap: ()async{
                              setState(() {
                                _selectItem  =index;
+                               _selectedItemID = categoryProvider.categories[index].id;
                              });
                            },
                                child: Card(
@@ -130,7 +137,13 @@ class CategoriesScreenState extends State<CategoriesScreen>{
          color: Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
+            child: GestureDetector (onTap: ()async{
+              BasePrefs.setString(CATEGORY_ID, _selectedItemID);
+
+             await productProvider.loadProductsByCategory(sort: 'default', page:'1', per_pag:'10',category: _selectedItemID);
+              changeScreen(context, MainPageScreen(currentTab: 1,));
+            },
+            child:  Container(
               height: 40,
               decoration: BoxDecoration(
                 color:  Colors.orange,
@@ -141,7 +154,8 @@ class CategoriesScreenState extends State<CategoriesScreen>{
                     color: Colors.white,
                     fontFamily: 'Poppins', fontWeight: FontWeight.w400, fontSize: 14)),
               ),
-            ),
+            ),)
+
           )
       )
     );

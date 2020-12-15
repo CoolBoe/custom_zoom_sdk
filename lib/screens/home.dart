@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/screens/category.dart';
-import 'package:wooapp/screens/products.dart';
+import 'package:wooapp/screens/productScreen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';

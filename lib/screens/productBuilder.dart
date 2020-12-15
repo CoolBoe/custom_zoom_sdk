@@ -3,25 +3,30 @@ import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/constants.dart';
+import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
+import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/product.dart';
+import 'package:wooapp/screens/category.dart';
+import 'package:wooapp/screens/productScreen.dart';
+import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/loading.dart';
 class ShopView extends StatefulWidget {
 
-  const ShopView({Key key}) : super(key: key);
+  ShopView({Key key}) : super(key: key);
   @override
   ShopState createState()=>ShopState();
 
 }
-
 class ShopState extends State<ShopView>{
-
+  String categoryID;
   int pageCount = 4;
   int sortByIndex = 0;
 
-  List<String> _images = List();
   List<SortBy> sortBy = [
     SortBy('Popularity', 0),
     SortBy('Average Rating', 1),
@@ -30,56 +35,10 @@ class ShopState extends State<ShopView>{
     SortBy("Price: high to low", 4)
 
   ];
-  List<Item> itemList = [
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_6_front-600x600.jpg",
-        "Black Hoodie",
-        "₹ 450.00",
-        "4.5",
-        true,
-        "21"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/T_6_front.jpg",
-        "T-Shirt",
-        "₹ 400.00",
-        "4.5",
-        true,
-        "0"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/T_5_front-600x600.jpg",
-        "T-Shirt",
-        "₹ 350.00",
-        "4.5",
-        true,
-        "0"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/T_1_front.jpg",
-        "T-Shirt",
-        "₹ 290.00",
-        "4.5",
-        true,
-        "0"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_7_front-600x600.jpg",
-        "Hoodie",
-        "₹ 920.00",
-        "4.5",
-        true,
-        "0"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/long-sleeve-tee-2-600x600.jpg",
-        "Long Sleeve Tee",
-        "₹ 220.00",
-        "4.5",
-        true,
-        "0"),
-  ];
   int currentTab = 0;
   @override
   void initState() {
-
-   var product =  ProductsProvider.initialize();
-    // TODO: implement initState
+  BasePrefs.init();
     super.initState();
   }
   @override
@@ -123,11 +82,6 @@ class ShopState extends State<ShopView>{
         ),),);
   }
   Widget _CustomScrollView(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
-    final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
-    final double itemWidth = size.width / 2;
-    final productProvider =  Provider.of<ProductsProvider>(context, listen: false);
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
@@ -169,6 +123,7 @@ class ShopState extends State<ShopView>{
                     child:  GestureDetector(
                       onTap: (){setState(() {
                         currentTab=0;
+                        changeScreen(context, CategoriesScreen());
                       });},
                       child: Container(
                         height: 35,
@@ -343,120 +298,143 @@ class ShopState extends State<ShopView>{
             ),
           ),
         ),
-        SliverPadding(padding: EdgeInsets.all(8),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: (itemWidth/itemHeight),
-            ),
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index){
-                  return Container(
-                    height: 200,
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      children: <Widget>[
-                        Stack(
-                          children: <Widget>[
-                            Container(
-                              height: 180,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          productProvider.products[index].images[0].src),fit: BoxFit.fill
-                                  )
-                              ),
-                              child: FadeInImage(
-                                placeholder: AssetImage('assets/images/bg_lock.png'),
-                                image: NetworkImage(productProvider.products[index].images[0].src),
-                              ),
-                               ),
-                            new Align(alignment: Alignment.topRight,
-                              child:
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SvgPicture.asset('assets/icons/ic_heart.svg', color: Colors.red,),
-                              ),),
-                            new Align(alignment: Alignment.topLeft,
-                              child:
-                              Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.amber,
-                                        borderRadius: BorderRadius.all(Radius.circular(5.0))
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top:3.0, left: 5, bottom: 3, right: 5),
-                                      child: Text(productProvider.products[index].ratingCount.toString(),
-                                        style: TextStyle( color: Colors.white,  fontFamily: 'Poppins', fontSize: 8.0,
-                                          fontWeight: FontWeight.w600,),),
-                                    ),
-                                  )
-                              ),)
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(productProvider.products[index].name,
-                            style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                              fontWeight: FontWeight.w600,),),
-                        ),
-                        Text(productProvider.products[index].price,
-                          style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                            fontWeight: FontWeight.w600,),),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children:<Widget>[
-                            RatingBar(
-                                itemSize: 20,
-                                initialRating:double.parse(productProvider.products[index].ratingCount.toString()),
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 5,
-                                itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                                ratingWidget: RatingWidget(
-                                    full: new Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    half: new Icon(
-                                      Icons.star_half,
-                                      color: Colors.amber,
-                                    ),
-                                    empty: new Icon(
-                                      Icons.star_border,
-                                      color: Colors.amber,
-                                    )
-                                ),
-                                onRatingUpdate: (rating){
-                                  print(rating);
-                                }
-                            ),
-                            Text(" {"+productProvider.products[index].averageRating+"}",
-                              style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                                fontWeight: FontWeight.w600,),),
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                },childCount:getItemCount(productProvider.products.length)
-            ),
-          ),
-        ),
+        SliverDataBuilder(context)
       ],
     );
   }
-  int getItemCount(int count){
-    print("productcount=> "+count.toString());
-      if(count==0){
-        return itemList.length;
+
+  Widget SliverDataBuilder(BuildContext context){
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
+    final double itemWidth = size.width / 2;
+    final productProvider =  Provider.of<ProductsProvider>(context, listen: false);
+    final app = Provider.of<AppProvider>(context, listen: false);
+    categoryID= BasePrefs.getString(CATEGORY_ID);
+    List<ProductModel> productList =[];
+      switch(app.product){
+        case 'Default':
+
       }
-    return count;
+      productList = productProvider.products.where((i) => i.inStock).toList();
+
+    SliverGrid grid= new SliverGrid(  delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index){
+          return GestureDetector(onTap: () async{
+            ProductModel model= await productList[index];
+
+          }, child: Container(
+            height: 200,
+            alignment: Alignment.topLeft,
+            child: Column(
+              children: <Widget>[
+                Stack(
+                  children: <Widget>[
+                    Container(
+                      height: 180,
+                      child: FadeInImage(
+                        placeholder: AssetImage('assets/images/bg_lock.png'),
+                        image: NetworkImage(productList.length >= 0 ? productList[index].images[0].src : 'assets/images/bg_lock.png'),
+                      ),
+                    ),
+                    new Align(alignment: Alignment.topRight,
+                      child:
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.asset('assets/icons/ic_heart.svg', color: Colors.red,),
+                      ),),
+                    new Align(alignment: Alignment.topLeft,
+                      child:
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.amber,
+                                borderRadius: BorderRadius.all(Radius.circular(5.0))
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top:3.0, left: 5, bottom: 3, right: 5),
+                              child: Text(productList.length > 0 ?productList[index].ratingCount.toString(): "5",
+                                style: TextStyle( color: Colors.white,  fontFamily: 'Poppins', fontSize: 8.0,
+                                  fontWeight: FontWeight.w600,),),
+                            ),
+                          )
+                      ),)
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(productList.length >= 0 ? productProvider.products[index].name : "Woo App",
+                    style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
+                      fontWeight: FontWeight.w600,),),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    new RichText(
+                      text: new TextSpan(
+                        text: '',
+                        children: <TextSpan>[
+                          new TextSpan(
+                            text:productList.length >= 0 ?"₹ "+productProvider.products[index].price+"   ": "₹ 200 ",
+                            style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
+                              fontWeight: FontWeight.w600,),),
+                          new TextSpan(
+                            text:  productList.length >= 0 ? "₹"+ productProvider.products[index].regularPrice: "₹ 250",
+                            style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0, decoration: TextDecoration.lineThrough,
+                              fontWeight: FontWeight.w300,),),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:<Widget>[
+                    RatingBar(
+                        itemSize: 20,
+                        initialRating:double.parse(productList.length >= 0 ?productProvider.products[index].ratingCount.toString(): "5"),
+                        minRating: 1,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 0),
+                        ratingWidget: RatingWidget(
+                            full: new Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            half: new Icon(
+                              Icons.star_half,
+                              color: Colors.amber,
+                            ),
+                            empty: new Icon(
+                              Icons.star_border,
+                              color: Colors.amber,
+                            )
+                        ),
+                        onRatingUpdate: (rating){
+                          print(rating);
+                        }
+                    ),
+                    Text(productList.length >= 0 ? " {"+productProvider.products[index].averageRating+"}" : "5",
+                      style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
+                        fontWeight: FontWeight.w600,),),
+                  ],
+                )
+              ],
+            ),
+          ),);
+        },childCount: productList.length
+    ), gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+      maxCrossAxisExtent: 200.0,
+      mainAxisSpacing: 10.0,
+      crossAxisSpacing: 10.0,
+      childAspectRatio: (itemWidth/itemHeight),
+    ));
+
+   return SliverPadding(padding: EdgeInsets.all(8),
+      sliver: grid
+    );
   }
 
   void SortByDialog(){

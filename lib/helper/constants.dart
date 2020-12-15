@@ -18,9 +18,16 @@ const String COUNTRY ='country';
 const String POSTCODE ='postcode';
 const String CITY ='city';
 const String SOCIAL_LOGIN_MODE='mode';
+const String CATEGORY_ID='category_id';
 const String PIC_URL ='pic_url';
 const String LOGIN_STATUS_TRUE ='User Logged in Successfully';
 
+
+/*------------Product Listing----------------------*/
+const String DEFAULT ='0';
+const String CATEGORY ='1';
+const String PRICE ='2';
+const String ATTRIBUTE ='3';
 
 /*----------Error Massage----------------------*/
 const String NETWORK_ERROR ='Something Went Wrong';

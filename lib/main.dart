@@ -36,7 +36,7 @@ class ScreensController extends StatelessWidget {
     print(auth.status);
     switch (auth.status) {
       case Status.Authorized:
-        return MainPageScreen();
+        return MainPageScreen(currentTab: 0,);
       case Status.Unauthorized:
         return SpleshScreen();
       default:

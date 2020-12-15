@@ -8,19 +8,21 @@ import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/screens/favourite.dart';
 import 'package:wooapp/screens/home.dart';
 import 'package:wooapp/screens/profile.dart';
-import 'package:wooapp/screens/shop.dart';
+import 'package:wooapp/screens/productBuilder.dart';
 
 class MainPageScreen extends StatefulWidget{
   int currentTab = 0;
-  MainPageScreen(  {Key key}) : super(key: key);
+  MainPageScreen(  {Key key, this.currentTab}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return MainPageScreenState();
+    return MainPageScreenState(currentTab);
   }
 }
 class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
   bool _toggel = true;
-  int currentTab = 0;
+  int currentTab ;
+
+  MainPageScreenState(this.currentTab);
   final List<Widget> screens = [
     HomeView(),
     ShopView(),
@@ -38,14 +40,24 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = HomeView();
-
+  Widget  currentScreen(int screenId){
+    switch(screenId){
+      case 0:
+        return HomeView();
+      case 1:
+        return ShopView();
+      case 2:
+        return FavouriteScreen();
+      case 3:
+        return ProfileView();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<ProductsProvider>(context, listen: false);
     return Scaffold(
       body: PageStorage(
-        child: currentScreen,
+        child: currentScreen(currentTab),
         bucket: bucket,
       ),
       floatingActionButton: FloatingActionButton(
@@ -70,8 +82,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
                   MaterialButton(
                     minWidth: 80,
                     onPressed: (){setState(() {
-                      currentScreen= HomeView();
                       currentTab=0;
+                      currentScreen(currentTab);
                     });
                     },
                     child: Column(
@@ -85,8 +97,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
                     minWidth: 80,
                     onPressed: () {
                        setState(()  {
-                         currentScreen = ShopView();
                          currentTab=1;
+                         currentScreen(currentTab);
                     });
                     },
                     child: Column(
@@ -104,9 +116,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
                   MaterialButton(
                     minWidth: 80,
                     onPressed: (){setState(() {
-                      currentScreen= FavouriteScreen();
-                      notifyListeners();
                       currentTab=2;
+                      currentScreen(currentTab);
                     });
                     },
                     child: Column(
@@ -119,8 +130,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
                   MaterialButton(
                     minWidth: 80,
                     onPressed: (){setState(() {
-                      currentScreen= ProfileView();
                       currentTab=3;
+                      currentScreen(currentTab);
                     });
                     },
                     child: Column(
