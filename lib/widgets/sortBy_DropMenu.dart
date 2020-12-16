@@ -7,70 +7,35 @@ import 'package:wooapp/widgets/loading.dart';
 
 class sortByDropMenu extends StatefulWidget{
   List<CategoryModel> categoryList;
-  final int num;
-  sortByDropMenu({Key key, this.num, this.categoryList}) : super(key: key);
-
+  final ValueChanged<CategoryModel> onChanged;
+  CategoryModel defaultValue ;
+  String hint;
+  sortByDropMenu({
+    Key key,
+    this.defaultValue,
+    this.categoryList,
+    this.onChanged,
+    this.hint})
+      : super(key: key);
 
   @override
-  sortByDropMenuState createState()=>sortByDropMenuState(byCatgories: categoryList);
-
+  sortByDropMenuState createState()=>sortByDropMenuState();
 
 }
 
 class sortByDropMenuState extends State<sortByDropMenu>{
   List<CategoryModel> byCatgories;
-
-  sortByDropMenuState({Key key,  this.byCatgories});
+  CategoryModel selectedItem;
 
   List<DropdownMenuItem<CategoryModel>> _dropdownMenuItems;
-  CategoryModel _selectedCategori;
   @override
   void initState() {
-    _dropdownMenuItems = buildDropdownMenuItems(byCatgories);
-    _selectedCategori= _dropdownMenuItems[0].value;
     super.initState();
   }
-  List<DropdownMenuItem<CategoryModel>> buildDropdownMenuItems(List companies) {
-    List<DropdownMenuItem<CategoryModel>> items = List();
-    for (CategoryModel category in companies) {
-      var imageUrl='https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg';
-      if(category.image!=null){
-        imageUrl = category.image.src;
-      }
-      printLog("imageURL", category.image);
-      items.add(
-        DropdownMenuItem(
 
-          value: category,
-          child: SizedBox(
-            height: 30,
-            child: Row(
-              children: [
-                Image.network(imageUrl, height: 15, width: 15),
-                Padding(
-                  padding: const EdgeInsets.only(left:10.0),
-                  child: Text(category.name, style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Poppins',
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400
-                  ),),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-    return items;
-  }
-  onChangeDropdownItem(CategoryModel selectedCategori) {
-    setState(() {
-      _selectedCategori = selectedCategori;
-    });
-  }
   @override
   Widget build(BuildContext context) {
+
       return Padding(
         padding: const EdgeInsets.only(left:30.0, right: 30),
         child: Container(
@@ -82,13 +47,49 @@ class sortByDropMenuState extends State<sortByDropMenu>{
             height: 30,
             child: Padding(
               padding: const EdgeInsets.only(left:15.0, right: 15),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  isExpanded: true,
-                  value: _selectedCategori,
-                  items: _dropdownMenuItems,
-                  onChanged: onChangeDropdownItem,
-                ),
+              child: DropdownButton<CategoryModel>(
+                items: widget.categoryList.map((model) {
+                  var imageUrl='https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg';
+                  if(model.image!=null){
+                    imageUrl = model.image.src;
+                  }
+                  return new DropdownMenuItem<CategoryModel>(
+                    value: model,
+                    child: SizedBox(
+                      height: 30,
+                      child: Row(
+                        children: [
+                          Image.network(imageUrl, height: 15, width: 15),
+                          Padding(
+                            padding: const EdgeInsets.only(left:10.0),
+                            child: Text(model.name, style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Poppins',
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400
+                            ),),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+                value: selectedItem == null ? widget.defaultValue : selectedItem,
+                isExpanded: true,
+                onChanged: (CategoryModel model){
+                   setState(() {
+                     selectedItem=  model;
+                  });
+                  printLog("datahh", model.id.toString());
+                  widget.onChanged(model);
+                },
+                hint: Text(widget.hint, style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Poppins',
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400
+                ),),
+                underline: Container(),
               )
             ),
           ),
@@ -96,3 +97,11 @@ class sortByDropMenuState extends State<sortByDropMenu>{
       ) ;
   }
 }
+// DropdownButtonHideUnderline(
+//                 child: DropdownButton(
+//                   isExpanded: true,
+//                   value: selectedItem,
+//                   items: _dropdownMenuItems,
+//                   onChanged: onChangeDropdownItem,
+//                 ),
+//               )

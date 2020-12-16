@@ -22,6 +22,7 @@ const String CATEGORY_ID='category_id';
 const String PIC_URL ='pic_url';
 const String LOGIN_STATUS_TRUE ='User Logged in Successfully';
 const String PRODUCT_BY='product_By';
+const String CHOOSE_CATEGORY = 'Choose Category';
 
 /*------------PriceRangeModel-------------------*/
 const String MIN_PRICE='min_price';
@@ -31,7 +32,12 @@ const String MAX_PRICE ='max_price';
 const String DEFAULT ='0';
 const String CATEGORY ='1';
 const String PRICE ='2';
-const String ATTRIBUTE ='3';
+const String BRAND ='3';
+const String FEATURED ='4';
+const String ON_SALE ='5';
+const String BYSEARCH = '6';
+
+/*------------Product Sorting----------------------*/
 
 /*----------Error Massage----------------------*/
 const String NETWORK_ERROR ='Something Went Wrong';

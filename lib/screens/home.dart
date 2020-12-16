@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:wooapp/helper/productList.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/screens/category.dart';
@@ -29,23 +30,7 @@ class HomeState extends State<HomeView> {
   GlobalKey<ScaffoldState> _key = GlobalKey();
   List<String> _images = List();
 
-  List<Item> itemList = [
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_6_front-600x600.jpg",
-        "Hoodie",
-        "₹ 450.00",
-        "4.5",
-        true,
-        "0"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/T_6_front.jpg",
-        "T-Shit",
-        "₹ 400.00",
-        "4.5",
-        true,
-        "0"),
 
-  ];
   int currentTab = 0;
   int _selectItem = 0;
   @override
@@ -409,7 +394,7 @@ class HomeState extends State<HomeView> {
             delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index){
                   return _itemBuilder( context, index);
-                },childCount: itemList.length
+                },childCount: productList(context).length
             ),
           ),
         ),
@@ -459,7 +444,7 @@ class HomeState extends State<HomeView> {
             delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index){
                   return _itemBuilder( context, index);
-                },childCount: itemList.length
+                },childCount: productList(context).length
             ),
           ),
         ),
@@ -493,7 +478,7 @@ class HomeState extends State<HomeView> {
     );
   }
   Widget _itemBuilder(BuildContext context, int index ){
-    double rating = double.parse(itemList[index].stars);
+    double rating = double.parse(productList(context)[index].ratingCount.toString());
     return GestureDetector(onTap: (){
       Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductScreen()));
     },
@@ -508,7 +493,7 @@ class HomeState extends State<HomeView> {
                 height: 180,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(itemList[index].item_image),fit: BoxFit.fill
+                        image: NetworkImage(productList(context)[index].images[0].src),fit: BoxFit.fill
                     )
                 ),
                 // child: Image.network(itemList[index].item_image, fit: BoxFit.fill)
@@ -523,11 +508,11 @@ class HomeState extends State<HomeView> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: Text(itemList[index].item_name,
+            child: Text(productList(context)[index].name,
               style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
                 fontWeight: FontWeight.w600,),),
           ),
-          Text(itemList[index].price,
+          Text(productList(context)[index].price,
             style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
               fontWeight: FontWeight.w600,),),
           Row(
@@ -559,7 +544,7 @@ class HomeState extends State<HomeView> {
                     print(rating);
                   }
               ),
-              Text(" {"+itemList[index].stars+"}",
+              Text(" {"+productList(context)[index].ratingCount.toString()+"}",
                 style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
                   fontWeight: FontWeight.w600,),),
             ],
@@ -568,15 +553,11 @@ class HomeState extends State<HomeView> {
         ],
       ),
     ),);
-
-
   }
-
 
   Widget _buildDrawer() {
     return Container(
       width: 250,
-
         child:  ClipRRect(
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(5), bottomRight: Radius.circular(5)),
@@ -658,13 +639,6 @@ class HomeState extends State<HomeView> {
                       height: 400,
                       child: ItemDrawerBuilder(),
                     ),
-                    // _itemDrawer('assets/icons/ic_home.svg', 'Home'),
-                    // _itemDrawer('assets/icons/ic_shop.svg', 'Shop'),
-                    // _itemDrawer('assets/icons/ic_categories.svg', 'Shop by Category'),
-                    // _itemDrawer('assets/icons/ic_chat.svg', 'Chat Support'),
-                    // _itemDrawer('assets/icons/ic_call.svg', 'Contact Us'),
-                    // _itemDrawer('assets/icons/ic_support.svg', 'Terms of Service'),
-                    // _itemDrawer('assets/icons/ic_rating.svg', 'Give Feedback'),
                     Expanded(child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(

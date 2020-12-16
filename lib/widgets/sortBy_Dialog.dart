@@ -15,11 +15,12 @@ class sortByDialog extends StatefulWidget{
 class sortByDialogState extends State<sortByDialog>{
   int value = 0;
   List<SortBy> sortBy = [
-    SortBy('Popularity', 0),
-    SortBy('Average Rating', 1),
-    SortBy("What's New", 2),
-    SortBy("Price: Low to High", 3),
-    SortBy("Price: high to low", 4)
+    SortBy('Default', 0),
+    SortBy('Popularity', 1),
+    SortBy("Rating", 2),
+    SortBy("Date", 3),
+    SortBy("High to Low", 4),
+    SortBy("Low to High", 5)
 
   ];
   @override
@@ -30,7 +31,7 @@ class sortByDialogState extends State<sortByDialog>{
       shrinkWrap: true,
       itemBuilder: (context, index) {
      return Padding(
-       padding: const EdgeInsets.only(left:30.0, right: 30.0),
+       padding: const EdgeInsets.only(left:30.0, right: 30.0, top: 5),
        child: Row(
          mainAxisAlignment: MainAxisAlignment.spaceBetween,
            children: <Widget>[
@@ -40,18 +41,22 @@ class sortByDialogState extends State<sortByDialog>{
                  style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 16.0,
                    fontWeight: FontWeight.w400,),),
              ),
-             Theme(data: Theme.of(context).copyWith(
-               unselectedWidgetColor: Colors.orange
-             ), child: Radio(
-               value: index,
-               activeColor: Colors.orange,
-               groupValue: value,
-               onChanged: (val){
-                 setState(() {
-                   value= val;
-                 });
-               },
-             ),)
+             SizedBox(
+               height: 20,
+               width: 20,
+               child: Theme(data: Theme.of(context).copyWith(
+                 unselectedWidgetColor: Colors.orange
+               ), child: Radio(
+                 value: index,
+                 activeColor: Colors.orange,
+                 groupValue: value,
+                 onChanged: (val){
+                   setState(() {
+                     value= val;
+                   });
+                 },
+               ),),
+             )
            ],
        ),
      );

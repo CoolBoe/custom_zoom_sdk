@@ -19,8 +19,6 @@ class ProductScreen extends StatefulWidget {
 }
 
 class ProductScreenState extends State<ProductScreen>{
-  ProductModel productModel;
-
   Widget _cartDone(){
     return Padding(
       padding: const EdgeInsets.only(
@@ -48,11 +46,18 @@ class ProductScreenState extends State<ProductScreen>{
         ),),);
   }
   Widget _CustomScrollView(){
-
+    String catergory = "Uncategorized";
+    String attributes = "Uncategorized";
+    if(widget.productModel.categories!=null){
+      catergory= widget.productModel.categories[0].name;
+    };
+    if(widget.productModel.attributes!=null){
+      attributes = widget.productModel.attributes[0].toString();
+    }
     return CustomScrollView(
       slivers: [
         SliverPersistentHeader(
-          delegate: MySliverAppBar(expandedHeight: 550, productModel: productModel),
+          delegate: MySliverAppBar(expandedHeight: 550, productModel: widget.productModel),
           pinned: true,
         ),
         SliverPadding(
@@ -93,7 +98,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text(productModel.categories[0].name, style: TextStyle(
+                                child: Text(catergory, style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -113,7 +118,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text(productModel.totalSales.toString(), style: TextStyle(
+                                child: Text(widget.productModel.totalSales.toString(), style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -133,7 +138,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text(productModel.sku, style: TextStyle(
+                                child: Text(widget.productModel.sku, style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -153,7 +158,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text(productModel.attributes[0], style: TextStyle(
+                                child: Text(attributes, style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -209,7 +214,7 @@ class ProductScreenState extends State<ProductScreen>{
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('₹ '+productModel.price, style: TextStyle(
+                Text('₹ '+widget.productModel.price, style: TextStyle(
                     color: Colors.black,
                     fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 24)),
                 Row(
@@ -496,6 +501,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
                                      children: <Widget>[
                                        Icon( Icons.star, color: Colors.orange,size: 20,),
                                        Text("{"+ productModel.ratingCount.toString()+ "}",
+
                                            style: TextStyle(
                                                fontFamily: 'Poppins',
                                                fontSize: 10.0,
@@ -506,6 +512,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
                                  ),
                                ],),
                              Text(productModel.description,
+                                 overflow: TextOverflow.ellipsis,
                                  style: TextStyle(
                                      fontFamily: 'Poppins',
                                      fontSize: 10.0,

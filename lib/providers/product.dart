@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/services/product.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class ProductsProvider with ChangeNotifier{
+
 
   String sort = 'default';
   String page = '1';
@@ -11,7 +13,10 @@ class ProductsProvider with ChangeNotifier{
   List<ProductModel> products = [];
   List<ProductModel> productsByCategory = [];
   List<ProductModel> productsByPrice = [];
-  List<ProductModel> productsByAttribute = [];
+  List<ProductModel> productsByBrand = [];
+  List<ProductModel> productsByFeatured = [];
+  List<ProductModel> productsByOnSale = [];
+  List<ProductModel> productsBySearch = [];
   ProductServices _productServices = ProductServices();
 
   ProductsProvider.initialize(){
@@ -33,8 +38,24 @@ class ProductsProvider with ChangeNotifier{
     productsByPrice = await _productServices.getProductsByPrice(sort:sort, page:page, per_page:per_page, min_price: min_price, max_price: max_price);
     notifyListeners();
   }
-  Future loadProductsByAttribute({String sort, String page, String per_pag, String category }) async{
-    productsByAttribute = await _productServices.getProductsByCategory();
+  Future loadProductsByBrand({String sort, String page, String per_page, String brand }) async{
+    productsByBrand = await _productServices.getProductByBrand(sort: sort, page: page, per_page: per_page, brand: brand);
+    notifyListeners();
+  }
+  Future loadProductsByFeatured({String sort, String page, String per_page, String featured }) async{
+    productsByBrand = await _productServices.getProductByFeatured(sort: sort, page: page, per_page: per_page, featured: featured);
+    notifyListeners();
+  }
+  Future loadProductsByOnSale({String sort, String page, String per_page, String on_sale }) async{
+    productsByBrand = await _productServices.getProductByOnSale(sort: sort, page: page, per_page: per_page, on_sale: on_sale);
+    notifyListeners();
+  }
+  Future loadProductsBySearch({String sort, String page, String per_page, String search }) async{
+    productsByBrand = await _productServices.getProductBySearch(sort: sort, page: page, per_page: per_page, search: search);
+    notifyListeners();
+  }
+  Future loadProductsBySorting({String sort, String page, String per_page}) async{
+    productsByBrand = await _productServices.getProductBySearch(sort: sort, page: page, per_page: per_page);
     notifyListeners();
   }
 }

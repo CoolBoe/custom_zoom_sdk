@@ -14,15 +14,13 @@ import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class CategoriesScreen extends StatefulWidget {
-
   const CategoriesScreen({Key key}) : super(key: key);
   @override
   CategoriesScreenState createState()=>CategoriesScreenState();
-
 }
 class CategoriesScreenState extends State<CategoriesScreen>{
   int _selectItem = 0;
-  String _selectedItemID ;
+  String _selectedItemID= '15' ;
   List<ByCatgories> productbycategories = [
     ByCatgories('Glasses', 0, "assets/icons/ic_eyeglasses.svg"),
     ByCatgories('Hoodies', 1, "assets/icons/ic_hoodie.svg"),
@@ -50,7 +48,6 @@ class CategoriesScreenState extends State<CategoriesScreen>{
   final categoryProvider = Provider.of<CategoriesProvider>(context, listen: false);
   final productProvider = Provider.of<ProductsProvider>(context);
   final app= Provider.of<AppProvider>(context);
-
     return Scaffold(
      body: Container(
        decoration: BoxDecoration(color: Colors.white),
