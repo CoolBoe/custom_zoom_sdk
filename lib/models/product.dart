@@ -27,7 +27,7 @@ class ProductModel {
   int totalSales;
   bool virtual;
   bool downloadable;
-  List<Downloads> downloads;
+  List<Null> downloads;
   int downloadLimit;
   int downloadExpiry;
   String externalUrl;
@@ -58,9 +58,9 @@ class ProductModel {
   List<Categories> categories;
   List<Null> tags;
   List<Images> images;
-  List<Null> attributes;
+  List<Attributes> attributes;
   List<Null> defaultAttributes;
-  List<Null> variations;
+  List<int> variations;
   List<Null> groupedProducts;
   int menuOrder;
   List<MetaData> metaData;
@@ -163,12 +163,12 @@ class ProductModel {
     totalSales = json['total_sales'];
     virtual = json['virtual'];
     downloadable = json['downloadable'];
-    if (json['downloads'] != null) {
-      downloads = new List<Downloads>();
-      json['downloads'].forEach((v) {
-        downloads.add(new Downloads.fromJson(v));
-      });
-    }
+    // if (json['downloads'] != null) {
+    //   downloads = new List<Null>();
+    //   json['downloads'].forEach((v) {
+    //     downloads.add(new Null.fromJson(v));
+    //   });
+    // }
     downloadLimit = json['download_limit'];
     downloadExpiry = json['download_expiry'];
     externalUrl = json['external_url'];
@@ -226,24 +226,19 @@ class ProductModel {
         images.add(new Images.fromJson(v));
       });
     }
-    // if (json['attributes'] != null) {
-    //   attributes = new List<Null>();
-    //   json['attributes'].forEach((v) {
-    //     attributes.add(new Null.fromJson(v));
-    //   });
-    // }
+    if (json['attributes'] != null) {
+      attributes = new List<Attributes>();
+      json['attributes'].forEach((v) {
+        attributes.add(new Attributes.fromJson(v));
+      });
+    }
     // if (json['default_attributes'] != null) {
     //   defaultAttributes = new List<Null>();
     //   json['default_attributes'].forEach((v) {
     //     defaultAttributes.add(new Null.fromJson(v));
     //   });
     // }
-    // if (json['variations'] != null) {
-    //   variations = new List<Null>();
-    //   json['variations'].forEach((v) {
-    //     variations.add(new Null.fromJson(v));
-    //   });
-    // }
+    variations = json['variations'].cast<int>();
     // if (json['grouped_products'] != null) {
     //   groupedProducts = new List<Null>();
     //   json['grouped_products'].forEach((v) {
@@ -290,9 +285,9 @@ class ProductModel {
     data['total_sales'] = this.totalSales;
     data['virtual'] = this.virtual;
     data['downloadable'] = this.downloadable;
-    if (this.downloads != null) {
-      data['downloads'] = this.downloads.map((v) => v.toJson()).toList();
-    }
+    // if (this.downloads != null) {
+    //   data['downloads'] = this.downloads.map((v) => v.toJson()).toList();
+    // }
     data['download_limit'] = this.downloadLimit;
     data['download_expiry'] = this.downloadExpiry;
     data['external_url'] = this.externalUrl;
@@ -336,16 +331,14 @@ class ProductModel {
     if (this.images != null) {
       data['images'] = this.images.map((v) => v.toJson()).toList();
     }
-    // if (this.attributes != null) {
-    //   data['attributes'] = this.attributes.map((v) => v.toJson()).toList();
-    // }
+    if (this.attributes != null) {
+      data['attributes'] = this.attributes.map((v) => v.toJson()).toList();
+    }
     // if (this.defaultAttributes != null) {
     //   data['default_attributes'] =
     //       this.defaultAttributes.map((v) => v.toJson()).toList();
     // }
-    // if (this.variations != null) {
-    //   data['variations'] = this.variations.map((v) => v.toJson()).toList();
-    // }
+    data['variations'] = this.variations;
     // if (this.groupedProducts != null) {
     //   data['grouped_products'] =
     //       this.groupedProducts.map((v) => v.toJson()).toList();
@@ -357,28 +350,6 @@ class ProductModel {
     if (this.lLinks != null) {
       data['_links'] = this.lLinks.toJson();
     }
-    return data;
-  }
-}
-
-class Downloads {
-  String id;
-  String name;
-  String file;
-
-  Downloads({this.id, this.name, this.file});
-
-  Downloads.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    file = json['file'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['file'] = this.file;
     return data;
   }
 }
@@ -472,6 +443,50 @@ class Images {
     data['name'] = this.name;
     data['alt'] = this.alt;
     data['position'] = this.position;
+    return data;
+  }
+}
+
+class Attributes {
+  String name;
+  String slug;
+  int position;
+  bool visible;
+  bool variation;
+  List<Null> options;
+
+  Attributes(
+      {this.name,
+        this.slug,
+        this.position,
+        this.visible,
+        this.variation,
+        this.options});
+
+  Attributes.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    slug = json['slug'];
+    position = json['position'];
+    visible = json['visible'];
+    variation = json['variation'];
+    // if (json['options'] != null) {
+    //   options = new List<Null>();
+    //   json['options'].forEach((v) {
+    //     options.add(new Null.fromJson(v));
+    //   });
+    // }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['slug'] = this.slug;
+    data['position'] = this.position;
+    data['visible'] = this.visible;
+    data['variation'] = this.variation;
+    // if (this.options != null) {
+    //   data['options'] = this.options.map((v) => v.toJson()).toList();
+    // }
     return data;
   }
 }

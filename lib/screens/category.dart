@@ -156,7 +156,6 @@ class CategoriesScreenState extends State<CategoriesScreen>{
                     fontFamily: 'Poppins', fontWeight: FontWeight.w400, fontSize: 14)),
               ),
             ),)
-
           )
       )
     );

@@ -57,7 +57,6 @@ class HomeState extends State<HomeView> {
               child: _CustomScrollView())),
     );
   }
-
   Widget _CustomScrollView() {
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
@@ -101,7 +100,7 @@ class HomeState extends State<HomeView> {
               ),
             ),
           ),
-          title: Text('',style: TextStyle(
+          title: Text('Woo App',style: TextStyle(
             color: Colors.black,
             fontFamily: 'Poppins',
             fontSize: 14.0,
@@ -451,7 +450,6 @@ class HomeState extends State<HomeView> {
       ],
     );
   }
-
   Widget _itemDrawer(String Icon, String Name){
     return
       Padding(
@@ -549,12 +547,10 @@ class HomeState extends State<HomeView> {
                   fontWeight: FontWeight.w600,),),
             ],
           )
-
         ],
       ),
     ),);
   }
-
   Widget _buildDrawer() {
     return Container(
       width: 250,

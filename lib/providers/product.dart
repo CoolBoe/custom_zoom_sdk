@@ -5,8 +5,6 @@ import 'package:wooapp/services/product.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class ProductsProvider with ChangeNotifier{
-
-
   String sort = 'default';
   String page = '1';
   String per_page = '10';

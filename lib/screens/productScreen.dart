@@ -1,4 +1,6 @@
 
+import 'package:carousel_pro/carousel_pro.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:wooapp/models/mockdata/item_colorpicker.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/product.dart';
+import 'package:wooapp/helper/style.dart';
 
 class ProductScreen extends StatefulWidget {
 
@@ -56,12 +59,39 @@ class ProductScreenState extends State<ProductScreen>{
     }
     return CustomScrollView(
       slivers: [
+        SliverAppBar(
+          pinned: true,
+          backgroundColor: grey,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text("Products",
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black)),
+            centerTitle: true,
+          ),
+          leading: GestureDetector(
+              onTap: (){
+                // Navigator.of(context).pushNamed(routes.MainPage_Route);
+              },
+              child: Icon(
+                Icons.arrow_back, color: Colors.black,
+              )
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SvgPicture.asset('assets/icons/ic_search.svg'),
+            )
+          ],
+        ),
         SliverPersistentHeader(
-          delegate: MySliverAppBar(expandedHeight: 550, productModel: widget.productModel),
+          delegate: MySliverAppBar(expandedHeight: 400, productModel: widget.productModel),
           pinned: true,
         ),
         SliverPadding(
-          padding: const EdgeInsets.only(top:130.0, left: 30, right:28, bottom: 10),
+          padding: const EdgeInsets.only(top:150.0, left: 30, right:28, bottom: 10),
           sliver: SliverToBoxAdapter(
               child:Card(
                 elevation: 10,
@@ -184,14 +214,8 @@ class ProductScreenState extends State<ProductScreen>{
   Widget build(BuildContext context) {
 
     return
-      Scaffold(
-      body: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: RefreshIndicator(
-            onRefresh: () async {
-              await Future.value({});
-            },
-            child:  Center(child: _CustomScrollView())),
+      Scaffold(body: Container(
+        child:  _CustomScrollView()
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(0),
@@ -430,49 +454,42 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
   ];
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+      List<Images> imageArray = productModel.images;
+      List<NetworkImage> UrlArray;
+      for(int i =0; i < imageArray.length; i++){
+        UrlArray.add(NetworkImage(imageArray[i].src));
+      }
          return Stack(
            fit: StackFit.expand,
            overflow: Overflow.visible,
            children: [
              Container(
-               height: 350,
+               height: 100,
                decoration: BoxDecoration(
                    color: Colors.grey[200]
                ),
                child: Padding(
-                 padding: const EdgeInsets.only(top: 60.0, bottom: 30),
-                 child: Image.network(productModel.images[0].src),
+                 padding: const EdgeInsets.only(top: 0.0, bottom: 30),
+                 child: Carousel(
+                 boxFit: BoxFit.fill,
+                 autoplay: true,
+                 animationCurve: Curves.fastOutSlowIn,
+                 animationDuration: Duration(milliseconds: 1000),
+                 dotSize: 2.0,
+                 dotIncreaseSize: 6.0,
+                 dotBgColor: Colors.transparent,
+                 dotColor: Colors.grey,
+                 dotPosition: DotPosition.bottomCenter,
+                 showIndicator: true,
+                 indicatorBgPadding: 6.0,
+                 images: UrlArray
                ),
-             ),
-             Positioned(
-                 top: expandedHeight/9-shrinkOffset,
-                 left: MediaQuery.of(context).size.width/20,
-                 child: GestureDetector(onTap: (){
-                   Navigator.pop(context);
-                 },
-                 child: Icon(
-                  Icons.arrow_back, color: Colors.black,
-                  ),
-                 )),
-                 
-             Center(
-               child: Opacity(
-                 opacity: shrinkOffset / expandedHeight,
-                 child: Text(
-                   '',
-                   style: TextStyle(
-                     color: Colors.black,
-                     fontWeight: FontWeight.w700,
-                     fontSize: 23,
-                   ),
-                 ),
                ),
              ),
              Positioned(
                  top: expandedHeight/1.1-shrinkOffset,
                  left: MediaQuery.of(context).size.width/13,
                  child: Opacity(
-
                    opacity: 1-shrinkOffset/expandedHeight,
                    child: Card(
                      elevation: 3,
@@ -607,8 +624,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
 
            ],
          );
-
-       }
+  }
   @override
   // TODO: implement maxExtent
   double get maxExtent => expandedHeight;
