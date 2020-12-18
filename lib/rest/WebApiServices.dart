@@ -102,5 +102,33 @@ class WebApiServices {
     );
     return response;
   }
+  Future<http.Response> getProductById(String id) async {
+    var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.PRODUCT_BY_ID+'?'+WebRequestConstants.PRODUCT_ID+'='+id
+    );
+    return response;
+  }
 
+  Future<http.Response> getAddToCart(String id, String quantity, String variation, String variation_id) async {
+    var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.ADD_CART+'?'+WebRequestConstants.PRODUCT_ID
+        +'='+id+'&'+WebRequestConstants.QUANTITY+'='+quantity+'&'+WebRequestConstants.VARIATION+'='+variation+'&'+WebRequestConstants.VARIATION_ID+'='+variation_id
+    );
+    return response;
+  }
+  Future<http.Response> getUpdateToCart(String cartItemKey,String quantity, ) async {
+    var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CART_UPDATE+'?'+WebRequestConstants.CART_ITEM_KEY
+        +'='+cartItemKey+'&'+WebRequestConstants.QUANTITY+'='+quantity
+    );
+    return response;
+  }
+  Future<http.Response> getRemoveToCart(String cartItemKey ) async {
+    var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CART_REMOVE+'?'+WebRequestConstants.CART_ITEM_KEY
+        +'='+cartItemKey
+    );
+    return response;
+  }
+  Future<http.Response> getClearToCart() async {
+    var response=  await http.get(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CART_REMOVE
+    );
+    return response;
+  }
 }

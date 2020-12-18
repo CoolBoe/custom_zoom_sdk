@@ -60,7 +60,6 @@ class ShopState extends State<ShopView>{
   Widget build(BuildContext context) {
   final productProvider = Provider.of<ProductsProvider>(context, listen: false);
   final app = Provider.of<AppProvider>(context);
-
     return Scaffold(
       key: scaffoldKey,
       body:

@@ -26,7 +26,7 @@ class WebRequestConstants{
   static const String PRODUCT="products";
   static const String CUSTOM_PRODUCT="custom-products";
   static const String PRICE_RANGE="products/price-range";
-  static const String PRODUCT_BY_ID ="get-product-by-id";
+  static const String PRODUCT_BY_ID ="get-products-by-id";
   static const String SORT ="sort";
   static const String PAGE = "page";
   static const String PER_PAGE = "per_page";
@@ -41,6 +41,10 @@ class WebRequestConstants{
   static const String COUPON = "cart/coupon";
   static const String REMOVE_COUPON = "cart/remove-coupon";
   static const String CART_ITEM_COUNT= "cart/item-count";
+  static const String QUANTITY = "quantity";
+  static const String VARIATION = "variation";
+  static const String VARIATION_ID = "variation_id";
+  static const String CART_ITEM_KEY = "cart_item_key";
 
   /*-----------------------------Product Filters-----------------------------------------*/
   static const String CATEGORY= "category";
@@ -51,6 +55,7 @@ class WebRequestConstants{
   static const String ON_SALE = "on_sale";
   static const String ON_SEARCH = "search";
   static const String FEATURED = "featured";
+  static const String PRODUCT_ID = "id";
 
   /*-------------------------------------Sort Filters-----------------------------------------------------------------*/
   static const String SORT_BY_DEFAULT = "default";

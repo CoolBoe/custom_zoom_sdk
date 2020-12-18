@@ -10,6 +10,8 @@ class ProductsProvider with ChangeNotifier{
   String per_page = '10';
   List<ProductModel> products = [];
   List<ProductModel> productsByCategory = [];
+  List<ProductModel> productsByIdsList = [];
+  ProductModel productsById;
   List<ProductModel> productsByPrice = [];
   List<ProductModel> productsByBrand = [];
   List<ProductModel> productsByFeatured = [];
@@ -31,6 +33,7 @@ class ProductsProvider with ChangeNotifier{
     printLog("productsByCategory.length", productsByCategory.length);
     notifyListeners();
   }
+
   Future loadProductsByPrice({String sort, String page, String per_page, String min_price , String max_price}) async{
     productsByPrice=null;
     productsByPrice = await _productServices.getProductsByPrice(sort:sort, page:page, per_page:per_page, min_price: min_price, max_price: max_price);
@@ -41,19 +44,24 @@ class ProductsProvider with ChangeNotifier{
     notifyListeners();
   }
   Future loadProductsByFeatured({String sort, String page, String per_page, String featured }) async{
-    productsByBrand = await _productServices.getProductByFeatured(sort: sort, page: page, per_page: per_page, featured: featured);
+    productsByFeatured = await _productServices.getProductByFeatured(sort: sort, page: page, per_page: per_page, featured: featured);
     notifyListeners();
   }
   Future loadProductsByOnSale({String sort, String page, String per_page, String on_sale }) async{
-    productsByBrand = await _productServices.getProductByOnSale(sort: sort, page: page, per_page: per_page, on_sale: on_sale);
+    productsByOnSale = await _productServices.getProductByOnSale(sort: sort, page: page, per_page: per_page, on_sale: on_sale);
     notifyListeners();
   }
   Future loadProductsBySearch({String sort, String page, String per_page, String search }) async{
-    productsByBrand = await _productServices.getProductBySearch(sort: sort, page: page, per_page: per_page, search: search);
+    productsBySearch = await _productServices.getProductBySearch(sort: sort, page: page, per_page: per_page, search: search);
     notifyListeners();
   }
   Future loadProductsBySorting({String sort, String page, String per_page}) async{
-    productsByBrand = await _productServices.getProductBySearch(sort: sort, page: page, per_page: per_page);
+    productsByCategory = await _productServices.getProductBySearch(sort: sort, page: page, per_page: per_page);
+    notifyListeners();
+  }
+  Future loadProductsById({String id}) async{
+    productsById = await _productServices.getProductById(product_Id: id );
+    productsByIdsList.add(productsById);
     notifyListeners();
   }
 }

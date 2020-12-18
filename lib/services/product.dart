@@ -10,7 +10,7 @@ import 'package:wooapp/widgets/loading.dart';
 class ProductServices{
 
   List<ProductModel> products = new List<ProductModel>();
-
+  ProductModel productsModel = new ProductModel();
   Future<List<ProductModel>>getProducts({String sort, String page, String per_page}) => WebApiServices().getProducts(sort,page, per_page ).then((data){
     if(data.statusCode==HTTP_CODE_200){
       printLog("API getProduct200 =>", data.body.toString());
@@ -170,5 +170,19 @@ class ProductServices{
           toast(NETWORK_ERROR);
         }
         return products;
+      });
+  Future<ProductModel>getProductById({String product_Id}) =>
+      WebApiServices().getProductById(product_Id ).then((data){
+        if(data.statusCode==HTTP_CODE_200){
+          printLog("API getProductById200 =>", data.body.toString());
+          List<dynamic> values = new List<dynamic>();
+          if(data.body.isNotEmpty){
+            productsModel = ProductModel.fromJson(json.decode(data.body));
+          }
+        }else{
+          printLog("API getProductById Errorr Massage", data.body);
+          toast(NETWORK_ERROR);
+        }
+        return productsModel;
       });
 }
