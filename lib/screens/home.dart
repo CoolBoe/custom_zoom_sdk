@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'package:provider/provider.dart';
 import 'package:wooapp/helper/productList.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
+import 'package:wooapp/models/product.dart';
+import 'package:wooapp/providers/product.dart';
+import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/category.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:carousel_pro/carousel_pro.dart';
@@ -13,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/widgets/item_DrawerBuilder.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 class HomeView extends StatefulWidget {
 
@@ -29,18 +34,19 @@ class HomeState extends State<HomeView> {
   int pageCount = 4;
   GlobalKey<ScaffoldState> _key = GlobalKey();
   List<String> _images = List();
-
+  List<ProductModel> productList = [];
 
   int currentTab = 0;
   int _selectItem = 0;
+
   @override
   void initState() {
+    super.initState();
     // TODO: implement initState
     _images..add("https://i.pinimg.com/originals/10/78/e8/1078e854e2933b6763c754d37198f762.png");
     _images..add("https://app.tutiixx.com/wp-content/uploads/2019/01/T_7_front-600x600.jpg");
     _images..add("https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_4_front-600x600.jpg");
     _images..add("https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_7_front-600x600.jpg");
-    super.initState();
   }
 
   @override
@@ -58,9 +64,7 @@ class HomeState extends State<HomeView> {
     );
   }
   Widget _CustomScrollView() {
-    var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
-    final double itemWidth = size.width / 2;
+
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
@@ -382,21 +386,7 @@ class HomeState extends State<HomeView> {
             ),
           ),
         ),
-        SliverPadding(padding: EdgeInsets.all(8),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: (itemWidth/itemHeight),
-            ),
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index){
-                  return _itemBuilder( context, index);
-                },childCount: productList(context).length
-            ),
-          ),
-        ),
+      featuredListBuilder(),
         SliverPadding(padding: EdgeInsets.only(left: 30, right: 30),
           sliver: SliverToBoxAdapter(
             child: Container(
@@ -432,24 +422,62 @@ class HomeState extends State<HomeView> {
             ),
           ),
         ),
-        SliverPadding(padding: EdgeInsets.all(8),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: (itemWidth/itemHeight),
-            ),
-            delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index){
-                  return _itemBuilder( context, index);
-                },childCount: productList(context).length
-            ),
-          ),
-        ),
+      topSellerListBuilder()
       ],
     );
   }
+
+  Widget featuredListBuilder(){
+
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
+    final double itemWidth = size.width / 2;
+    return  SliverPadding(padding: EdgeInsets.all(8),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200.0,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: (itemWidth/itemHeight),
+        ),
+        delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index){
+              return _itemBuilder( context, index);
+            },childCount: productList.length
+        ),
+      ),
+    );
+  }
+
+  Widget topSellerListBuilder(){
+
+    setState(() {
+      if(productList.length != null){
+        printLog("datat", productList.length);
+      }
+    });
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
+    final double itemWidth = size.width / 2;
+    return productList.length > 0 ?
+      SliverPadding(padding: EdgeInsets.all(8),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200.0,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 10.0,
+          childAspectRatio: (itemWidth/itemHeight),
+        ),
+        delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index){
+              return _itemBuilder( context, index);
+            },childCount: productList.length
+        ),
+      ),
+    ):SliverToBoxAdapter(child: Center(child: CircularProgressIndicator()),);
+  }
+
+
   Widget _itemDrawer(String Icon, String Name){
     return
       Padding(
@@ -476,9 +504,10 @@ class HomeState extends State<HomeView> {
     );
   }
   Widget _itemBuilder(BuildContext context, int index ){
-    double rating = double.parse(productList(context)[index].ratingCount.toString());
+
+    double rating = double.parse(productList[index].ratingCount.toString());
     return GestureDetector(onTap: (){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductScreen(productModel: productList[index],)));
     },
     child: Container(
       height: 200,
@@ -491,7 +520,7 @@ class HomeState extends State<HomeView> {
                 height: 180,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(productList(context)[index].images[0].src),fit: BoxFit.fill
+                        image: NetworkImage(productList[index].images[0].src),fit: BoxFit.fill
                     )
                 ),
                 // child: Image.network(itemList[index].item_image, fit: BoxFit.fill)
@@ -506,11 +535,11 @@ class HomeState extends State<HomeView> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: Text(productList(context)[index].name,
+            child: Text(productList[index].name,
               style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
                 fontWeight: FontWeight.w600,),),
           ),
-          Text(productList(context)[index].price,
+          Text(productList[index].price,
             style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
               fontWeight: FontWeight.w600,),),
           Row(
@@ -542,7 +571,7 @@ class HomeState extends State<HomeView> {
                     print(rating);
                   }
               ),
-              Text(" {"+productList(context)[index].ratingCount.toString()+"}",
+              Text(" {"+productList[index].ratingCount.toString()+"}",
                 style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
                   fontWeight: FontWeight.w600,),),
             ],

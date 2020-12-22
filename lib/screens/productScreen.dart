@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/models/WebResponseModel.dart';
 import 'package:wooapp/models/mockdata/item_colorpicker.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
 import 'package:wooapp/models/product.dart';
@@ -13,6 +14,7 @@ import 'package:wooapp/helper/color.dart' as color;
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
+import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -34,7 +36,7 @@ class ProductScreenState extends State<ProductScreen>{
           right: 30
       ),
       child: GestureDetector(onTap: (){
-        // Navigator.of(context).pushNamed(routes.CartScreen_Route);
+      changeScreen(context, CartScreen());
       },
         child:  Container(
           height: 40.0,
@@ -53,24 +55,49 @@ class ProductScreenState extends State<ProductScreen>{
         ),),);
   }
   Widget _CustomScrollView(){
-
     final productProvider = Provider.of<ProductsProvider>(context, listen: false);
 
-    for(int i=0; i<widget.productModel.relatedIds.length; i++){
-      printLog("relatedIdss", widget.productModel.relatedIds[i].toString());
-      productProvider.loadProductsById(
-          id: widget.productModel.relatedIds[i].toString());
+    if(widget.productModel.relatedIds.isNotEmpty){
+      for(int i=0; i<widget.productModel.relatedIds.length; i++){
+        printLog("relatedIdss", widget.productModel.relatedIds[i].toString());
+        productProvider.loadProductsById(
+            product_Id: widget.productModel.relatedIds[i].toString());
+      }
     }
+
     List<ProductModel> modelList =productProvider.productsByIdsList;
     printLog("relatedIdmodelListss", modelList.length.toString());
+    Attribute colorAttribute, sizeAttribute;
 
     String catergory = "Uncategorized";
-    String attributes = "Uncategorized";
+    String colorType = "";
     if(widget.productModel.categories!=null){
       catergory= widget.productModel.categories[0].name;
     };
-    if(widget.productModel.attributes!=null){
-      attributes = "Variation in "+widget.productModel.attributes[0].name;
+    if(widget.productModel.attributes.isNotEmpty) {
+      printLog("productmodeid", widget.productModel.id.toString());
+
+       colorAttribute = widget.productModel.attributes[0] !=null ? widget.productModel.attributes[0] : null;
+       sizeAttribute = widget.productModel.attributes.length ==2  ? widget.productModel.attributes[1] : null;
+        printLog("productmodel", colorAttribute.options.length);
+        List<String> colorValue = [];
+        List<String> sizeValue = [];
+        for(int i=0; i<colorAttribute.values.length; i++){
+          printLog("colorAttribute", colorAttribute.values[i]);
+        }
+
+       if(colorAttribute!=null){
+         for(int i=0; i<colorAttribute.values.length; i++){
+           colorValue.add(colorAttribute.values[i]);
+           colorValue = colorAttribute.values;
+         }
+       }else if (sizeAttribute!=null){
+         for(int i=0; i<sizeAttribute.values.length; i++){
+           sizeValue.add(sizeAttribute.values[i]);
+         }
+       }
+       printLog("colorArray", colorValue.toString());
+       printLog("sizeArray", sizeValue.toString());
     }
     return CustomScrollView(
       slivers: [
@@ -211,7 +238,7 @@ class ProductScreenState extends State<ProductScreen>{
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right:20.0),
-                                child: Text(attributes, style: TextStyle(
+                                child: Text(colorType, style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 10)),
                               ),
@@ -355,6 +382,8 @@ class ProductScreenState extends State<ProductScreen>{
   }
   @override
   Widget build(BuildContext context) {
+    WebResponseModel cartResponse;
+    final cart = Provider.of<CartProvider>(context, listen: false);
     return
       Scaffold(
         body: Container(
@@ -399,9 +428,15 @@ class ProductScreenState extends State<ProductScreen>{
                           ),
                           child: GestureDetector(
                             onTap: ()async{
-                              final cart = Provider.of<CartProvider>(context);
+                              cart.getAddToCart(id: widget.productModel.id.toString(), quantity: "1").then((value) => {
+                               if(value.code=="1"){
+                                 cartDialog(value.message)
+                               }else{
+                                 toast(value.message)
+                               }
 
-                              cartDialog();
+                              });
+
                             },
                             child:  Padding(
                               padding: const EdgeInsets.only(top:5.0, bottom: 5.0, left: 0, right: 0),
@@ -437,7 +472,7 @@ class ProductScreenState extends State<ProductScreen>{
         ),
       );
   }
-  void cartDialog(){
+  void cartDialog(String msg){
 
     showGeneralDialog(
         barrierLabel: "label",
@@ -563,7 +598,7 @@ class ProductScreenState extends State<ProductScreen>{
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top:10.0),
-                        child: Text('1 product has been added to your cart!', style: TextStyle(color: Colors.black, fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 12),),
+                        child: Text(msg, style: TextStyle(color: Colors.black, fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 12),),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top:20.0, left: 20, right:20, bottom: 20),

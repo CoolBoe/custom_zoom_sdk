@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/services/app.dart';
+import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 enum ProductBy{Default, Category, Price, Attribute}
@@ -19,11 +23,19 @@ class AppProvider with ChangeNotifier{
   }
 
 
-  Future getPriceRange() async{
-    priceRangeModel = await _appServices.getPriceRange();
-    printLog("acbhj", priceRangeModel.toString());
-    notifyListeners();
-  }
+  Future getPriceRange({String sort, String page, String per_page}) => WebApiServices().getPriceRange().then((data){
+    if(data.statusCode==HTTP_CODE_200){
+      printLog("API getPriceRange200 =>", data.body.toString());
+      if(data.body.isNotEmpty){
+        Map<String, dynamic> result = json.decode(data.body);
+        return result;
+      }
+    }else{
+      printLog("API getPriceRange Errorr Massage", data.body);
+
+      // toast(NETWORK_ERROR);
+    }
+  });
   void changeLoading(){
     isLoading = !isLoading;
     notifyListeners();

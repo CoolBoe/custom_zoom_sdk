@@ -30,7 +30,8 @@ void toast(Object msg){
      msg: msg.toString(),
      toastLength: Toast.LENGTH_SHORT,
      gravity: ToastGravity.BOTTOM,
-     timeInSecForIosWeb: 2);
+     // timeInSecForIosWeb: 2
+ );
 }
 
 void printLog(String tag, Object msg){

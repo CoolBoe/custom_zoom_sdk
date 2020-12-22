@@ -52,11 +52,14 @@ class WebApiServices {
     return http.get(WebRequestConstants.getBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.ALL_CATEGORIES);
   }
   Future<http.Response> getProducts(String sort, String page, String per_page) async {
-    printLog('loadProducts', sort+"=="+page+"=="+per_page);
+    printLog('loadProducts', WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CUSTOM_PRODUCT+'?'+WebRequestConstants.SORT
+        +'='+sort+'&'+WebRequestConstants.PAGE+'='+page+'&'+WebRequestConstants.PER_PAGE+'='+per_page);
 
     var response=  await http.get(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.CUSTOM_PRODUCT+'?'+WebRequestConstants.SORT
         +'='+sort+'&'+WebRequestConstants.PAGE+'='+page+'&'+WebRequestConstants.PER_PAGE+'='+per_page
     );
+    printLog('responseProducts',response.body.toString());
+
     return response;
   }
   Future<http.Response> getPriceRange() async {
@@ -108,7 +111,20 @@ class WebApiServices {
     return response;
   }
 
-  Future<http.Response> getAddToCart(String id, String quantity, String variation, String variation_id) async {
+  Future<http.Response> getAddToCart(String id, String quantity) async {
+    // printLog("getAddToCart", WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.ADD_CART+'?'+WebRequestConstants.PRODUCT_ID
+    //     +'='+id+'&'+WebRequestConstants.QUANTITY+'='+quantity);
+    var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.ADD_CART,
+      body: jsonEncode(<String, String>{
+        'id': id,
+        'quantity':quantity
+      }),
+    );
+    return response;
+  }
+  Future<http.Response> getAddToCartVariationProduct(String id, String quantity, String variation, String variation_id) async {
+    printLog("getAddToCart", WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.ADD_CART+'?'+WebRequestConstants.PRODUCT_ID
+        +'='+id+'&'+WebRequestConstants.QUANTITY+'='+quantity+'&'+WebRequestConstants.VARIATION+'='+variation+'&'+WebRequestConstants.VARIATION_ID+'='+variation_id);
     var response=  await http.post(WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.ADD_CART+'?'+WebRequestConstants.PRODUCT_ID
         +'='+id+'&'+WebRequestConstants.QUANTITY+'='+quantity+'&'+WebRequestConstants.VARIATION+'='+variation+'&'+WebRequestConstants.VARIATION_ID+'='+variation_id
     );

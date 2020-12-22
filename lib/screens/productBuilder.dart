@@ -5,6 +5,7 @@ import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/productList.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
@@ -60,17 +61,27 @@ class ShopState extends State<ShopView>{
   Widget build(BuildContext context) {
   final productProvider = Provider.of<ProductsProvider>(context, listen: false);
   final app = Provider.of<AppProvider>(context);
-    return Scaffold(
-      key: scaffoldKey,
-      body:
-      Container(
-          decoration: BoxDecoration(color: Colors.white),
-          child: RefreshIndicator(
-              onRefresh: () async {
-                await Future.value({});
-              },
-              child: _CustomScrollView(context))),
-    );
+    return FutureBuilder(
+        future: productProvider.loadProducts(),
+        builder: (ctx, snapshot){
+          if (snapshot.connectionState ==ConnectionState.done){
+            return Scaffold(
+              key: scaffoldKey,
+              body:
+              Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: RefreshIndicator(
+                      onRefresh: () async {
+                        await Future.value({});
+                      },
+                      child: _CustomScrollView(context))),
+            );
+          }else{
+            return CircularProgressIndicator(
+              backgroundColor: orange,
+            );
+          }
+        });
   }
   Widget _filterbutton({String category,String sort, String min_price, String max_price, String featured, String on_sale, String brand, String per_page, String page})
   {
@@ -334,112 +345,114 @@ class ShopState extends State<ShopView>{
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
     final double itemWidth = size.width / 2;
+    final product = Provider.of<ProductsProvider>(context);
     SliverGrid grid= new SliverGrid(  delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index){
-          return GestureDetector(onTap: () async{
-            changeScreen(context, ProductScreen(productModel: productList(context)[index]));
-          }, child: Container(
-            height: 200,
-            alignment: Alignment.topLeft,
-            child: Column(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Container(
-                      height: 180,
-                      child: FadeInImage(
-                        placeholder: AssetImage('assets/images/bg_lock.png'),
-                        image: NetworkImage(productList(context).length >= 0 ? productList(context)[index].images[0].src : 'assets/images/bg_lock.png'),
-                      ),
-                    ),
-                    new Align(alignment: Alignment.topRight,
-                      child:
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SvgPicture.asset('assets/icons/ic_heart.svg', color: Colors.red,),
-                      ),),
-                    new Align(alignment: Alignment.topLeft,
-                      child:
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius: BorderRadius.all(Radius.circular(5.0))
+              return
+                GestureDetector(onTap: () async{
+                  changeScreen(context, ProductScreen(productModel: productList(context)[index]));
+                }, child: Container(
+                  height: 200,
+                  alignment: Alignment.topLeft,
+                  child: Column(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          Container(
+                            height: 180,
+                            child: FadeInImage(
+                              placeholder: AssetImage('assets/images/bg_lock.png'),
+                              image: NetworkImage(productList(context).length >= 0 ? productList(context)[index].images[0].src : 'assets/images/bg_lock.png'),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top:3.0, left: 5, bottom: 3, right: 5),
-                              child: Text(productList(context).length > 0 ?productList(context)[index].ratingCount.toString(): "5",
-                                style: TextStyle( color: Colors.white,  fontFamily: 'Poppins', fontSize: 8.0,
-                                  fontWeight: FontWeight.w600,),),
-                            ),
-                          )
-                      ),)
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(productList(context).length >= 0 ? productList(context)[index].name : "Woo App",
-                    style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                      fontWeight: FontWeight.w600,),),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    new RichText(
-                      text: new TextSpan(
-                        text: '',
-                        children: <TextSpan>[
-                          new TextSpan(
-                            text:productList(context).length >= 0 ?"₹ "+productList(context)[index].price+"   ": "₹ 200 ",
-                            style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                              fontWeight: FontWeight.w600,),),
-                          new TextSpan(
-                            text:  productList(context).length >= 0 ? "₹"+ productList(context)[index].regularPrice: "₹ 250",
-                            style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0, decoration: TextDecoration.lineThrough,
-                              fontWeight: FontWeight.w300,),),
+                          ),
+                          new Align(alignment: Alignment.topRight,
+                            child:
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset('assets/icons/ic_heart.svg', color: Colors.red,),
+                            ),),
+                          new Align(alignment: Alignment.topLeft,
+                            child:
+                            Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.amber,
+                                      borderRadius: BorderRadius.all(Radius.circular(5.0))
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top:3.0, left: 5, bottom: 3, right: 5),
+                                    child: Text(productList(context).length > 0 ?productList(context)[index].ratingCount.toString(): "5",
+                                      style: TextStyle( color: Colors.white,  fontFamily: 'Poppins', fontSize: 8.0,
+                                        fontWeight: FontWeight.w600,),),
+                                  ),
+                                )
+                            ),)
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children:<Widget>[
-                    RatingBar(
-                        itemSize: 20,
-                        initialRating:double.parse(productList(context).length >= 0 ?productList(context)[index].ratingCount.toString(): "5"),
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                        ratingWidget: RatingWidget(
-                            full: new Icon(
-                              Icons.star,
-                              color: Colors.amber,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(productList(context).length >= 0 ? productList(context)[index].name : "Woo App",
+                          style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
+                            fontWeight: FontWeight.w600,),),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          new RichText(
+                            text: new TextSpan(
+                              text: '',
+                              children: <TextSpan>[
+                                new TextSpan(
+                                  text:productList(context).length >= 0 ?"₹ "+productList(context)[index].price+"   ": "₹ 200 ",
+                                  style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
+                                    fontWeight: FontWeight.w600,),),
+                                new TextSpan(
+                                  text:  productList(context).length >= 0 ? "₹"+ productList(context)[index].regularPrice: "₹ 250",
+                                  style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0, decoration: TextDecoration.lineThrough,
+                                    fontWeight: FontWeight.w300,),),
+                              ],
                             ),
-                            half: new Icon(
-                              Icons.star_half,
-                              color: Colors.amber,
-                            ),
-                            empty: new Icon(
-                              Icons.star_border,
-                              color: Colors.amber,
-                            )
-                        ),
-                        onRatingUpdate: (rating){
-                          print(rating);
-                        }
-                    ),
-                    Text(productList(context).length >= 0 ? " {"+productList(context)[index].averageRating+"}" : "5",
-                      style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                        fontWeight: FontWeight.w600,),),
-                  ],
-                )
-              ],
-            ),
-          ),);
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children:<Widget>[
+                          RatingBar(
+                              itemSize: 20,
+                              initialRating:double.parse(productList(context).length >= 0 ?productList(context)[index].ratingCount.toString(): "5"),
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding: EdgeInsets.symmetric(horizontal: 0),
+                              ratingWidget: RatingWidget(
+                                  full: new Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  half: new Icon(
+                                    Icons.star_half,
+                                    color: Colors.amber,
+                                  ),
+                                  empty: new Icon(
+                                    Icons.star_border,
+                                    color: Colors.amber,
+                                  )
+                              ),
+                              onRatingUpdate: (rating){
+                                print(rating);
+                              }
+                          ),
+                          Text(productList(context).length >= 0 ? " {"+productList(context)[index].averageRating+"}" : "5",
+                            style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
+                              fontWeight: FontWeight.w600,),),
+                        ],
+                      )
+                    ],
+                  ),
+                ),);
         },childCount: productList(context).length
     ), gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
       maxCrossAxisExtent: 200.0,
@@ -451,7 +464,6 @@ class ShopState extends State<ShopView>{
       sliver: grid
     );
   }
-
   void SortByDialog(){
     printLog('SortByDialog', 'SortByDialog');
   showGeneralDialog(

@@ -171,6 +171,7 @@ class ProductServices{
         }
         return products;
       });
+
   Future<ProductModel>getProductById({String product_Id}) =>
       WebApiServices().getProductById(product_Id ).then((data){
         if(data.statusCode==HTTP_CODE_200){

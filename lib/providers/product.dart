@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/services/product.dart';
 import 'package:wooapp/widgets/loading.dart';
+import 'dart:convert';
+import 'package:wooapp/rest/WebApiServices.dart';
 
 class ProductsProvider with ChangeNotifier{
   String sort = 'default';
@@ -23,45 +26,194 @@ class ProductsProvider with ChangeNotifier{
     loadProducts(sort: sort, page: page, per_page: per_page);
   }
 
- Future loadProducts({String sort, String page, String per_page }) async{
-    products = await _productServices.getProducts(sort: sort, page: page, per_page: per_page);
-    notifyListeners();
-  }
-  Future loadProductsByCategory({String sort, String page, String per_page, String category }) async{
-    productsByCategory=null;
-    productsByCategory = await _productServices.getProductsByCategory(sort: sort, page: page, per_page: per_page, category: category);
-    printLog("productsByCategory.length", productsByCategory.length);
-    notifyListeners();
-  }
+  Future<List<ProductModel>>loadProducts({String sort, String page, String per_page}) => WebApiServices().getProducts(sort,page, per_page ).then((data){
+    if(data.statusCode==HTTP_CODE_200){
+      printLog("API getProduct200 =>", data.body.toString());
+      List<dynamic> values = new List<dynamic>();
+      if(data.body.isNotEmpty){
+        values =json.decode(data.body);
+        if(values.length>0){
+          for(int i=0; i<values.length; i++ ){
+            if(values[i]!=null){
+              Map<String,dynamic> map = values[i];
+              products.add(ProductModel.fromJson(map));
+            }
+          }
+        }
+      }
+    }else{
+      printLog("API getProduct Errorr Massage", data.body);
+      toast(NETWORK_ERROR);
+    }
+    return products;
+  });
 
-  Future loadProductsByPrice({String sort, String page, String per_page, String min_price , String max_price}) async{
-    productsByPrice=null;
-    productsByPrice = await _productServices.getProductsByPrice(sort:sort, page:page, per_page:per_page, min_price: min_price, max_price: max_price);
+ Future<List<ProductModel>>loadProductsByCategory({String sort, String page, String per_page, String category}) => WebApiServices().getProductByCategory(sort,page, per_page, category ).then((data){
+    if(data.statusCode==HTTP_CODE_200){
+      productsByCategory=null;
+      printLog("API getProductByCategory200 =>", data.body.toString());
+      List<dynamic> values = new List<dynamic>();
+      if(data.body.isNotEmpty){
+        products.clear();
+        values =json.decode(data.body);
+        if(values.length>0){
+          for(int i=0; i<values.length; i++ ){
+            if(values[i]!=null){
+              Map<String,dynamic> map = values[i];
+              products.add(ProductModel.fromJson(map));
+            }
+          }
+        }
+      }
+    }else{
+      printLog("API getProduct Errorr Massage", data.body);
+      toast(NETWORK_ERROR);
+    }
     notifyListeners();
-  }
-  Future loadProductsByBrand({String sort, String page, String per_page, String brand }) async{
-    productsByBrand = await _productServices.getProductByBrand(sort: sort, page: page, per_page: per_page, brand: brand);
+    return products;
+  });
+
+  Future<List<ProductModel>>loadProductsByPrice({String sort, String page, String per_page, String min_price, String max_price}) => WebApiServices().getProductByPrice(sort,page, per_page, min_price, max_price ).then((data){
+    if(data.statusCode==HTTP_CODE_200){
+      productsByPrice=null;
+      printLog("API getProductByPrice200 =>", data.body.toString());
+      List<dynamic> values = new List<dynamic>();
+      if(data.body.isNotEmpty){
+        products.clear();
+        values =json.decode(data.body);
+        if(values.length>0){
+          for(int i=0; i<values.length; i++ ){
+            if(values[i]!=null){
+              Map<String,dynamic> map = values[i];
+              products.add(ProductModel.fromJson(map));
+            }
+          }
+        }
+      }
+    }else{
+      printLog("API getProduct Errorr Massage", data.body);
+      toast(NETWORK_ERROR);
+    }
     notifyListeners();
-  }
-  Future loadProductsByFeatured({String sort, String page, String per_page, String featured }) async{
-    productsByFeatured = await _productServices.getProductByFeatured(sort: sort, page: page, per_page: per_page, featured: featured);
+    return products;
+  });
+
+  Future<List<ProductModel>>loadProductsByBrand({String sort, String page, String per_page, String brand}) => WebApiServices().getProductByBrand(sort,page, per_page, brand ).then((data){
+    if(data.statusCode==HTTP_CODE_200){
+      printLog("API getProductByBrand200 =>", data.body.toString());
+      List<dynamic> values = new List<dynamic>();
+      if(data.body.isNotEmpty){
+        products.clear();
+        values =json.decode(data.body);
+        if(values.length>0){
+          for(int i=0; i<values.length; i++ ){
+            if(values[i]!=null){
+              Map<String,dynamic> map = values[i];
+              products.add(ProductModel.fromJson(map));
+            }
+          }
+        }
+      }
+    }else{
+      printLog("API getProduct Errorr Massage", data.body);
+      toast(NETWORK_ERROR);
+    }
     notifyListeners();
-  }
-  Future loadProductsByOnSale({String sort, String page, String per_page, String on_sale }) async{
-    productsByOnSale = await _productServices.getProductByOnSale(sort: sort, page: page, per_page: per_page, on_sale: on_sale);
-    notifyListeners();
-  }
-  Future loadProductsBySearch({String sort, String page, String per_page, String search }) async{
-    productsBySearch = await _productServices.getProductBySearch(sort: sort, page: page, per_page: per_page, search: search);
-    notifyListeners();
-  }
+    return products;
+  });
+
+  Future<List<ProductModel>>loadProductsByFeatured({String sort, String page, String per_page, String featured}) =>
+      WebApiServices().getProductByFeatured(sort,page, per_page, featured ).then((data){
+        if(data.statusCode==HTTP_CODE_200){
+          printLog("API getProductByFeatured200 =>", data.body.toString());
+          List<dynamic> values = new List<dynamic>();
+          if(data.body.isNotEmpty){
+            products.clear();
+            values =json.decode(data.body);
+            if(values.length>0){
+              for(int i=0; i<values.length; i++ ){
+                if(values[i]!=null){
+                  Map<String,dynamic> map = values[i];
+                  products.add(ProductModel.fromJson(map));
+                }
+              }
+            }
+          }
+        }else{
+          printLog("API getProductByFeatured Errorr Massage", data.body);
+          toast(NETWORK_ERROR);
+        }
+        notifyListeners();
+        return products;
+      });
+
+  Future<List<ProductModel>>loadProductsByOnSale({String sort, String page, String per_page, String on_sale}) =>
+      WebApiServices().getProductByOnSale(sort,page, per_page, on_sale ).then((data){
+        if(data.statusCode==HTTP_CODE_200){
+          printLog("API getProductByOnSale200 =>", data.body.toString());
+          List<dynamic> values = new List<dynamic>();
+          if(data.body.isNotEmpty){
+            products.clear();
+            values =json.decode(data.body);
+            if(values.length>0){
+              for(int i=0; i<values.length; i++ ){
+                if(values[i]!=null){
+                  Map<String,dynamic> map = values[i];
+                  products.add(ProductModel.fromJson(map));
+                }
+              }
+            }
+          }
+        }else{
+          printLog("API getProductByOnSale Errorr Massage", data.body);
+          toast(NETWORK_ERROR);
+        }
+        notifyListeners();
+        return products;
+      });
+
+  Future<List<ProductModel>>getProductBySearch({String sort, String page, String per_page, String search}) =>
+      WebApiServices().getProductBySearch(sort,page, per_page, search ).then((data){
+        if(data.statusCode==HTTP_CODE_200){
+          printLog("API getProductBySearch200 =>", data.body.toString());
+          List<dynamic> values = new List<dynamic>();
+          if(data.body.isNotEmpty){
+            products.clear();
+            values =json.decode(data.body);
+            if(values.length>0){
+              for(int i=0; i<values.length; i++ ){
+                if(values[i]!=null){
+                  Map<String,dynamic> map = values[i];
+                  products.add(ProductModel.fromJson(map));
+                }
+              }
+            }
+          }
+        }else{
+          printLog("API getProductBySearch Errorr Massage", data.body);
+          toast(NETWORK_ERROR);
+        }
+        notifyListeners();
+        return products;
+      });
   Future loadProductsBySorting({String sort, String page, String per_page}) async{
     productsByCategory = await _productServices.getProductBySearch(sort: sort, page: page, per_page: per_page);
     notifyListeners();
   }
-  Future loadProductsById({String id}) async{
-    productsById = await _productServices.getProductById(product_Id: id );
-    productsByIdsList.add(productsById);
-    notifyListeners();
-  }
+
+  Future<ProductModel>loadProductsById({String product_Id}) =>
+      WebApiServices().getProductById(product_Id ).then((data){
+        if(data.statusCode==HTTP_CODE_200){
+          printLog("API getProductById200 =>", data.body.toString());
+
+          if(data.body.isNotEmpty){
+            productsById = ProductModel.fromJson(json.decode(data.body));
+          }
+        }else{
+          printLog("API getProductById Errorr Massage", data.body);
+          toast(NETWORK_ERROR);
+        }
+        productsByIdsList.add(productsById);
+        return productsById;
+      });
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/providers/app.dart';
+import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/category.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/screens/mainpage.dart';
@@ -18,7 +19,8 @@ void main() {
       ChangeNotifierProvider.value(value: AppProvider.initialize()),
       ChangeNotifierProvider.value(value: UserProvider.initialize()),
       ChangeNotifierProvider.value(value: CategoriesProvider.initialize()),
-      ChangeNotifierProvider.value(value: ProductsProvider.initialize())
+      ChangeNotifierProvider.value(value: ProductsProvider.initialize()),
+      ChangeNotifierProvider.value(value: CartProvider.initialize())
   ],
     child: MaterialApp(
       title: "Woo App",
