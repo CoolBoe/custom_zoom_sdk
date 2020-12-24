@@ -7,7 +7,7 @@ class WebRequestConstants{
   static const String getBaseUrl ="https://app.democontentphoeniixx.com";
 
   static const String getWPBaseUrl= "https://wooapp.themiixx.com";
-
+  static const String COOKIES= "Cookie";
 
 //  String getDomainUrl ="https://app.democontentphoeniixx.com/wp-json/wc/v2/";
 //  String getDomainWebUrl= "https://app.democontentphoeniixx.com/wp-json/wc/v2/";

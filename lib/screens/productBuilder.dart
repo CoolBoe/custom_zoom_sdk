@@ -24,6 +24,7 @@ import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/loading.dart';
+import 'package:wooapp/widgets/progress_bar.dart';
 import 'package:wooapp/widgets/sortBy_ColorPicker.dart';
 import 'package:wooapp/widgets/sortBy_Dialog.dart';
 import 'package:wooapp/widgets/sortBy_DropMenu.dart';
@@ -37,6 +38,9 @@ class ShopView extends StatefulWidget {
 }
 class ShopState extends State<ShopView>{
 
+  AppProvider appProvider;
+  CategoriesProvider categoriesProvider;
+  ProductsProvider productsProvider;
   Map<String, dynamic> priceRange;
   int sortByIndex = 0;
 
@@ -54,37 +58,23 @@ class ShopState extends State<ShopView>{
   void initState() {
   BasePrefs.init();
   AppProvider.initialize();
-  CategoriesProvider.initialize();
   super.initState();
   }
   @override
   Widget build(BuildContext context) {
-  final productProvider = Provider.of<ProductsProvider>(context, listen: false);
-  final app = Provider.of<AppProvider>(context);
-    return FutureBuilder(
-        future: productProvider.loadProducts(),
-        builder: (ctx, snapshot){
-          if (snapshot.connectionState ==ConnectionState.done){
-            return Scaffold(
-              key: scaffoldKey,
-              body:
-              Container(
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: RefreshIndicator(
-                      onRefresh: () async {
-                        await Future.value({});
-                      },
-                      child: _CustomScrollView(context))),
-            );
-          }else{
-            return CircularProgressIndicator(
-              backgroundColor: orange,
-            );
-          }
-        });
+    return Scaffold(
+      key: scaffoldKey,
+      body:
+      Container(
+          decoration: BoxDecoration(color: Colors.white),
+          child: RefreshIndicator(
+              onRefresh: () async {
+                await Future.value({});
+              },
+              child: _CustomScrollView(context))),
+    );
   }
-  Widget _filterbutton({String category,String sort, String min_price, String max_price, String featured, String on_sale, String brand, String per_page, String page})
-  {
+  Widget _filterbutton({String category,String sort, String min_price, String max_price, String featured, String on_sale, String brand, String per_page, String page}) {
     return Padding(
       padding: const EdgeInsets.only(
           top: 10.0,
@@ -336,20 +326,19 @@ class ShopState extends State<ShopView>{
             ),
           ),
         ),
-        SliverDataBuilder(context)
+        SliverDataBuilder()
       ],
     );
   }
-
-  Widget SliverDataBuilder(BuildContext context){
+  Widget SliverDataBuilder(){
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2;
     final double itemWidth = size.width / 2;
-    final product = Provider.of<ProductsProvider>(context);
     SliverGrid grid= new SliverGrid(  delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index){
               return
                 GestureDetector(onTap: () async{
+
                   changeScreen(context, ProductScreen(productModel: productList(context)[index]));
                 }, child: Container(
                   height: 200,
@@ -460,9 +449,15 @@ class ShopState extends State<ShopView>{
       crossAxisSpacing: 10.0,
       childAspectRatio: (itemWidth/itemHeight),
     ));
-   return SliverPadding(padding: EdgeInsets.all(8),
-      sliver: grid
-    );
+     if(productList(context).length!=null){
+       return  SliverPadding(padding: EdgeInsets.all(8),
+           sliver:   grid
+       );
+    }else{
+       return SliverToBoxAdapter(
+         child: progressBar(context, orange),
+       );
+     }
   }
   void SortByDialog(){
     printLog('SortByDialog', 'SortByDialog');

@@ -4,16 +4,19 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/helper/social_login.dart' as social_login;
 import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/login.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/registration.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/loading.dart';
+import 'package:wooapp/widgets/progress_bar.dart';
 class SpleshScreen extends StatefulWidget {
 
   const SpleshScreen({Key key}) : super(key: key);
@@ -37,6 +40,7 @@ class SpleshScreenState extends State<SpleshScreen>{
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<UserProvider>(context, listen: false);
+    final app = Provider.of<AppProvider>(context);
 
     void _getUser(){
       if(!Validate().isValidString(BasePrefs.getString(USER_NAME))){
@@ -52,7 +56,9 @@ class SpleshScreenState extends State<SpleshScreen>{
     }
 
     return Scaffold(
-        body: new Container(
+        body:  app.isLoading ?
+            progressBar(context, orange)
+            : Container(
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/bg_login.png"),
@@ -75,7 +81,7 @@ class SpleshScreenState extends State<SpleshScreen>{
                               fontFamily: 'Poppins',
                               fontSize: 20.0,
                               fontWeight: FontWeight.w200,
-                              color: Colors.white
+                              color: white
                           ),),
                         Text("WooApp",
 
@@ -83,7 +89,7 @@ class SpleshScreenState extends State<SpleshScreen>{
                               fontFamily: 'Poppins',
                               fontSize: 40.0,
                               fontWeight: FontWeight.w400,
-                              color: Colors.white
+                              color: white
                           ),),
                         Padding(
                           padding: EdgeInsets.only(
@@ -92,7 +98,7 @@ class SpleshScreenState extends State<SpleshScreen>{
                           ),
                           child: Container(
                             height: 0.3,
-                            color: Colors.white70,
+                            color: white_70,
                           ),
                         ),
                         Padding(
@@ -100,20 +106,21 @@ class SpleshScreenState extends State<SpleshScreen>{
                               top: 40.0
                           ),
                           child: GestureDetector(onTap: ()async{
-                            await BasePrefs.init();
-                            print(BasePrefs.getString(USER_NAME));
+                          app.changeLoading();
+                          changeScreen(context, RegisterScreen());
+                          app.changeLoading();
                           },
                             child:   Container(
                               height: 50.0,
-                              color: Colors.transparent,
+                              color: transparent,
                               child: Container(
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: white,
                                     borderRadius: BorderRadius.all(Radius.circular(5.0))
                                 ),
                                 child: new Center(
                                   child: new Text("SIGN UP WITH EMAIL",
-                                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+                                    style: TextStyle(color: black, fontSize: 14, fontWeight: FontWeight.w500),
                                     textAlign: TextAlign.center,),
                                 ),
                               ),
@@ -126,42 +133,39 @@ class SpleshScreenState extends State<SpleshScreen>{
                           ),
                           child:  Container(
                             height: 50.0,
-                            color: Colors.transparent,
+                            color: transparent,
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(color: Colors.white, width: 2.0),
+                                  color: transparent,
+                                  border: Border.all(color: white, width: 2.0),
                                   borderRadius: BorderRadius.all(Radius.circular(5.0))
                               ),
-                              child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: (){
-                                    },
-                                    child: SvgPicture.asset(
-                                      ic_facebook, color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  GestureDetector(
-                                    onTap: (){
-                                      social_login.FBLogin().signInFB().then((value) {
-                                        if(value){
-                                          printLog('fblogin', value);
-                                          _getUser();
-                                        }
-                                      });
-                                    },
-                                    child: new Text("CONTINUE WITH FACEBOOK",
-                                        style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white)),
-                                  ),
-                                ],
-                              ),
+                              child:
+                                  GestureDetector(onTap: (){
+                                    app.changeLoading();
+                                    social_login.FBLogin().signInFB().then((value) {
+                                      if(value){
+                                        printLog('fblogin', value);
+                                        _getUser();
+                                      }
+                                    });
+                                    app.changeLoading();
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                        ic_facebook, color: white,
+                                      ),
+                                      SizedBox(width: 10),
+                                      new Text("CONTINUE WITH FACEBOOK",
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: white))
+                                    ],
+                                  ),)
                             ),
                           ),
                         ),
@@ -193,11 +197,11 @@ class MyAppBar extends StatelessWidget{
                         fontFamily: 'Poppins',
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white)),
+                        color: white)),
               ),
               GestureDetector(
                 onTap: (){},
-                child: new Icon(Icons.keyboard_arrow_right, color: Colors.white),
+                child: new Icon(Icons.keyboard_arrow_right, color: white),
               )
             ],
           ),

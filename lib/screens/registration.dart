@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
+import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/loading.dart';
+import 'package:wooapp/widgets/progress_bar.dart';
 import 'mainpage.dart';
 import 'package:wooapp/helper/social_login.dart' as social_login;
 
@@ -35,6 +38,8 @@ class RegisterScreenState extends State<RegisterScreen>{
   Widget build(BuildContext context) {
     String ic_facebook = "assets/svg_assets/ic_facebook.svg";
     final authProvider = Provider.of<UserProvider>(context, listen: false);
+    final app= Provider.of<AppProvider>(context, listen: false);
+
     void _saveUser(){
       if(!Validate().isValidString(authProvider.name.text)){
         _key.currentState.showSnackBar(SnackBar(content: Text('Please Enter your name')));
@@ -57,15 +62,19 @@ class RegisterScreenState extends State<RegisterScreen>{
       }else{
         authProvider.social_login(BasePrefs.getString(SOCIAL_LOGIN_MODE), BasePrefs.getString(USER_NAME), BasePrefs.getString(USER_FIRST_NAME),
             BasePrefs.getString(USER_LAST_NAME), BasePrefs.getString(USER_EMAIL)).then((value){
-          if(value){
-            printLog('getUser', value);
-            changeScreenReplacement(context, MainPageScreen());
-          }
+              setState(() {
+                if(value){
+                  printLog('getUser', value);
+                  changeScreenReplacement(context, MainPageScreen());
+                }
+              });
+
         });
       }
     }
-
-    return Container(
+    return  app.isLoading ?
+      progressBar(context, orange):
+      Container(
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/bg_login.png"),
@@ -76,7 +85,7 @@ class RegisterScreenState extends State<RegisterScreen>{
           key: _formKey,
           child: Scaffold(
             key: _key,
-            backgroundColor: Colors.transparent,
+            backgroundColor: transparent,
             resizeToAvoidBottomPadding: false,
             body: Column(
               children: <Widget>[
@@ -97,7 +106,7 @@ class RegisterScreenState extends State<RegisterScreen>{
                                     height: 60.0,
                                     child: Container(
                                       decoration: BoxDecoration(
-                                          color: Colors.black38,
+                                          color: black_38,
                                           borderRadius: BorderRadius.all(Radius.circular(5.0))
                                       ),
                                       child: new Padding(
@@ -116,7 +125,7 @@ class RegisterScreenState extends State<RegisterScreen>{
                                                       fontFamily: 'Poppins',
                                                       fontSize: 10.0,
                                                       fontWeight: FontWeight.w400,
-                                                      color: Colors.white)),
+                                                      color: white)),
                                             ),
                                             Expanded(
                                                 child: new TextFormField(
@@ -155,7 +164,7 @@ class RegisterScreenState extends State<RegisterScreen>{
                                       height: 60.0,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: Colors.black38,
+                                            color: black_38,
                                             borderRadius: BorderRadius.all(Radius.circular(5.0))
                                         ),
                                         child: new Padding(
@@ -174,7 +183,7 @@ class RegisterScreenState extends State<RegisterScreen>{
                                                         fontFamily: 'Poppins',
                                                         fontSize: 10.0,
                                                         fontWeight: FontWeight.w400,
-                                                        color: Colors.white)),
+                                                        color: white)),
                                               ),
                                               Expanded(
                                                   child: new TextFormField(
@@ -202,7 +211,7 @@ class RegisterScreenState extends State<RegisterScreen>{
                                       height: 60.0,
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: Colors.black38,
+                                            color: black_38,
                                             borderRadius: BorderRadius.all(Radius.circular(5.0))
                                         ),
                                         child: new Padding(padding: EdgeInsets.only(top: 5, left:10, bottom: 2, right: 10),
@@ -215,7 +224,7 @@ class RegisterScreenState extends State<RegisterScreen>{
                                                         fontFamily: 'Poppins',
                                                         fontSize: 10.0,
                                                         fontWeight: FontWeight.w400,
-                                                        color: Colors.white)),
+                                                        color: white)),
                                               ),
                                               Expanded(
                                                   child: new TextFormField(
@@ -259,15 +268,15 @@ class RegisterScreenState extends State<RegisterScreen>{
                                       },
                                         child: Container(
                                           height: 50.0,
-                                          color: Colors.transparent,
+                                          color: transparent,
                                           child: Container(
                                             decoration: BoxDecoration(
-                                                color: Colors.white,
+                                                color: white,
                                                 borderRadius: BorderRadius.all(Radius.circular(5.0))
                                             ),
                                             child: new Center(
                                               child: new Text("SIGN UP",
-                                                style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+                                                style: TextStyle(color: black, fontSize: 14, fontWeight: FontWeight.w500),
                                                 textAlign: TextAlign.center,),
                                             ),
                                           ),
@@ -280,20 +289,22 @@ class RegisterScreenState extends State<RegisterScreen>{
                                       ),
                                       child: GestureDetector(
                                         onTap: (){
+                                          app.changeLoading();
                                           social_login.FBLogin().signInFB().then((value) {
                                             if(value){
                                               printLog('fblogin', value);
                                               _getUser();
                                             }
                                           });
+                                          app.changeLoading();
                                         },
                                         child: Container(
                                           height: 50.0,
-                                          color: Colors.transparent,
+                                          color: transparent,
                                           child: Container(
                                             decoration: BoxDecoration(
-                                                color: Colors.transparent,
-                                                border: Border.all(color: Colors.white, width: 2.0),
+                                                color: transparent,
+                                                border: Border.all(color: white, width: 2.0),
                                                 borderRadius: BorderRadius.all(Radius.circular(5.0))
                                             ),
                                             child: new Row(
@@ -302,7 +313,7 @@ class RegisterScreenState extends State<RegisterScreen>{
                                                 GestureDetector(
                                                   onTap: (){},
                                                   child: SvgPicture.asset(
-                                                    ic_facebook, color: Colors.white,
+                                                    ic_facebook, color: white,
                                                   ),
                                                 ),
                                                 SizedBox(width: 10),
@@ -313,7 +324,7 @@ class RegisterScreenState extends State<RegisterScreen>{
                                                           fontFamily: 'Poppins',
                                                           fontSize: 12.0,
                                                           fontWeight: FontWeight.w500,
-                                                          color: Colors.white)),
+                                                          color: white)),
                                                 ),
 
                                               ],
@@ -341,7 +352,7 @@ class RegisterScreenState extends State<RegisterScreen>{
       ),
       child: Container(
         height: 0.9,
-        color: Colors.white70,
+        color: white_70,
       ),
     );
   }
@@ -356,11 +367,11 @@ class RegisterScreenState extends State<RegisterScreen>{
             width: 24.0,
             child: GestureDetector(
               child:Theme(
-                data: ThemeData(unselectedWidgetColor: Colors.white),
+                data: ThemeData(unselectedWidgetColor: white),
                 child: Checkbox(
                   value: cb_remember,
-                  checkColor: Colors.black,
-                  activeColor: Colors.white,
+                  checkColor: black,
+                  activeColor: white,
                   onChanged: (bool value){
                     setState(() {
                       cb_remember = value;
@@ -382,7 +393,7 @@ class RegisterScreenState extends State<RegisterScreen>{
               fontFamily: 'Poppins',
               fontSize: 20.0,
               fontWeight: FontWeight.w500,
-              color: Colors.white
+              color: white
           ),)
     );
   }
@@ -392,43 +403,9 @@ class RegisterScreenState extends State<RegisterScreen>{
           fontFamily: 'Poppins',
           fontSize: 35.0,
           fontWeight: FontWeight.w500,
-          color: Colors.white
+          color: white
       ),);
   }
-
-  Widget _btSignUp(BuildContext context){
-    return Padding(
-        padding: const EdgeInsets.only(
-            top: 40.0
-        ),
-        child: GestureDetector(onTap: () {
-          setState(() async{
-            if (cb_remember) {
-
-
-              // Navigator.of(context).pushNamed(routes.MainPage_Route);
-            }
-          });
-        },
-          child: Container(
-            height: 50.0,
-            color: Colors.transparent,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5.0))
-              ),
-              child: new Center(
-                child: new Text("SIGN UP",
-                  style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,),
-              ),
-            ),
-          ),
-        )
-    );
-  }
-
 }
 class MyAppBar extends StatelessWidget{
   @override
@@ -444,7 +421,7 @@ class MyAppBar extends StatelessWidget{
                 onTap: (){
                   Navigator.of(context).pop();
                 },
-                child: new Icon(Icons.keyboard_arrow_left, color: Colors.white),
+                child: new Icon(Icons.keyboard_arrow_left, color: white),
               )
             ],
           ),

@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
+import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/screens/mainpage.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 class CartScreen extends StatefulWidget {
 
@@ -14,22 +18,12 @@ class CartScreen extends StatefulWidget {
 }
 
 class CartScreenState extends State<CartScreen>{
-  List<Item> itemList = [
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/T_6_front.jpg",
-        "Women Black top",
-        "₹ 450.00",
-        "4.5",
-        true,
-        "21"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_6_front-600x600.jpg",
-        "Women White Top",
-        "₹ 250.00",
-        "4.5",
-        true,
-        "0"),
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    CartProvider.initialize();
+  }
   Widget _promocode(){
     return Padding(
       padding: const EdgeInsets.only(
@@ -76,7 +70,12 @@ class CartScreenState extends State<CartScreen>{
         ),),);
   }
   Widget _CustomScrollView(){
-
+    final cart  = Provider.of<CartProvider>(context);
+    CartModel cartModel =   cart.cartModel;
+    List<CartDatum> cartData =[];
+    if (cartModel.cartData != null){
+      cartData = cartModel.cartData;
+    }
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -107,10 +106,9 @@ class CartScreenState extends State<CartScreen>{
             )
           ],
         ),
-        SliverList(delegate: SliverChildListDelegate(
-          List.generate(itemList.length, (index) => _itemBuilder(context, index)
-          )
-        )),
+        SliverPadding(
+          padding: const EdgeInsets.only(top:0.0, left: 30, right:28, bottom: 10),
+        sliver: CartList(cartData),),
         SliverToBoxAdapter(
           child: _promocode(),
         ),
@@ -379,107 +377,111 @@ class CartScreenState extends State<CartScreen>{
       ],
     );
   }
-  Widget _itemBuilder(BuildContext context, int index ){
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        alignment: Alignment.topLeft,
-        height: 100,
-        child: Padding(
-          padding: const EdgeInsets.only(top:0.0, left: 10, right: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                width: 90,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 1.0),
-                        blurRadius: 6.0
-                    )
-                  ],
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 0.0, bottom: 0),
-                  child: Image.network(itemList[index].item_image),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left:8.0),
-                child: Container(
-                  width: 230,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top:5, left: 8, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(itemList[index].item_name, style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'Poppins'),),
-                            CircleAvatar(
-                              radius: 10.0,
-                              backgroundColor: Colors.red,
-                              child: Icon(
-                                Icons.close,
-                                color: Colors.white,
-                                size: 10,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:5.0, left: 8, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(itemList[index].price, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w600, fontFamily: 'Poppins'),),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:5.0, left: 8, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: 10.0,
-                              backgroundColor: Colors.orange[400],
-                              child: Icon(
-                                Icons.remove,color: Colors.red,
-                                size: 10,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left:8.0, right:8.0),
-                              child: Text('1', style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w400, fontFamily: 'Poppins'),),
-                            ),
-                            CircleAvatar(
-                              radius: 10.0,
-                              backgroundColor: Colors.orange[400],
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.red,
-                                size: 10,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+  Widget CartList(List<CartDatum> cartData){
+    return SliverList(delegate: SliverChildListDelegate(
+        List.generate(cartData.length, (index) =>Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            alignment: Alignment.topLeft,
+            height: 100,
+            child: Padding(
+              padding: const EdgeInsets.only(top:0.0, left: 10, right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: 90,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0.0, 1.0),
+                            blurRadius: 6.0
+                        )
+                      ],
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 0.0, bottom: 0),
+                      child: Image.network(cartData[index].image),
+                    ),
                   ),
-                ),
-              )
-            ],
+                  Padding(
+                    padding: const EdgeInsets.only(left:8.0),
+                    child: Container(
+                      width: 230,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top:5, left: 8, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(cartData[index].name, style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600, fontFamily: 'Poppins'),),
+                                CircleAvatar(
+                                  radius: 10.0,
+                                  backgroundColor: Colors.red,
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top:5.0, left: 8, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(cartData[index].price, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w600, fontFamily: 'Poppins'),),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top:5.0, left: 8, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 10.0,
+                                  backgroundColor: Colors.orange[400],
+                                  child: Icon(
+                                    Icons.remove,color: Colors.red,
+                                    size: 10,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left:8.0, right:8.0),
+                                  child: Text('1', style: TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.w400, fontFamily: 'Poppins'),),
+                                ),
+                                CircleAvatar(
+                                  radius: 10.0,
+                                  backgroundColor: Colors.orange[400],
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.red,
+                                    size: 10,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        )
+        )
+    ));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

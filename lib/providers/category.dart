@@ -13,10 +13,11 @@ class CategoriesProvider with ChangeNotifier{
   List<CategoryModel> categories = [];
 
   CategoriesProvider.initialize(){
-    getCategories();
+   getCategories();
   }
 
   Future<List<CategoryModel>>getCategories() => WebApiServices().getCategories().then((data){
+    categories.clear();
     if(data.statusCode==HTTP_CODE_200){
       List<dynamic> values = new List<dynamic>();
       values =json.decode(data.body);

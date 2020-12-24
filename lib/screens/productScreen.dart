@@ -11,11 +11,13 @@ import 'package:wooapp/models/mockdata/item_colorpicker.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/helper/color.dart' as color;
+import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/widgets/loading.dart';
+import 'package:wooapp/widgets/progress_bar.dart';
 
 class ProductScreen extends StatefulWidget {
 
@@ -60,7 +62,7 @@ class ProductScreenState extends State<ProductScreen>{
     if(widget.productModel.relatedIds.isNotEmpty){
       for(int i=0; i<widget.productModel.relatedIds.length; i++){
         printLog("relatedIdss", widget.productModel.relatedIds[i].toString());
-        productProvider.loadProductsById(
+        productProvider.loadProductsByRelatedId(
             product_Id: widget.productModel.relatedIds[i].toString());
       }
     }
@@ -82,20 +84,20 @@ class ProductScreenState extends State<ProductScreen>{
         printLog("productmodel", colorAttribute.options.length);
         List<String> colorValue = [];
         List<String> sizeValue = [];
-        for(int i=0; i<colorAttribute.values.length; i++){
-          printLog("colorAttribute", colorAttribute.values[i]);
-        }
+        // for(int i=0; i<colorAttribute.values.length; i++){
+        //   printLog("colorAttribute", colorAttribute.values[i]);
+        // }
 
-       if(colorAttribute!=null){
-         for(int i=0; i<colorAttribute.values.length; i++){
-           colorValue.add(colorAttribute.values[i]);
-           colorValue = colorAttribute.values;
-         }
-       }else if (sizeAttribute!=null){
-         for(int i=0; i<sizeAttribute.values.length; i++){
-           sizeValue.add(sizeAttribute.values[i]);
-         }
-       }
+       // if(colorAttribute!=null){
+       //   for(int i=0; i<colorAttribute.values.length; i++){
+       //     colorValue.add(colorAttribute.values[i]);
+       //     colorValue = colorAttribute.values;
+       //   }
+       // }else if (sizeAttribute!=null){
+       //   for(int i=0; i<sizeAttribute.values.length; i++){
+       //     sizeValue.add(sizeAttribute.values[i]);
+       //   }
+       // }
        printLog("colorArray", colorValue.toString());
        printLog("sizeArray", sizeValue.toString());
     }
@@ -104,7 +106,7 @@ class ProductScreenState extends State<ProductScreen>{
         SliverAppBar(
           pinned: true,
           expandedHeight: 50,
-          backgroundColor: color.grey,
+          backgroundColor: color.grey_200,
           flexibleSpace: FlexibleSpaceBar(
             title: Text(widget.productModel.name,
                 style: TextStyle(
@@ -384,15 +386,12 @@ class ProductScreenState extends State<ProductScreen>{
   Widget build(BuildContext context) {
     WebResponseModel cartResponse;
     final cart = Provider.of<CartProvider>(context, listen: false);
+    final app = Provider.of<AppProvider>(context, listen: false);
     return
       Scaffold(
         body: Container(
           decoration: BoxDecoration(color: Colors.white),
-          child: RefreshIndicator(
-              onRefresh: () async {
-                await Future.value({});
-              },
-              child:  Center(child: _CustomScrollView())),
+          child: app.isLoading ? progressBar(context, color.orange) : Center(child: _CustomScrollView()),
         ),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.all(0),
@@ -428,6 +427,7 @@ class ProductScreenState extends State<ProductScreen>{
                           ),
                           child: GestureDetector(
                             onTap: ()async{
+                              app.changeLoading();
                               cart.getAddToCart(id: widget.productModel.id.toString(), quantity: "1").then((value) => {
                                if(value.code=="1"){
                                  cartDialog(value.message)
@@ -436,7 +436,7 @@ class ProductScreenState extends State<ProductScreen>{
                                }
 
                               });
-
+                              app.changeLoading();
                             },
                             child:  Padding(
                               padding: const EdgeInsets.only(top:5.0, bottom: 5.0, left: 0, right: 0),
@@ -473,7 +473,6 @@ class ProductScreenState extends State<ProductScreen>{
       );
   }
   void cartDialog(String msg){
-
     showGeneralDialog(
         barrierLabel: "label",
         barrierDismissible: true,
@@ -672,7 +671,7 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
             dotSize: 2.0,
             dotIncreaseSize: 6.0,
             dotBgColor: Colors.transparent,
-            dotColor: Colors.grey,
+            dotColor: color.grey_50,
             dotPosition: DotPosition.bottomCenter,
             showIndicator: true,
             indicatorBgPadding: 6.0,

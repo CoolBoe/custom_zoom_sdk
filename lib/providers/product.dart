@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/product.dart';
+import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/services/product.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'dart:convert';
@@ -23,7 +24,7 @@ class ProductsProvider with ChangeNotifier{
   ProductServices _productServices = ProductServices();
 
   ProductsProvider.initialize(){
-    loadProducts(sort: sort, page: page, per_page: per_page);
+   loadProducts(sort: WebRequestConstants.SORT_BY_DEFAULT, per_page: "10", page: "1");
   }
 
   Future<List<ProductModel>>loadProducts({String sort, String page, String per_page}) => WebApiServices().getProducts(sort,page, per_page ).then((data){
@@ -33,6 +34,7 @@ class ProductsProvider with ChangeNotifier{
       if(data.body.isNotEmpty){
         values =json.decode(data.body);
         if(values.length>0){
+          products.clear();
           for(int i=0; i<values.length; i++ ){
             if(values[i]!=null){
               Map<String,dynamic> map = values[i];
@@ -207,13 +209,30 @@ class ProductsProvider with ChangeNotifier{
           printLog("API getProductById200 =>", data.body.toString());
 
           if(data.body.isNotEmpty){
+            productsByIdsList.clear();
             productsById = ProductModel.fromJson(json.decode(data.body));
           }
         }else{
           printLog("API getProductById Errorr Massage", data.body);
           toast(NETWORK_ERROR);
         }
-        productsByIdsList.add(productsById);
+        return productsById;
+      });
+
+  Future<ProductModel>loadProductsByRelatedId({String product_Id}) =>
+      WebApiServices().getProductById(product_Id ).then((data){
+        if(data.statusCode==HTTP_CODE_200){
+          printLog("API getProductById200 =>", data.body.toString());
+
+          if(data.body.isNotEmpty){
+            productsById = ProductModel.fromJson(json.decode(data.body));
+            productsByIdsList.add(productsById);
+          }
+        }else{
+          printLog("API getProductById Errorr Massage", data.body);
+          toast(NETWORK_ERROR);
+        }
+
         return productsById;
       });
 }

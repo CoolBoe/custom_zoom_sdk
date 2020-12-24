@@ -19,10 +19,12 @@ class AppProvider with ChangeNotifier{
   AppServices _appServices = AppServices();
 
   AppProvider.initialize(){
-      getPriceRange();
+      changeLoading();
   }
-
-
+  void changeLoading(){
+    isLoading = !isLoading;
+    notifyListeners();
+  }
   Future getPriceRange({String sort, String page, String per_page}) => WebApiServices().getPriceRange().then((data){
     if(data.statusCode==HTTP_CODE_200){
       printLog("API getPriceRange200 =>", data.body.toString());
@@ -33,13 +35,10 @@ class AppProvider with ChangeNotifier{
     }else{
       printLog("API getPriceRange Errorr Massage", data.body);
 
-      // toast(NETWORK_ERROR);
+      toast(NETWORK_ERROR);
     }
   });
-  void changeLoading(){
-    isLoading = !isLoading;
-    notifyListeners();
-  }
+
   void changeProductBy({ProductBy newProductBy}){
     product = newProductBy;
     switch(newProductBy.toString()){

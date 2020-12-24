@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
+import 'package:wooapp/models/category.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/category.dart';
@@ -12,6 +14,7 @@ import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/widgets/loading.dart';
+import 'package:wooapp/widgets/progress_bar.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({Key key}) : super(key: key);
@@ -35,8 +38,6 @@ class CategoriesScreenState extends State<CategoriesScreen>{
 @override
   void initState() {
   BasePrefs.init();
-  CategoriesProvider.initialize();
-  // TODO: implement initState
     super.initState();
   }
   @override
@@ -47,102 +48,103 @@ class CategoriesScreenState extends State<CategoriesScreen>{
 
   final categoryProvider = Provider.of<CategoriesProvider>(context, listen: false);
   final productProvider = Provider.of<ProductsProvider>(context);
-  final app= Provider.of<AppProvider>(context);
+  final app = Provider.of<AppProvider>(context);
+
+  final items = categoryProvider.categories;
     return Scaffold(
-     body: Container(
-       decoration: BoxDecoration(color: Colors.white),
-         child: RefreshIndicator(
-             onRefresh: () async {
-               await Future.value({});
-             },
-             child: CustomScrollView(
-               slivers: <Widget>[
-                 SliverAppBar(
-                   pinned: true,
-                   expandedHeight: 50,
-                   flexibleSpace: FlexibleSpaceBar(
-                     title: Text("Categories",
-                         style: TextStyle(
-                             fontFamily: 'Poppins',
-                             fontSize: 16.0,
-                             fontWeight: FontWeight.w600,
-                             color: Colors.black)),
-                     centerTitle: true,
-                   ),
-                   floating: true,
-                   leading: GestureDetector(
-                       onTap: (){
-                       },
-                       child: Icon(
-                         Icons.arrow_back, color: Colors.black,
-                       )
-                   ),
-                   actions: <Widget>[
-                     Padding(
-                       padding: const EdgeInsets.all(16.0),
-                       child: SvgPicture.asset('assets/icons/ic_search.svg'),
-                     )
-                   ],
+        body: app.isLoading ?
+        progressBar(context, orange)
+            : Container(
+         decoration: BoxDecoration(color: Colors.white),
+           child: CustomScrollView(
+           slivers: <Widget>[
+             SliverAppBar(
+               pinned: true,
+               expandedHeight: 50,
+               flexibleSpace: FlexibleSpaceBar(
+                 title: Text("Categories",
+                     style: TextStyle(
+                         fontFamily: 'Poppins',
+                         fontSize: 16.0,
+                         fontWeight: FontWeight.w600,
+                         color: Colors.black)),
+                 centerTitle: true,
+               ),
+               floating: true,
+               leading: GestureDetector(
+                   onTap: (){
+                   },
+                   child: Icon(
+                     Icons.arrow_back, color: Colors.black,
+                   )
+               ),
+               actions: <Widget>[
+                 Padding(
+                   padding: const EdgeInsets.all(16.0),
+                   child: SvgPicture.asset('assets/icons/ic_search.svg'),
+                 )
+               ],
+             ),
+             SliverPadding(padding: EdgeInsets.all(8),
+               sliver: SliverGrid(
+                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                   crossAxisCount: 3,
+                   childAspectRatio: (itemWidth/itemHeight),
                  ),
-                 SliverPadding(padding: EdgeInsets.all(8),
-                   sliver: SliverGrid(
-                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                       crossAxisCount: 3,
-                       childAspectRatio: (itemWidth/itemHeight),
-                     ),
-                     delegate: SliverChildBuilderDelegate(
-                             (BuildContext context, int index){
-                               var imageUrl='https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg';
-                               if(categoryProvider.categories[index].image!=null){
-                                 imageUrl =categoryProvider.categories[index].image.src;
-                               }
-                           return GestureDetector(onTap: ()async{
-                             setState(() {
-                               _selectItem  =index;
-                               _selectedItemID = categoryProvider.categories[index].id.toString();
-                             });
-                           },
-                               child: Card(
-                                 color: _selectItem==index ? Colors.orange: Colors.white,
-                                 shape: RoundedRectangleBorder(
-                                   borderRadius: BorderRadius.circular(15.0),
-                                 ),
-                                 elevation: 3,
-                                 child: Container(
-                                   child: Center(
-                                     child: Padding(
-                                       padding: const EdgeInsets.all(18.0),
-                                       child: Column(
-                                         mainAxisAlignment: MainAxisAlignment.center,
-                                         crossAxisAlignment: CrossAxisAlignment.center,
-                                         children: <Widget>[
-                                           Image.network(imageUrl, alignment: Alignment.center, height: 55, width: 60),
-                                           Padding(
-                                             padding: const EdgeInsets.all(8.0),
-                                             child: Text(categoryProvider.categories[index].name, style: TextStyle( color: _selectItem==index ? Colors.white: Colors.black,
-                                                 fontSize: 12, fontWeight: FontWeight.w400, fontFamily: 'Poppins')),
-                                           )
-                                         ],
-                                       ),
-                                     ),
+                 delegate: SliverChildBuilderDelegate(
+                         (BuildContext context, int index){
+                       var imageUrl='https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg';
+                       if(items[index].image!=null){
+                         imageUrl =items[index].image.src;
+                       }
+                       return GestureDetector(onTap: ()async{
+                         setState(() {
+                           _selectItem  =index;
+                           _selectedItemID = items[index].id.toString();
+                         });
+                       },
+                           child: Card(
+                             color: _selectItem==index ? Colors.orange: Colors.white,
+                             shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(15.0),
+                             ),
+                             elevation: 3,
+                             child: Container(
+                               child: Center(
+                                 child: Padding(
+                                   padding: const EdgeInsets.all(18.0),
+                                   child: Column(
+                                     mainAxisAlignment: MainAxisAlignment.center,
+                                     crossAxisAlignment: CrossAxisAlignment.center,
+                                     children: <Widget>[
+                                       Image.network(imageUrl, alignment: Alignment.center, height: 55, width: 60),
+                                       Padding(
+                                         padding: const EdgeInsets.all(8.0),
+                                         child: Text(items[index].name, style: TextStyle( color: _selectItem==index ? Colors.white: Colors.black,
+                                             fontSize: 12, fontWeight: FontWeight.w400, fontFamily: 'Poppins')),
+                                       )
+                                     ],
                                    ),
                                  ),
-                               ));
-                         },childCount: categoryProvider.categories.length
-                     ),
-                   ),
+                               ),
+                             ),
+                           ));
+                     },childCount: items.length
                  ),
-               ],
-             )),
-      ),
-      bottomNavigationBar:  Container(
+               ),
+             ),
+           ],
+         )),
+         bottomNavigationBar:  Container(
          color: Colors.transparent,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector (onTap: ()async{
+              app.changeLoading();
               BasePrefs.setString(PRODUCT_BY, CATEGORY);
               await productProvider.loadProductsByCategory(sort: 'default', page:'1', per_page:'10',category: _selectedItemID);
               changeScreen(context, MainPageScreen(currentTab: 1,));
+              app.changeLoading();
             },
             child:  Container(
               height: 40,

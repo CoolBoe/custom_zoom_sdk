@@ -1,13 +1,13 @@
 // To parse this JSON data, do
 //
 //     final productModel = productModelFromJson(jsonString);
-import 'package:json_annotation/json_annotation.dart';
+
 import 'dart:convert';
 
 ProductModel productModelFromJson(String str) => ProductModel.fromJson(json.decode(str));
 
 String productModelToJson(ProductModel data) => json.encode(data.toJson());
-@JsonSerializable(nullable: true)
+
 class ProductModel {
   ProductModel({
     this.id,
@@ -204,7 +204,7 @@ class ProductModel {
     purchaseNote: json["purchase_note"],
     categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
     tags: List<dynamic>.from(json["tags"].map((x) => x)),
-    images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+    images: Image==null ? null : List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
     attributes: List<Attribute>.from(json["attributes"].map((x) => Attribute.fromJson(x))),
     defaultAttributes: List<dynamic>.from(json["default_attributes"].map((x) => x)),
     variations: List<int>.from(json["variations"].map((x) => x)),
@@ -291,7 +291,7 @@ class Attribute {
     this.position,
     this.visible,
     this.variation,
-    this.values,
+    this.selectOptions,
     this.options,
   });
 
@@ -300,8 +300,8 @@ class Attribute {
   int position;
   bool visible;
   bool variation;
-  List<String> values;
-  List<String> options;
+  List<String> selectOptions;
+  List<dynamic> options;
 
   factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
     name: json["name"],
@@ -309,8 +309,8 @@ class Attribute {
     position: json["position"],
     visible: json["visible"],
     variation: json["variation"],
-    values: Attribute!=null ?  List<String>():List<String>.from(json["values"].map((x) => x)),
-    options: Attribute!=null ? List<String>():List<String>.from(json["options"].map((x) => x)),
+    selectOptions: Attribute !=null ? List<String>(): List<String>.from(json["select-options"].map((x) => x)),
+    options: Attribute !=null ? List<dynamic>() : List<dynamic>.from(json["options"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -319,8 +319,60 @@ class Attribute {
     "position": position,
     "visible": visible,
     "variation": variation,
-    "values": Attribute==null ? null :List<dynamic>.from(values.map((x) => x)),
-    "options": Attribute==null ? null : List<dynamic>.from(values.map((x) => x)),
+    "select-options": Attribute==null ? null : List<dynamic>.from(selectOptions.map((x) => x)),
+    "options": Attribute==null ? null : List<dynamic>.from(options.map((x) => x)),
+  };
+}
+
+class OptionClass {
+  OptionClass({
+    this.termId,
+    this.name,
+    this.slug,
+    this.termGroup,
+    this.termTaxonomyId,
+    this.taxonomy,
+    this.description,
+    this.parent,
+    this.count,
+    this.filter,
+  });
+
+  int termId;
+  String name;
+  String slug;
+  int termGroup;
+  int termTaxonomyId;
+  String taxonomy;
+  String description;
+  int parent;
+  int count;
+  String filter;
+
+  factory OptionClass.fromJson(Map<String, dynamic> json) => OptionClass(
+    termId: json["term_id"],
+    name: json["name"],
+    slug: json["slug"],
+    termGroup: json["term_group"],
+    termTaxonomyId: json["term_taxonomy_id"],
+    taxonomy: json["taxonomy"],
+    description: json["description"],
+    parent: json["parent"],
+    count: json["count"],
+    filter: json["filter"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "term_id": termId,
+    "name": name,
+    "slug": slug,
+    "term_group": termGroup,
+    "term_taxonomy_id": termTaxonomyId,
+    "taxonomy": taxonomy,
+    "description": description,
+    "parent": parent,
+    "count": count,
+    "filter": filter,
   };
 }
 

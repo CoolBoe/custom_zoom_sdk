@@ -17,6 +17,7 @@ class BasePrefs {
       return _preferences;
   }
   static String getString(String key, [String defValue]) {
+
     return _preferences.getString(key);
   }
 

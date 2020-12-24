@@ -6,6 +6,7 @@ import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/product.dart';
+import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/screens/favourite.dart';
 import 'package:wooapp/screens/home.dart';
 import 'package:wooapp/screens/profile.dart';
@@ -67,7 +68,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
         backgroundColor: Colors.orange,
         child: SvgPicture.asset("assets/icons/ic_shoppingcart.svg", color: Colors.white,),
         onPressed: (){
-          // Navigator.of(context).pushNamed(routes.CartScreen_Route);
+         changeScreen(context, CartScreen());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
