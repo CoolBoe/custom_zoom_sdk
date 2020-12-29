@@ -4,14 +4,15 @@ import 'package:provider/provider.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/screens/mainpage.dart';
 
-class PasswordResetScreen extends StatefulWidget{
+class PasswordResetScreen extends StatefulWidget {
   const PasswordResetScreen({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return PasswordResetScreenState();
   }
 }
-class PasswordResetScreenState extends State<PasswordResetScreen>{
+
+class PasswordResetScreenState extends State<PasswordResetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,10 +23,12 @@ class PasswordResetScreenState extends State<PasswordResetScreen>{
           MyAppBar(),
           Expanded(
             child: Padding(
-                padding: const EdgeInsets.only(left: 50.0, top: 0, right:50.0, bottom: 20.0),
+                padding: const EdgeInsets.only(
+                    left: 50.0, top: 0, right: 50.0, bottom: 20.0),
                 child: Center(
                     child: SingleChildScrollView(
-                        child: Padding ( padding: EdgeInsets.only(bottom: 150),
+                        child: Padding(
+                            padding: EdgeInsets.only(bottom: 150),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -33,43 +36,41 @@ class PasswordResetScreenState extends State<PasswordResetScreen>{
                                 Container(
                                   width: 100.00,
                                   height: 100.00,
-                                  decoration: BoxDecoration
-                                    (image: new DecorationImage(
-                                      image: AssetImage("assets/images/bg_lock.png"),fit: BoxFit.fill
-                                  )),
-
+                                  decoration: BoxDecoration(
+                                      image: new DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/bg_lock.png"),
+                                          fit: BoxFit.fill)),
                                 ),
-                                Padding(padding: EdgeInsets.only(top: 0),
-                                    child: Text("Hello Phoeniixx",
+                                Padding(
+                                    padding: EdgeInsets.only(top: 0),
+                                    child: Text(
+                                      "Hello Phoeniixx",
                                       style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 24.0,
                                           fontWeight: FontWeight.w400,
-                                          color: Colors.black
-                                      ),)
-                                ),
-                                Text("Your Password has been reset",
+                                          color: Colors.black),
+                                    )),
+                                Text(
+                                  "Your Password has been reset",
                                   style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
-                                      color: Colors.black
-                                  ),),
-                                Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 10.0
-                                    )),
-                                Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                    ]
+                                      color: Colors.black),
                                 ),
+                                Padding(padding: EdgeInsets.only(top: 10.0)),
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[]),
                                 Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20.0
-                                    ),
-                                    child: GestureDetector(onTap: (){
-                                      changeScreenReplacement(context, MainPageScreen());
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        changeScreenReplacement(
+                                            context, MainPageScreen());
                                       },
                                       child: Container(
                                         height: 50.0,
@@ -77,46 +78,49 @@ class PasswordResetScreenState extends State<PasswordResetScreen>{
                                         child: Container(
                                           decoration: BoxDecoration(
                                               color: Colors.black,
-                                              borderRadius: BorderRadius.all(Radius.circular(5.0))
-                                          ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5.0))),
                                           child: new Center(
-                                            child: new Text("START SHOPPING",
-                                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
-                                              textAlign: TextAlign.center,),
+                                            child: new Text(
+                                              "START SHOPPING",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
                                         ),
-                                      ),)
-                                ),
+                                      ),
+                                    )),
                               ],
-                            )
-                        ) )
-                )
-            ),
-          )],
+                            ))))),
+          )
+        ],
       ),
     );
   }
-
 }
-class MyAppBar extends StatelessWidget{
+
+class MyAppBar extends StatelessWidget {
   @override
-   Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 10.0, top: 10, right:10.0, bottom: 20.0),
-          child:
-          new Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              GestureDetector(
-                onTap: (){
-                  Navigator.of(context).pop();
-                },
-                child: new Icon(Icons.keyboard_arrow_left, color: Colors.black,  size: 30),
-              )
-            ],
-          ),
-        )
-    );
+      padding:
+          const EdgeInsets.only(left: 10.0, top: 10, right: 10.0, bottom: 20.0),
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: new Icon(Icons.keyboard_arrow_left,
+                color: Colors.black, size: 30),
+          )
+        ],
+      ),
+    ));
   }
 }

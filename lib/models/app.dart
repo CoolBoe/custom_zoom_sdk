@@ -1,6 +1,5 @@
-class AppModel{
+class AppModel {}
 
-}
 class PriceRangeModel {
   int min;
   int max;

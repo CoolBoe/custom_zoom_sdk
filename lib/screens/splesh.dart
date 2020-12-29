@@ -17,195 +17,213 @@ import 'package:wooapp/screens/registration.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
-class SpleshScreen extends StatefulWidget {
 
+class SpleshScreen extends StatefulWidget {
   const SpleshScreen({Key key}) : super(key: key);
 
   @override
   SpleshScreenState createState() => SpleshScreenState();
-
 }
 
-class SpleshScreenState extends State<SpleshScreen>{
-  final String ic_facebook = "assets/svg_assets/ic_facebook.svg";
+class SpleshScreenState extends State<SpleshScreen> {
   bool isLoggedIn = false;
   var fbProfile;
-
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<UserProvider>(context, listen: false);
     final app = Provider.of<AppProvider>(context);
-
-    void _getUser(){
-      if(!Validate().isValidString(BasePrefs.getString(USER_NAME))){
+    void _getUser() {
+      if (!Validate().isValidString(BasePrefs.getString(USER_NAME))) {
         snackBar("User Info Not Found");
-      }else{
-        authProvider.social_login(BasePrefs.getString(SOCIAL_LOGIN_MODE), BasePrefs.getString(USER_NAME), BasePrefs.getString(USER_FIRST_NAME),
-        BasePrefs.getString(USER_LAST_NAME), BasePrefs.getString(USER_EMAIL)).then((value){
-          if(value){
-            changeScreenReplacement(context, MainPageScreen());
+      } else {
+        authProvider
+            .social_login(
+                BasePrefs.getString(SOCIAL_LOGIN_MODE) != null
+                    ? BasePrefs.getString(SOCIAL_LOGIN_MODE)
+                    : "",
+                BasePrefs.getString(USER_NAME) != null
+                    ? BasePrefs.getString(USER_NAME)
+                    : "",
+                BasePrefs.getString(USER_FIRST_NAME) != null
+                    ? BasePrefs.getString(USER_FIRST_NAME)
+                    : "",
+                BasePrefs.getString(USER_LAST_NAME) != null
+                    ? BasePrefs.getString(USER_LAST_NAME)
+                    : "",
+                BasePrefs.getString(USER_EMAIL) != null
+                    ? BasePrefs.getString(USER_EMAIL)
+                    : "")
+            .then((value) {
+          if (value) {
+            printLog("datas", value);
+            toast(LOGIN_STATUS_TRUE);
+            changeScreen(
+                context,
+                MainPageScreen(
+                  currentTab: 0,
+                ));
+          } else {
+            toast(LOGIN_STATUS_FALSE);
           }
         });
       }
     }
 
     return Scaffold(
-        body:  app.isLoading ?
-            progressBar(context, orange)
-            : Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/bg_login.png"),
-              fit: BoxFit.fill,
-            ),
-          ),
-          child: Column(
-            children: <Widget>[
-              MyAppBar(),
-              Expanded(
-                child:
-                Padding(
-                    padding: const EdgeInsets.only(left: 50.0, top: 0, right:50.0, bottom: 50.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text("Welcome to",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w200,
-                              color: white
-                          ),),
-                        Text("WooApp",
-
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 40.0,
-                              fontWeight: FontWeight.w400,
-                              color: white
-                          ),),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 16.0,
-
-                          ),
-                          child: Container(
-                            height: 0.3,
-                            color: white_70,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 40.0
-                          ),
-                          child: GestureDetector(onTap: ()async{
+        body: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(ic_bg_login),
+          fit: BoxFit.fill,
+        ),
+      ),
+      child: Column(
+        children: <Widget>[
+          MyAppBar(),
+          Expanded(
+            child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 50.0, top: 0, right: 50.0, bottom: 50.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(
+                      "Welcome to",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w200,
+                          color: white),
+                    ),
+                    Text(
+                      appName,
+                      style: TextStyle(
+                          fontFamily: fontName,
+                          fontSize: dp40,
+                          fontWeight: regular,
+                          color: white),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 16.0,
+                      ),
+                      child: Container(
+                        height: 0.3,
+                        color: white_70,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: dp40),
+                      child: GestureDetector(
+                        onTap: () async {
                           app.changeLoading();
                           changeScreen(context, RegisterScreen());
                           app.changeLoading();
-                          },
-                            child:   Container(
-                              height: 50.0,
-                              color: transparent,
-                              child: Container(
-                                decoration: BoxDecoration(
+                        },
+                        child: Container(
+                          height: 50.0,
+                          color: transparent,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: white,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0))),
+                            child: new Center(
+                              child: new Text(
+                                "SIGN UP WITH EMAIL",
+                                style: TextStyle(
+                                    color: black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: dp10),
+                      child: Container(
+                        height: dp50,
+                        color: transparent,
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: transparent,
+                                border: Border.all(color: white, width: 2.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(dp5))),
+                            child: GestureDetector(
+                              onTap: () {
+                                app.changeLoading();
+                                social_login.FBLogin().signInFB().then((value) {
+                                  if (value) {
+                                    _getUser();
+                                  }
+                                });
+                                app.changeLoading();
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SvgPicture.asset(
+                                    ic_facebook,
                                     color: white,
-                                    borderRadius: BorderRadius.all(Radius.circular(5.0))
-                                ),
-                                child: new Center(
-                                  child: new Text("SIGN UP WITH EMAIL",
-                                    style: TextStyle(color: black, fontSize: 14, fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,),
-                                ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  new Text("CONTINUE WITH FACEBOOK",
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 12.0,
+                                          fontWeight: medium,
+                                          color: white))
+                                ],
                               ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 10.0
-                          ),
-                          child:  Container(
-                            height: 50.0,
-                            color: transparent,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: transparent,
-                                  border: Border.all(color: white, width: 2.0),
-                                  borderRadius: BorderRadius.all(Radius.circular(5.0))
-                              ),
-                              child:
-                                  GestureDetector(onTap: (){
-                                    app.changeLoading();
-                                    social_login.FBLogin().signInFB().then((value) {
-                                      if(value){
-                                        printLog('fblogin', value);
-                                        _getUser();
-                                      }
-                                    });
-                                    app.changeLoading();
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      SvgPicture.asset(
-                                        ic_facebook, color: white,
-                                      ),
-                                      SizedBox(width: 10),
-                                      new Text("CONTINUE WITH FACEBOOK",
-                                          style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: white))
-                                    ],
-                                  ),)
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                ),
-              )],
-          ),
-        )
-    );
+                            )),
+                      ),
+                    ),
+                  ],
+                )),
+          )
+        ],
+      ),
+    ));
   }
 }
-class MyAppBar extends StatelessWidget{
+
+class MyAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 0.0, top: 0, right:10.0, bottom: 20.0),
-          child:
-          new Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              GestureDetector(
-                onTap: ()async {
-                 changeScreenReplacement(context, LoginScreen());
-                },
-                child: new Text("SIGN IN",
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                        color: white)),
-              ),
-              GestureDetector(
-                onTap: (){},
-                child: new Icon(Icons.keyboard_arrow_right, color: white),
-              )
-            ],
-          ),
-        )
-    );
+      padding:
+          const EdgeInsets.only(left: 0.0, top: 10, right: dp10, bottom: dp20),
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          GestureDetector(
+              onTap: () async {
+                changeScreenReplacement(context, LoginScreen());
+              },
+              child: new Row(
+                children: [
+                  Text("SIGN IN",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 12.0,
+                          fontWeight: medium,
+                          color: white)),
+                  Icon(Icons.keyboard_arrow_right, color: white),
+                ],
+              )),
+        ],
+      ),
+    ));
   }
 }

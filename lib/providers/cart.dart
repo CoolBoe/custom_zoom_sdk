@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/services/cart.dart';
@@ -7,54 +8,41 @@ import 'package:wooapp/models/WebResponseModel.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/widgets/loading.dart';
 
-class CartProvider with ChangeNotifier{
-  bool cartStatus;
+class CartProvider with ChangeNotifier {
+  WebResponseModel webResponseModel;
+  CartServices cartServices = CartServices();
   CartModel cartModel;
-  CartServices _cartServices = CartServices();
 
-  CartProvider.initialize(){
+  CartProvider() {
     getCart();
   }
 
-  Future<WebResponseModel>getAddToCart({String id, String quantity, String variation, String variation_id}) => WebApiServices().getAddToCart(id, quantity).then((data){
-    if(data.statusCode==HTTP_CODE_200){
-      printLog("API getAddToCart(200):- ",data.body);
-      WebResponseModel values =WebResponseModel.fromJson(json.decode(data.body));
-      if(values.code=="0"){
-        return values;
-      }else{
-        return values;
-      }
-    }else{
-      printLog("Errorr", data.statusCode);
-      // toast(NETWORK_ERROR);
-      return null;
-    }
-  });
-  Future<WebResponseModel>getAddToCartVariationProduct({String id, String quantity, String variation, String variation_id}) => WebApiServices().getAddToCartVariationProduct(id, quantity, variation, variation_id).then((data){
-    if(data.statusCode==HTTP_CODE_200){
-      printLog("API getAddToCart(200):- ",data.body);
-      WebResponseModel values =WebResponseModel.fromJson(json.decode(data.body));
-      if(values.code=="0"){
-        return values;
-      }else{
-        return values;
-      }
-    }else{
-      printLog("Errorr", data.statusCode);
-      // toast(NETWORK_ERROR);
-      return null;
-    }
-  });
-  Future<CartModel>getCart() => WebApiServices().getCart().then((data){
-    if(data.statusCode==HTTP_CODE_200){
-      printLog("API getCart(200):- ",data.body);
-      cartModel =CartModel.fromJson(jsonDecode(data.body));
-      return cartModel;
-    }else{
-      printLog("Errorr", data.statusCode);
-      toast(NETWORK_ERROR);
-      return null;
-    }
-  });
+  Future<WebResponseModel> getAddToCart(
+      {String id,
+      String quantity,
+      String variation,
+      String variation_id}) async {
+    webResponseModel =
+        await cartServices.getAddToCart(id: id, quantity: quantity);
+    notifyListeners();
+  }
+
+  Future<WebResponseModel> getAddToCartVariationProduct(
+      {String id,
+      String quantity,
+      String variation,
+      String variation_id}) async {
+    webResponseModel = await cartServices.getAddToCartVariationProduct(
+        id: id,
+        quantity: quantity,
+        variation: variation,
+        variation_id: variation_id);
+    notifyListeners();
+  }
+
+  Future<CartModel> getCart() async {
+    cartModel = await cartServices.getCart();
+    printLog("getAddToCart", cartModel);
+    notifyListeners();
+  }
 }

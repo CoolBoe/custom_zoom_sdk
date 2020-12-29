@@ -12,17 +12,18 @@ import 'package:wooapp/screens/home.dart';
 import 'package:wooapp/screens/profile.dart';
 import 'package:wooapp/screens/productBuilder.dart';
 
-class MainPageScreen extends StatefulWidget{
+class MainPageScreen extends StatefulWidget {
   int currentTab = 0;
-  MainPageScreen(  {Key key, this.currentTab}) : super(key: key);
+  MainPageScreen({Key key, this.currentTab}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return MainPageScreenState(currentTab);
   }
 }
-class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
+
+class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
   bool _toggel = true;
-  int currentTab ;
+  int currentTab;
 
   MainPageScreenState(this.currentTab);
   final List<Widget> screens = [
@@ -33,7 +34,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
   ];
 
   List<ByCatgories> sortBy = [
-    ByCatgories("Home", 0,'assets/icons/ic_home.svg'),
+    ByCatgories("Home", 0, 'assets/icons/ic_home.svg'),
     ByCatgories("Shop", 1, 'assets/icons/ic_shop.svg'),
     ByCatgories("Shop by Category", 2, 'assets/icons/ic_categories.svg'),
     ByCatgories("Chat Support", 3, 'assets/icons/ic_chat.svg'),
@@ -43,8 +44,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget  currentScreen(int screenId){
-    switch(screenId){
+  Widget currentScreen(int screenId) {
+    switch (screenId) {
       case 0:
         return HomeView();
       case 1:
@@ -55,10 +56,12 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
         return ProfileView();
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    final productProvider = Provider.of<ProductsProvider>(context, listen: false);
-    final app= Provider.of<AppProvider>(context, listen: false);
+    final productProvider =
+        Provider.of<ProductsProvider>(context, listen: false);
+    final app = Provider.of<AppProvider>(context, listen: false);
     return Scaffold(
       body: PageStorage(
         child: currentScreen(currentTab),
@@ -66,9 +69,12 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
-        child: SvgPicture.asset("assets/icons/ic_shoppingcart.svg", color: Colors.white,),
-        onPressed: (){
-         changeScreen(context, CartScreen());
+        child: SvgPicture.asset(
+          "assets/icons/ic_shoppingcart.svg",
+          color: Colors.white,
+        ),
+        onPressed: () {
+          changeScreen(context, CartScreen());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -85,30 +91,37 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
                 children: <Widget>[
                   MaterialButton(
                     minWidth: 80,
-                    onPressed: (){setState(() {
-                      currentTab=0;
-                      currentScreen(currentTab);
-                    });
+                    onPressed: () {
+                      setState(() {
+                        currentTab = 0;
+                        currentScreen(currentTab);
+                      });
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SvgPicture.asset("assets/icons/ic_home.svg", color: currentTab == 0 ? Colors.orange : Colors.grey,)
+                        SvgPicture.asset(
+                          "assets/icons/ic_home.svg",
+                          color: currentTab == 0 ? Colors.orange : Colors.grey,
+                        )
                       ],
                     ),
                   ),
                   MaterialButton(
                     minWidth: 80,
                     onPressed: () {
-                       setState(()  {
-                         currentTab=1;
-                         currentScreen(currentTab);
-                    });
+                      setState(() {
+                        currentTab = 1;
+                        currentScreen(currentTab);
+                      });
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SvgPicture.asset("assets/icons/ic_shop.svg", color: currentTab == 1 ? Colors.orange : Colors.grey,)
+                        SvgPicture.asset(
+                          "assets/icons/ic_shop.svg",
+                          color: currentTab == 1 ? Colors.orange : Colors.grey,
+                        )
                       ],
                     ),
                   ),
@@ -119,29 +132,37 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
                 children: <Widget>[
                   MaterialButton(
                     minWidth: 80,
-                    onPressed: (){setState(() {
-                      currentTab=2;
-                      currentScreen(currentTab);
-                    });
+                    onPressed: () {
+                      setState(() {
+                        currentTab = 2;
+                        currentScreen(currentTab);
+                      });
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SvgPicture.asset("assets/icons/ic_heart.svg", color: currentTab == 2 ? Colors.orange : Colors.grey,)
+                        SvgPicture.asset(
+                          "assets/icons/ic_heart.svg",
+                          color: currentTab == 2 ? Colors.orange : Colors.grey,
+                        )
                       ],
                     ),
                   ),
                   MaterialButton(
                     minWidth: 80,
-                    onPressed: (){setState(() {
-                      currentTab=3;
-                      currentScreen(currentTab);
-                    });
+                    onPressed: () {
+                      setState(() {
+                        currentTab = 3;
+                        currentScreen(currentTab);
+                      });
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SvgPicture.asset("assets/icons/ic_profile.svg", color: currentTab == 3 ? Colors.orange : Colors.grey,)
+                        SvgPicture.asset(
+                          "assets/icons/ic_profile.svg",
+                          color: currentTab == 3 ? Colors.orange : Colors.grey,
+                        )
                       ],
                     ),
                   ),
@@ -152,7 +173,5 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier{
         ),
       ),
     );
-
   }
-
 }

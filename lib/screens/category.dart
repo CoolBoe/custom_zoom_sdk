@@ -19,11 +19,12 @@ import 'package:wooapp/widgets/progress_bar.dart';
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({Key key}) : super(key: key);
   @override
-  CategoriesScreenState createState()=>CategoriesScreenState();
+  CategoriesScreenState createState() => CategoriesScreenState();
 }
-class CategoriesScreenState extends State<CategoriesScreen>{
+
+class CategoriesScreenState extends State<CategoriesScreen> {
   int _selectItem = 0;
-  String _selectedItemID= '15' ;
+  String _selectedItemID = '15';
   List<ByCatgories> productbycategories = [
     ByCatgories('Glasses', 0, "assets/icons/ic_eyeglasses.svg"),
     ByCatgories('Hoodies', 1, "assets/icons/ic_hoodie.svg"),
@@ -35,131 +36,157 @@ class CategoriesScreenState extends State<CategoriesScreen>{
     ByCatgories("Clothing", 7, "assets/icons/ic_cloth.svg"),
     ByCatgories("Jeans", 8, "assets/icons/ic_trousers.svg")
   ];
-@override
+  @override
   void initState() {
-  BasePrefs.init();
+    BasePrefs.init();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height/1.32 - kToolbarHeight - 34) / 2.2;
+    final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 2.2;
     final double itemWidth = size.width / 2;
 
-  final categoryProvider = Provider.of<CategoriesProvider>(context, listen: false);
-  final productProvider = Provider.of<ProductsProvider>(context);
-  final app = Provider.of<AppProvider>(context);
+    final categoryProvider =
+        Provider.of<CategoriesProvider>(context, listen: false);
+    final productProvider = Provider.of<ProductsProvider>(context);
+    final app = Provider.of<AppProvider>(context);
 
-  final items = categoryProvider.categories;
+    final items = categoryProvider.categories;
     return Scaffold(
-        body: app.isLoading ?
-        progressBar(context, orange)
+        body: app.isLoading
+            ? progressBar(context, orange)
             : Container(
-         decoration: BoxDecoration(color: Colors.white),
-           child: CustomScrollView(
-           slivers: <Widget>[
-             SliverAppBar(
-               pinned: true,
-               expandedHeight: 50,
-               flexibleSpace: FlexibleSpaceBar(
-                 title: Text("Categories",
-                     style: TextStyle(
-                         fontFamily: 'Poppins',
-                         fontSize: 16.0,
-                         fontWeight: FontWeight.w600,
-                         color: Colors.black)),
-                 centerTitle: true,
-               ),
-               floating: true,
-               leading: GestureDetector(
-                   onTap: (){
-                   },
-                   child: Icon(
-                     Icons.arrow_back, color: Colors.black,
-                   )
-               ),
-               actions: <Widget>[
-                 Padding(
-                   padding: const EdgeInsets.all(16.0),
-                   child: SvgPicture.asset('assets/icons/ic_search.svg'),
-                 )
-               ],
-             ),
-             SliverPadding(padding: EdgeInsets.all(8),
-               sliver: SliverGrid(
-                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                   crossAxisCount: 3,
-                   childAspectRatio: (itemWidth/itemHeight),
-                 ),
-                 delegate: SliverChildBuilderDelegate(
-                         (BuildContext context, int index){
-                       var imageUrl='https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg';
-                       if(items[index].image!=null){
-                         imageUrl =items[index].image.src;
-                       }
-                       return GestureDetector(onTap: ()async{
-                         setState(() {
-                           _selectItem  =index;
-                           _selectedItemID = items[index].id.toString();
-                         });
-                       },
-                           child: Card(
-                             color: _selectItem==index ? Colors.orange: Colors.white,
-                             shape: RoundedRectangleBorder(
-                               borderRadius: BorderRadius.circular(15.0),
-                             ),
-                             elevation: 3,
-                             child: Container(
-                               child: Center(
-                                 child: Padding(
-                                   padding: const EdgeInsets.all(18.0),
-                                   child: Column(
-                                     mainAxisAlignment: MainAxisAlignment.center,
-                                     crossAxisAlignment: CrossAxisAlignment.center,
-                                     children: <Widget>[
-                                       Image.network(imageUrl, alignment: Alignment.center, height: 55, width: 60),
-                                       Padding(
-                                         padding: const EdgeInsets.all(8.0),
-                                         child: Text(items[index].name, style: TextStyle( color: _selectItem==index ? Colors.white: Colors.black,
-                                             fontSize: 12, fontWeight: FontWeight.w400, fontFamily: 'Poppins')),
-                                       )
-                                     ],
-                                   ),
-                                 ),
-                               ),
-                             ),
-                           ));
-                     },childCount: items.length
-                 ),
-               ),
-             ),
-           ],
-         )),
-         bottomNavigationBar:  Container(
-         color: Colors.transparent,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector (onTap: ()async{
-              app.changeLoading();
-              BasePrefs.setString(PRODUCT_BY, CATEGORY);
-              await productProvider.loadProductsByCategory(sort: 'default', page:'1', per_page:'10',category: _selectedItemID);
-              changeScreen(context, MainPageScreen(currentTab: 1,));
-              app.changeLoading();
-            },
-            child:  Container(
-              height: 40,
-              decoration: BoxDecoration(
-                color:  Colors.orange,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Center(
-                child: Text('Next', style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Poppins', fontWeight: FontWeight.w400, fontSize: 14)),
-              ),
-            ),)
-          )
-      )
-    );
+                decoration: BoxDecoration(color: Colors.white),
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      pinned: true,
+                      expandedHeight: 50,
+                      flexibleSpace: FlexibleSpaceBar(
+                        title: Text("Categories",
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black)),
+                        centerTitle: true,
+                      ),
+                      floating: true,
+                      leading: GestureDetector(
+                          onTap: () {},
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.black,
+                          )),
+                      actions: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: SvgPicture.asset('assets/icons/ic_search.svg'),
+                        )
+                      ],
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.all(8),
+                      sliver: SliverGrid(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: (itemWidth / itemHeight),
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                          var imageUrl =
+                              'https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg';
+                          if (items[index].image != null) {
+                            imageUrl = items[index].image.src;
+                          }
+                          return GestureDetector(
+                              onTap: () async {
+                                setState(() {
+                                  _selectItem = index;
+                                  _selectedItemID = items[index].id.toString();
+                                });
+                              },
+                              child: Card(
+                                color: _selectItem == index
+                                    ? Colors.orange
+                                    : Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                elevation: 3,
+                                child: Container(
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(18.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Image.network(imageUrl,
+                                              alignment: Alignment.center,
+                                              height: 55,
+                                              width: 60),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(items[index].name,
+                                                style: TextStyle(
+                                                    color: _selectItem == index
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'Poppins')),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ));
+                        }, childCount: items.length),
+                      ),
+                    ),
+                  ],
+                )),
+        bottomNavigationBar: Container(
+            color: Colors.transparent,
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () async {
+                    app.changeLoading();
+                    BasePrefs.setString(PRODUCT_BY, CATEGORY);
+                    await productProvider.loadProductsByCategory(
+                        sort: 'default',
+                        page: '1',
+                        per_page: '10',
+                        category: _selectedItemID);
+                    changeScreen(
+                        context,
+                        MainPageScreen(
+                          currentTab: 1,
+                        ));
+                    app.changeLoading();
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Center(
+                      child: Text('Next',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14)),
+                    ),
+                  ),
+                ))));
   }
 }

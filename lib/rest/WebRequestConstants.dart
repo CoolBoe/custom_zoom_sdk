@@ -1,13 +1,18 @@
 import 'dart:convert';
 
-class WebRequestConstants{
+class WebRequestConstants {
+  static const String getDomainUrl = "/wp-json/wc/v2/";
 
-  static const String getDomainUrl ="/wp-json/wc/v2/";
+  static const String getBaseUrl = "https://app.democontentphoeniixx.com";
+  static const String BaseAuthId =
+      "ck_182712e047bc83b22974476388360fca763c0005";
+  static const String BaseAuthPass =
+      "cs_3351fba7577bb78534600af478007e73f8babd4e";
+  static const String getWPBaseUrl = "https://wooapp.themiixx.com";
 
-  static const String getBaseUrl ="https://app.democontentphoeniixx.com";
-
-  static const String getWPBaseUrl= "https://wooapp.themiixx.com";
-  static const String COOKIES= "Cookie";
+  String BaseAuth =
+      'Basic ' + base64Encode(utf8.encode('$BaseAuthId:$BaseAuthPass'));
+  static const String COOKIES = "Cookie";
 
 //  String getDomainUrl ="https://app.democontentphoeniixx.com/wp-json/wc/v2/";
 //  String getDomainWebUrl= "https://app.democontentphoeniixx.com/wp-json/wc/v2/";
@@ -18,16 +23,16 @@ class WebRequestConstants{
   static const String VERIFICATION = "newreg";
   static const String FORGOT_PASSWORD = "forget-password";
   static const String USER_LOGOUT = "logout";
-  static const String REGISTER= "register";
+  static const String REGISTER = "register";
   static const String CHANGE_PASSWORD = "change-password";
   static const String SOCIAL_LOGIN = "social-login";
-  static const String LOGIN="login";
-  static const String ALL_CATEGORIES="products/all-categories";
-  static const String PRODUCT="products";
-  static const String CUSTOM_PRODUCT="custom-products";
-  static const String PRICE_RANGE="products/price-range";
-  static const String PRODUCT_BY_ID ="get-products-by-id";
-  static const String SORT ="sort";
+  static const String LOGIN = "login";
+  static const String ALL_CATEGORIES = "products/all-categories";
+  static const String PRODUCT = "products";
+  static const String CUSTOM_PRODUCT = "custom-products";
+  static const String PRICE_RANGE = "products/price-range";
+  static const String PRODUCT_BY_ID = "get-products-by-id";
+  static const String SORT = "sort";
   static const String PAGE = "page";
   static const String PER_PAGE = "per_page";
 
@@ -37,19 +42,19 @@ class WebRequestConstants{
   static const String CART_UPDATE = "cart/update";
   static const String CART_REMOVE = "cart/remove";
   static const String CART_CLEAR = "cart/clear";
-  static const String CART_TOTAL ="cart/totals";
+  static const String CART_TOTAL = "cart/totals";
   static const String COUPON = "cart/coupon";
   static const String REMOVE_COUPON = "cart/remove-coupon";
-  static const String CART_ITEM_COUNT= "cart/item-count";
+  static const String CART_ITEM_COUNT = "cart/item-count";
   static const String QUANTITY = "quantity";
   static const String VARIATION = "variation";
   static const String VARIATION_ID = "variation_id";
   static const String CART_ITEM_KEY = "cart_item_key";
 
   /*-----------------------------Product Filters-----------------------------------------*/
-  static const String CATEGORY= "category";
-  static const String BRAND= "brand";
-  static const String SEARCH= "search";
+  static const String CATEGORY = "category";
+  static const String BRAND = "brand";
+  static const String SEARCH = "search";
   static const String MAX_PRICE = "max_price";
   static const String MIN_PRICE = "min_price";
   static const String ON_SALE = "on_sale";
@@ -60,14 +65,8 @@ class WebRequestConstants{
   /*-------------------------------------Sort Filters-----------------------------------------------------------------*/
   static const String SORT_BY_DEFAULT = "default";
   static const String SORT_BY_POPULARITY = "popularity";
-  static const String SORT_BY_RATING ="rating";
-  static const String SORT_BY_DATE ="date";
+  static const String SORT_BY_RATING = "rating";
+  static const String SORT_BY_DATE = "date";
   static const String SORT_BY_PRICE_DESC = "price_desc";
   static const String SORT_BY_PRICE_ASC = "price_asc";
-
-
-
-
-
-
 }

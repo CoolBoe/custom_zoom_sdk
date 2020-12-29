@@ -1,4 +1,4 @@
-class UserModel{
+class UserModel {
   String status;
   String user_id;
   String refer_earn;
@@ -6,29 +6,26 @@ class UserModel{
   String code;
   Details details;
 
-  UserModel({this.code,
-    this.status,
-    this.user_id,
-    this.refer_earn,
-    this.error,
-  this.details});
+  UserModel(
+      {this.code,
+      this.status,
+      this.user_id,
+      this.refer_earn,
+      this.error,
+      this.details});
 
-  factory UserModel.fromJson(Map<String, dynamic>jsonMap){
+  factory UserModel.fromJson(Map<String, dynamic> jsonMap) {
     return UserModel(
         user_id: jsonMap['user_id'],
         refer_earn: jsonMap['refer_earn'],
-        details: jsonMap['details']
-    );
+        details: jsonMap['details']);
   }
 
-  Map<String, dynamic> toJson()=>{
-    'user_id':user_id,
-    'refer_earn':refer_earn,
-    'details':details
-  };
-
+  Map<String, dynamic> toJson() =>
+      {'user_id': user_id, 'refer_earn': refer_earn, 'details': details};
 }
-class Details{
+
+class Details {
   String id;
   String date_created;
   String date_modified;
@@ -45,8 +42,8 @@ class Details{
   String avatar_url;
   MetaData meta_data;
 
-  Details({
-      this.id,
+  Details(
+      {this.id,
       this.date_created,
       this.date_modified,
       this.email,
@@ -62,7 +59,7 @@ class Details{
       this.avatar_url,
       this.meta_data});
 
-  factory Details.fromJson(Map<String, dynamic>jsonMap){
+  factory Details.fromJson(Map<String, dynamic> jsonMap) {
     return Details(
       id: jsonMap['id'],
       date_created: jsonMap['date_created'],
@@ -82,25 +79,26 @@ class Details{
     );
   }
 
-  Map<String, dynamic> toJson()=>{
-    'id':id,
-    'date_created':date_created,
-    'date_modified':date_modified,
-    'email':email,
-    'first_name':first_name,
-    'last_name':last_name,
-    'username':username,
-    'role':role,
-    'billing':billing,
-    'shipping':shipping,
-    'is_paying_customer':is_paying_customer,
-    'orders_count':orders_count,
-    'total_spent':total_spent,
-    'avatar_url':avatar_url,
-    'meta_data':meta_data,
-  };
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'date_created': date_created,
+        'date_modified': date_modified,
+        'email': email,
+        'first_name': first_name,
+        'last_name': last_name,
+        'username': username,
+        'role': role,
+        'billing': billing,
+        'shipping': shipping,
+        'is_paying_customer': is_paying_customer,
+        'orders_count': orders_count,
+        'total_spent': total_spent,
+        'avatar_url': avatar_url,
+        'meta_data': meta_data,
+      };
 }
-class Billing{
+
+class Billing {
   String first_name;
   String last_name;
   String company;
@@ -113,8 +111,8 @@ class Billing{
   String email;
   String phone;
 
-  Billing({
-      this.first_name,
+  Billing(
+      {this.first_name,
       this.last_name,
       this.company,
       this.address_1,
@@ -125,7 +123,7 @@ class Billing{
       this.state,
       this.email,
       this.phone});
-  factory Billing.fromJson(Map<String, dynamic>jsonMap){
+  factory Billing.fromJson(Map<String, dynamic> jsonMap) {
     return Billing(
       first_name: jsonMap['first_name'],
       last_name: jsonMap['last_name'],
@@ -140,21 +138,22 @@ class Billing{
       phone: jsonMap['phone'],
     );
   }
-  Map<String, dynamic> toJson()=>{
-    'first_name':first_name,
-    'last_name':last_name,
-    'company':company,
-    'address_1':address_1,
-    'address_2':address_2,
-    'city':city,
-    'postcode':postcode,
-    'country':country,
-    'state':state,
-    'email':email,
-    'phone':phone,
-  };
+  Map<String, dynamic> toJson() => {
+        'first_name': first_name,
+        'last_name': last_name,
+        'company': company,
+        'address_1': address_1,
+        'address_2': address_2,
+        'city': city,
+        'postcode': postcode,
+        'country': country,
+        'state': state,
+        'email': email,
+        'phone': phone,
+      };
 }
-class Shipping{
+
+class Shipping {
   String first_name;
   String last_name;
   String company;
@@ -165,10 +164,18 @@ class Shipping{
   String country;
   String state;
 
-  Shipping({this.first_name, this.last_name, this.company, this.address_1,
-      this.address_2, this.city, this.postcode, this.country, this.state});
+  Shipping(
+      {this.first_name,
+      this.last_name,
+      this.company,
+      this.address_1,
+      this.address_2,
+      this.city,
+      this.postcode,
+      this.country,
+      this.state});
 
-  factory Shipping.fromJson(Map<String, dynamic>jsonMap){
+  factory Shipping.fromJson(Map<String, dynamic> jsonMap) {
     return Shipping(
       first_name: jsonMap['first_name'],
       last_name: jsonMap['last_name'],
@@ -181,35 +188,36 @@ class Shipping{
       state: jsonMap['state'],
     );
   }
-  Map<String, dynamic> toJson()=>{
-    'first_name':first_name,
-    'last_name':last_name,
-    'company':company,
-    'address_1':address_1,
-    'address_2':address_2,
-    'city':city,
-    'postcode':postcode,
-    'country':country,
-    'state':state,
-  };
+  Map<String, dynamic> toJson() => {
+        'first_name': first_name,
+        'last_name': last_name,
+        'company': company,
+        'address_1': address_1,
+        'address_2': address_2,
+        'city': city,
+        'postcode': postcode,
+        'country': country,
+        'state': state,
+      };
 }
-class MetaData{
+
+class MetaData {
   String id;
   String key;
   String value;
 
   MetaData({this.id, this.key, this.value});
 
-  factory MetaData.fromJson(Map<String, dynamic>jsonMap){
+  factory MetaData.fromJson(Map<String, dynamic> jsonMap) {
     return MetaData(
       id: jsonMap['id'],
       key: jsonMap['key'],
       value: jsonMap['value'],
     );
   }
-  Map<String, dynamic> toJson()=>{
-    'id':id,
-    'key':key,
-    'value':value,
-  };
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'key': key,
+        'value': value,
+      };
 }

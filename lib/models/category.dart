@@ -12,13 +12,13 @@ class CategoryModel {
 
   CategoryModel(
       {this.id,
-        this.name,
-        this.slug,
-        this.parent,
-        this.description,
-        this.display,
-        this.image,
-        this.count});
+      this.name,
+      this.slug,
+      this.parent,
+      this.description,
+      this.display,
+      this.image,
+      this.count});
 
   CategoryModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

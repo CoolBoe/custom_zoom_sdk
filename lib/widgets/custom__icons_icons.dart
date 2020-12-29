@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/Custom_Icons.ttf
 ///
-/// 
+///
 ///
 import 'package:flutter/widgets.dart';
 
@@ -19,7 +19,6 @@ class Custom_Icons {
   Custom_Icons._();
 
   static const _kFontFam = 'Custom_Icons';
-
 
   static const IconData ic_drawer = IconData(0xe800, fontFamily: _kFontFam);
 }

@@ -2,86 +2,100 @@ import 'dart:ffi';
 
 import 'package:wooapp/widgets/loading.dart';
 
-class Validate{
-  static const String EMAIL_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})";
+class Validate {
+  static const String EMAIL_REGEX =
+      "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})";
   static const String EMAIL_MSG_EMPTY = "Please enter your valid email.";
-  static const  String EMAIL_MSG_INVALID = "You have entered an invalid email address.";
+  static const String EMAIL_MSG_INVALID =
+      "You have entered an invalid email address.";
 
-  static const  String MOBILE_REGEX = "^[+]?[0-9]{7,15}";
-  static const String MOBILENUMBER_MSG_EMPTY = "Please enter your mobile number.";
-  static const String MOBILENUMBER_MSG_INVALID = "You have entered an invalid mobile number.";
+  static const String MOBILE_REGEX = "^[+]?[0-9]{7,15}";
+  static const String MOBILENUMBER_MSG_EMPTY =
+      "Please enter your mobile number.";
+  static const String MOBILENUMBER_MSG_INVALID =
+      "You have entered an invalid mobile number.";
 
-  static const String EMAIL_OR_MOBILE_MSG_EMPTY = "Please enter your valid email / mobile number.";
+  static const String EMAIL_OR_MOBILE_MSG_EMPTY =
+      "Please enter your valid email / mobile number.";
 
   static const String PASSWORD_MSG_EMPTY = "Please enter your password.";
-  static const String PASSWORD_MSG_INVALID = "Your password can't start or end with a blank space.";
-  static const String PASSWORD_MSG_INVALID_LENGTH = "You must be provide at least 6 to 30 characters for password.";
+  static const String PASSWORD_MSG_INVALID =
+      "Your password can't start or end with a blank space.";
+  static const String PASSWORD_MSG_INVALID_LENGTH =
+      "You must be provide at least 6 to 30 characters for password.";
 
-  static const String CONFIRM_PASSWORD_MSG_EMPTY = "Please enter your confirm password.";
-  static const String CONFIRM_PASSWORD_MSG_INVALID = "Password and confirm password does not match.";
+  static const String CONFIRM_PASSWORD_MSG_EMPTY =
+      "Please enter your confirm password.";
+  static const String CONFIRM_PASSWORD_MSG_INVALID =
+      "Password and confirm password does not match.";
 
   static const String OTP_MSG_EMPTY = "Please enter your OTP.";
   static const String OTP_MSG_INVALID = "You have entered an invalid OTP.";
 
   static const String FIRST_NAME_MSG_EMPTY = "Please enter your first name.";
-  static const String FIRST_NAME_MSG_INVALID = "Your first name can't start or end with a blank space.";
-  static const String FIRST_NAME_MSG_INVALID_LENGTH = "First name should be 3 to 20 Alphabetic Characters only.";
+  static const String FIRST_NAME_MSG_INVALID =
+      "Your first name can't start or end with a blank space.";
+  static const String FIRST_NAME_MSG_INVALID_LENGTH =
+      "First name should be 3 to 20 Alphabetic Characters only.";
 
   static const String LAST_NAME_MSG_EMPTY = "Please enter your last name.";
-  static const String LAST_NAME_MSG_INVALID = "Your last name can't start or end with a blank space.";
-  static const String LAST_NAME_MSG_INVALID_LENGTH = "Last name should be 3 to 20 Alphabetic Characters only.";
+  static const String LAST_NAME_MSG_INVALID =
+      "Your last name can't start or end with a blank space.";
+  static const String LAST_NAME_MSG_INVALID_LENGTH =
+      "Last name should be 3 to 20 Alphabetic Characters only.";
 
-  bool validEmailAddress(String emailAddress){
-  String email = emailAddress.trim().toString();
-  if(email.length==0){
+  bool validEmailAddress(String emailAddress) {
+    String email = emailAddress.trim().toString();
+    if (email.length == 0) {
       snackBar(EMAIL_MSG_EMPTY);
       return false;
+    }
+    return validEmailPattern(emailAddress);
   }
-  return validEmailPattern(emailAddress);
-  }
+
   bool validEmailPattern(String emailAddress) {
-    String email =emailAddress.trim().toString();
-    RegExp regExp= new RegExp(EMAIL_REGEX);
-    if(!regExp.hasMatch(emailAddress)){
+    String email = emailAddress.trim().toString();
+    RegExp regExp = new RegExp(EMAIL_REGEX);
+    if (!regExp.hasMatch(emailAddress)) {
       snackBar(EMAIL_MSG_INVALID);
       return false;
     }
     return true;
   }
 
-  bool validMobileNumber(String mobile){
-  String mobileNumber = mobile.trim().toString();
-  if(mobileNumber.length==0){
-    snackBar(MOBILENUMBER_MSG_EMPTY);
-    return false;
-  }
-  return validMobilePattern(mobile);
+  bool validMobileNumber(String mobile) {
+    String mobileNumber = mobile.trim().toString();
+    if (mobileNumber.length == 0) {
+      snackBar(MOBILENUMBER_MSG_EMPTY);
+      return false;
+    }
+    return validMobilePattern(mobile);
   }
 
   bool validMobilePattern(String mobile) {
-  String mobileNumber = mobile.trim().toString();
-  RegExp regExp= new RegExp(MOBILENUMBER_MSG_INVALID);
-  if(!regExp.hasMatch(mobile)){
-    snackBar(MOBILENUMBER_MSG_INVALID);
-    return false;
-  }
-  return true;
+    String mobileNumber = mobile.trim().toString();
+    RegExp regExp = new RegExp(MOBILENUMBER_MSG_INVALID);
+    if (!regExp.hasMatch(mobile)) {
+      snackBar(MOBILENUMBER_MSG_INVALID);
+      return false;
+    }
+    return true;
   }
 
   bool isValidString(String data) {
-    return data != null && ! data.isEmpty;
+    return data != null && !data.isEmpty;
   }
 
-  String getValidDecimal(String value){
-    if(!isValidString(value)){
+  String getValidDecimal(String value) {
+    if (!isValidString(value)) {
       return "0.00";
     }
-    double netValue =  double.parse(value);
+    double netValue = double.parse(value);
     assert(netValue is double);
     return getValidDecimalFormat(netValue);
   }
 
- bool validFirstName(String editText) {
+  bool validFirstName(String editText) {
     String firstName = editText.trim().toString();
     if (firstName.length == 0) {
       snackBar(FIRST_NAME_MSG_EMPTY);
@@ -122,9 +136,4 @@ class Validate{
   String getValidDecimalFormat(double value) {
     return value.toStringAsFixed(2);
   }
-
-
-
-
 }
-

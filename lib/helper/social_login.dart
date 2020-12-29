@@ -11,16 +11,16 @@ import 'dart:convert' as JSON;
 import 'package:wooapp/screens/splesh.dart' as splesh;
 
 import 'package:wooapp/widgets/loading.dart';
-class FBLogin{
 
+class FBLogin {
   final fbLogin = FacebookLogin();
   var profileData;
   bool isLoggedIn = false;
 
-   Future<bool>signInFB()async{
+  Future<bool> signInFB() async {
     BasePrefs.init();
-    final FacebookLoginResult result= await fbLogin.logIn(['email']);
-    switch(result.status){
+    final FacebookLoginResult result = await fbLogin.logIn(['email']);
+    switch (result.status) {
       case FacebookLoginStatus.error:
         printLog('FacebookLoginResult(error):- ', result.errorMessage);
         isLoggedIn = false;
@@ -32,16 +32,17 @@ class FBLogin{
       case FacebookLoginStatus.loggedIn:
         printLog('FacebookLoginResult', result.errorMessage);
         final String token = result.accessToken.token;
-        final response = await http.get('https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
+        final response = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
         final profile = JSON.jsonDecode(response.body);
-        if(profile!=null){
+        if (profile != null) {
           BasePrefs.setString(USER_NAME, profile['name']);
           BasePrefs.setString(USER_LAST_NAME, profile['last_name']);
           BasePrefs.setString(USER_EMAIL, profile['email']);
           BasePrefs.setString(USER_FB_ID, profile['id']);
           BasePrefs.setString(SOCIAL_LOGIN_MODE, 'facebook');
           isLoggedIn = true;
-        }else{
+        } else {
           isLoggedIn = false;
         }
         break;
@@ -49,15 +50,15 @@ class FBLogin{
     return isLoggedIn;
   }
 
-  Future signOutFB(BuildContext context)async{
+  Future signOutFB(BuildContext context) async {
     await fbLogin.logOut();
     changeScreenReplacement(context, splesh.SpleshScreen());
   }
 
-  void onLoginStatusChanged(bool isLoggedIn){
-    if(isLoggedIn){
+  void onLoginStatusChanged(bool isLoggedIn) {
+    if (isLoggedIn) {
       toast(LOGIN_STATUS_TRUE);
-    }else{
+    } else {
       toast(LOGIN_STATUS_FALSE);
     }
   }
