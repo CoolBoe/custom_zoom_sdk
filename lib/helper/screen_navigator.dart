@@ -8,3 +8,12 @@ void changeScreen(BuildContext context, Widget widget) {
 void changeScreenReplacement(BuildContext context, Widget widget) {
   Navigator.push(context, MaterialPageRoute(builder: (context) => widget));
 }
+void changeToNewScreen(BuildContext context, Widget widget){
+  Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+          builder: (context) => widget
+      ),
+      ModalRoute.withName("/Home")
+  );
+}

@@ -21,7 +21,7 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<UserProvider>(context, listen: false);
     void _updatePassword() {
-      if (!Validate().isValidString(authProvider.password.text.trim())) {
+      if (!isValidString(authProvider.password.text.trim())) {
         snackBar("Please Enter Email ID");
       } else {
         authProvider.forget_password(authProvider.email.text).then((value) {

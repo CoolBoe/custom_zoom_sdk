@@ -4,6 +4,10 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:wooapp/validator/validate.dart';
+import 'package:wooapp/widgets/loading.dart';
+
 ProductModel productModelFromJson(String str) =>
     ProductModel.fromJson(json.decode(str));
 
@@ -137,7 +141,7 @@ class ProductModel {
   String purchaseNote;
   List<Category> categories;
   List<dynamic> tags;
-  List<Image> images;
+  List<Images> images;
   List<Attribute> attributes;
   List<dynamic> defaultAttributes;
   List<int> variations;
@@ -206,9 +210,9 @@ class ProductModel {
         categories: List<Category>.from(
             json["categories"].map((x) => Category.fromJson(x))),
         tags: List<dynamic>.from(json["tags"].map((x) => x)),
-        images: Image == null
+        images: Images == null
             ? null
-            : List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+            : List<Images>.from(json["images"].map((x) => Images.fromJson(x))),
         attributes: List<Attribute>.from(
             json["attributes"].map((x) => Attribute.fromJson(x))),
         defaultAttributes:
@@ -291,6 +295,15 @@ class ProductModel {
         "meta_data": List<dynamic>.from(metaData.map((x) => x.toJson())),
         "_links": links.toJson(),
       };
+
+  calculateDiscount(){
+    if(!isValidString(regularPrice) || !isValidString(price) || regularPrice== "" ||price =="") return null;
+    double regulerPrice =  regularPrice== "" ? 0: double.parse(regularPrice) ;
+    double salePrice = price== "" ? 0: double.parse(this.price) ;
+    double discount = regulerPrice.toDouble()-salePrice ;
+    double disPercent = (discount/regulerPrice)*100;
+    return disPercent.round();
+  }
 }
 
 class Attribute {
@@ -441,8 +454,8 @@ class Dimensions {
       };
 }
 
-class Image {
-  Image({
+class Images {
+  Images({
     this.id,
     this.dateCreated,
     this.dateCreatedGmt,
@@ -464,7 +477,7 @@ class Image {
   String alt;
   int position;
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory Images.fromJson(Map<String, dynamic> json) => Images(
         id: json["id"],
         dateCreated: DateTime.parse(json["date_created"]),
         dateCreatedGmt: DateTime.parse(json["date_created_gmt"]),

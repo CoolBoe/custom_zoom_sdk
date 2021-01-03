@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
 import 'package:wooapp/providers/app.dart';
@@ -11,6 +12,7 @@ import 'package:wooapp/screens/favourite.dart';
 import 'package:wooapp/screens/home.dart';
 import 'package:wooapp/screens/profile.dart';
 import 'package:wooapp/screens/productBuilder.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 class MainPageScreen extends StatefulWidget {
   int currentTab = 0;
@@ -56,12 +58,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
         return ProfileView();
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    final productProvider =
-        Provider.of<ProductsProvider>(context, listen: false);
-    final app = Provider.of<AppProvider>(context, listen: false);
     return Scaffold(
       body: PageStorage(
         child: currentScreen(currentTab),
@@ -70,11 +68,11 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
         child: SvgPicture.asset(
-          "assets/icons/ic_shoppingcart.svg",
+          ic_shoppingcart,
           color: Colors.white,
         ),
         onPressed: () {
-          changeScreen(context, CartScreen());
+          toast("phuuu");
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

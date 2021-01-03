@@ -1,47 +1,55 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:wooapp/helper/color.dart';
-import 'package:wooapp/widgets/progress_bar.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 class ProgressHUD extends StatelessWidget {
-  final Widget child;
   final bool inAsyncCall;
   final double opacity;
   final Color color;
-  final Animation<Color> valueColor;
+  final Widget progressIndicator;
+  final Offset offset;
+  final bool dismissible;
+  final Widget child;
 
-  ProgressHUD(
-      {Key key,
-      @required this.child,
-      @required this.inAsyncCall,
-      this.opacity,
-      this.color,
-      this.valueColor})
-      : super(key: key);
+  ProgressHUD({
+    Key key,
+    @required this.inAsyncCall,
+    this.opacity = 0.3,
+    this.color = grey,
+    this.progressIndicator = const CircularProgressIndicator(),
+    this.offset,
+    this.dismissible = false,
+    @required this.child,
+  })  : assert(child != null),
+        assert(inAsyncCall != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetList = new List<Widget>();
-    widgetList.add(child);
-    if (inAsyncCall) {
-      final modal = new Stack(
-        children: [
-          new Opacity(
-            opacity: opacity,
-            child: ModalBarrier(
-              dismissible: false,
-              color: color,
-            ),
-          ),
-          new Center(
-            child: progressBar(context, orange),
-          )
-        ],
+    printLog("inAsyncCall", inAsyncCall);
+    if (!inAsyncCall) return child;
+
+    Widget layOutProgressIndicator;
+    if (offset == null)
+      layOutProgressIndicator = Center(child: progressIndicator);
+    else {
+      layOutProgressIndicator = Positioned(
+        child: progressIndicator,
+        left: offset.dx,
+        top: offset.dy,
       );
-      widgetList.add(modal);
     }
-    return Stack(
-      children: widgetList,
+
+    return new Stack(
+      children: [
+        child,
+        new Opacity(
+          child: new ModalBarrier(dismissible: dismissible, color: color),
+          opacity: opacity,
+        ),
+        layOutProgressIndicator,
+      ],
     );
   }
 }

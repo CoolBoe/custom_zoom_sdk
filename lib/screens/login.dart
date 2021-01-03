@@ -10,6 +10,7 @@ import 'package:wooapp/screens/forgotPassword.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/helper/social_login.dart' as social_login;
+import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,15 +21,15 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   final _key = GlobalKey<ScaffoldState>();
   bool cb_remember = false;
-
+  bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<UserProvider>(context, listen: false);
 
     void _getUser() {
-      if (!Validate().isValidString(authProvider.password.text.trim())) {
+      if (!isValidString(authProvider.password.text.trim())) {
         snackBar("Please Enter Your Password");
-      } else if (!Validate().isValidString(authProvider.email.text.trim())) {
+      } else if (!isValidString(authProvider.email.text.trim())) {
         snackBar("Please Enter Your Email ID");
       } else {
         authProvider
@@ -46,10 +47,13 @@ class LoginScreenState extends State<LoginScreen> {
           }
         });
       }
+      setState(() {
+        isApiCallProcess = false;
+      });
     }
 
     void _getFBUser() {
-      if (!Validate().isValidString(BasePrefs.getString(USER_NAME))) {
+      if (!isValidString(BasePrefs.getString(USER_NAME))) {
         snackBar("User Info Not Found");
       } else {
         authProvider
@@ -84,7 +88,7 @@ class LoginScreenState extends State<LoginScreen> {
       }
     }
 
-    return Container(
+    return ProgressHUD(inAsyncCall: isApiCallProcess, child: Container(
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(ic_bg_login),
@@ -105,195 +109,198 @@ class LoginScreenState extends State<LoginScreen> {
                   child: Center(
                       child: SingleChildScrollView(
                           child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      _tvlogin(),
-                      _tvYourAccount(),
-                      _topPaddingLine(),
-                      Container(
-                        height: 60.0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.black38,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.0))),
-                          child: new Padding(
-                            padding: EdgeInsets.only(
-                                top: 10, left: 10, bottom: 2, right: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  child: new Text("Email",
-                                      style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white)),
-                                ),
-                                Expanded(
-                                    child: new TextFormField(
-                                  controller: authProvider.email,
-                                  // validator: (val){
-                                  //   if (val.length==0){
-                                  //     return "Email cannot be empty";
-                                  //   }else{
-                                  //     return null;
-                                  //   }
-                                  // },
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  keyboardType: TextInputType.emailAddress,
-                                  style: new TextStyle(
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18),
-                                )),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Container(
-                          height: 60.0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.black38,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0))),
-                            child: new Padding(
-                              padding: EdgeInsets.only(
-                                  top: 5, left: 10, bottom: 2, right: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: new Text("Password",
-                                        style: TextStyle(
-                                            fontFamily: 'Poppins',
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.white)),
-                                  ),
-                                  Expanded(
-                                      child: new TextFormField(
-                                    // validator: (val){
-                                    //   if (val.length==0){
-                                    //     return "Password cannot be empty";
-                                    //   }else{
-                                    //     return null;
-                                    //   }
-                                    // },
-                                    controller: authProvider.password,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none),
-                                    keyboardType: TextInputType.visiblePassword,
-                                    obscureText: true,
-                                    style: new TextStyle(
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 18),
-                                  )),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      _sizebox(),
-                      _cbRememberMe(),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 40.0),
-                        child: GestureDetector(
-                          onTap: () async {
-                            if (cb_remember) {
-                              _getUser();
-                            } else {
-                              _key.currentState.showSnackBar(SnackBar(
-                                  content: Text(
-                                      "Please check Remember me to keep login")));
-                            }
-                            // Navigator.pushNamed(context, routes.MainPage_Route);
-                          },
-                          child: Container(
-                            height: 50.0,
-                            color: Colors.transparent,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              _tvlogin(),
+                              _tvYourAccount(),
+                              _topPaddingLine(),
+                              Container(
+                                height: 60.0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.black38,
+                                      borderRadius:
                                       BorderRadius.all(Radius.circular(5.0))),
-                              child: new Center(
-                                child: new Text(
-                                  "SIGN",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                  textAlign: TextAlign.center,
+                                  child: new Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 10, left: 10, bottom: 2, right: 10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: new Text("Email",
+                                              style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white)),
+                                        ),
+                                        Expanded(
+                                            child: new TextFormField(
+                                              controller: authProvider.email,
+                                              // validator: (val){
+                                              //   if (val.length==0){
+                                              //     return "Email cannot be empty";
+                                              //   }else{
+                                              //     return null;
+                                              //   }
+                                              // },
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                              ),
+                                              keyboardType: TextInputType.emailAddress,
+                                              style: new TextStyle(
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 18),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              social_login.FBLogin().signInFB().then((value) {
-                                if (value) {
-                                  printLog('fblogin', value);
-                                  _getFBUser();
-                                }
-                              });
-                            },
-                            child: Container(
-                              height: 50.0,
-                              color: Colors.transparent,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    border: Border.all(
-                                        color: Colors.white, width: 2.0),
-                                    borderRadius:
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Container(
+                                  height: 60.0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.black38,
+                                        borderRadius:
                                         BorderRadius.all(Radius.circular(5.0))),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: SvgPicture.asset(
-                                        ic_facebook,
-                                        color: Colors.white,
+                                    child: new Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 5, left: 10, bottom: 2, right: 10),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: new Text("Password",
+                                                style: TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 10.0,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white)),
+                                          ),
+                                          Expanded(
+                                              child: new TextFormField(
+                                                // validator: (val){
+                                                //   if (val.length==0){
+                                                //     return "Password cannot be empty";
+                                                //   }else{
+                                                //     return null;
+                                                //   }
+                                                // },
+                                                controller: authProvider.password,
+                                                decoration: InputDecoration(
+                                                    border: InputBorder.none),
+                                                keyboardType: TextInputType.visiblePassword,
+                                                obscureText: true,
+                                                style: new TextStyle(
+                                                    fontFamily: "Poppins",
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18),
+                                              )),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(width: 10),
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: new Text("CONTINUE WITH FACEBOOK",
-                                          style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.white)),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          )),
-                    ],
-                  )))),
+                              _sizebox(),
+                              _cbRememberMe(),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 40.0),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    if (cb_remember) {
+                                      setState(() {
+                                        isApiCallProcess = true;
+                                      });
+                                      _getUser();
+                                    } else {
+                                      _key.currentState.showSnackBar(SnackBar(
+                                          content: Text(
+                                              "Please check Remember me to keep login")));
+                                    }
+                                    // Navigator.pushNamed(context, routes.MainPage_Route);
+                                  },
+                                  child: Container(
+                                    height: 50.0,
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(5.0))),
+                                      child: new Center(
+                                        child: new Text(
+                                          "SIGN",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      social_login.FBLogin().signInFB().then((value) {
+                                        if (value) {
+                                          printLog('fblogin', value);
+                                          _getFBUser();
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 50.0,
+                                      color: Colors.transparent,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            border: Border.all(
+                                                color: Colors.white, width: 2.0),
+                                            borderRadius:
+                                            BorderRadius.all(Radius.circular(5.0))),
+                                        child: new Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {},
+                                              child: SvgPicture.asset(
+                                                ic_facebook,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            GestureDetector(
+                                              onTap: () {},
+                                              child: new Text("CONTINUE WITH FACEBOOK",
+                                                  style: TextStyle(
+                                                      fontFamily: 'Poppins',
+                                                      fontSize: 12.0,
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.white)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          )))),
             )
           ],
         ),
       ),
-    );
+    ), opacity: 0.3,);
   }
 
   Widget _cbRememberMe() {

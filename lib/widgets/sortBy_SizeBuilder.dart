@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
+import 'package:wooapp/models/sort_by.dart';
 
 class sortBySizeBuilder extends StatefulWidget {
   final int num;
@@ -21,16 +22,14 @@ class sortBySizeBuilderState extends State<sortBySizeBuilder> {
     final double itemHeight = (size.height - kToolbarHeight - 24) / 13;
     final double itemWidth = size.width / 2;
     int selectedItem = 0;
+    //'default', "Default", "asc"
     List<SortBy> sortBy = [
-      SortBy(
-        "XS",
-        0,
-      ),
-      SortBy("S", 1),
-      SortBy("M", 2),
-      SortBy("L", 3),
-      SortBy("XL", 4),
-      SortBy("XXL", 5),
+      SortBy("xs", "XS", ""),
+      SortBy("s", "S", ""),
+      SortBy("m","M", ""),
+      SortBy("l","L", ""),
+      SortBy("xl","XL", ""),
+      SortBy("xxl","XXL", ""),
     ];
     return Padding(
       padding: const EdgeInsets.only(left: 30.0, right: 30),
@@ -59,7 +58,7 @@ class sortBySizeBuilderState extends State<sortBySizeBuilder> {
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: Center(
                       child: Text(
-                    sortBy[index].name,
+                    sortBy[index].text,
                     style: TextStyle(
                         color:
                             _selectItem == index ? Colors.white : Colors.black),

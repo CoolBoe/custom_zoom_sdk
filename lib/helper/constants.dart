@@ -1,6 +1,7 @@
 /*-------------User Constants-----------*/
 
 import 'package:flutter/cupertino.dart';
+import 'package:wooapp/models/sort_by.dart';
 
 const String appName = 'WooApp';
 const String fontName = 'Poppins';
@@ -58,34 +59,34 @@ const int HTTP_CODE_404 = 404;
 const int HTTP_CODE_500 = 500;
 
 /*----------------IC_SVG_Image-------------------------*/
-const String ic_facebook = "assets/svg_assets/ic_facebook.svg";
-const String ic_backpack = "assets/svg_assets/ic_backpack.svg";
-const String ic_bag = "assets/svg_assets/ic_bag.svg";
-const String ic_call = "assets/svg_assets/ic_call.svg";
-const String ic_categories = "assets/svg_assets/ic_categories.svg";
-const String ic_chat = "assets/svg_assets/ic_chat.svg";
-const String ic_cloth = "assets/svg_assets/ic_cloth.svg";
-const String ic_coupon = "assets/svg_assets/ic_coupon.svg";
-const String ic_drawer = "assets/svg_assets/ic_drawer.svg";
-const String ic_eyeglasses = "assets/svg_assets/ic_eyeglasses.svg";
-const String ic_filter = "assets/svg_assets/ic_filter.svg";
-const String ic_heart = "assets/svg_assets/ic_heart.svg";
-const String ic_home = "assets/svg_assets/ic_home.svg";
-const String ic_hoodie = "assets/svg_assets/ic_hoodie.svg";
-const String ic_location = "assets/svg_assets/ic_location.svg";
-const String ic_logout = "assets/svg_assets/ic_logout.svg";
-const String ic_order = "assets/svg_assets/ic_order.svg";
-const String ic_rating = "assets/svg_assets/ic_rating.svg";
-const String ic_remove = "assets/svg_assets/ic_remove.svg";
-const String ic_search = "assets/svg_assets/ic_search.svg";
-const String ic_shop = "assets/svg_assets/ic_shop.svg";
-const String ic_shoppingcart = "assets/svg_assets/ic_shoppingcart.svg";
-const String ic_skirt = "assets/svg_assets/ic_skirt.svg";
-const String ic_sneaker = "assets/svg_assets/ic_sneaker.svg";
-const String ic_sortby = "assets/svg_assets/ic_sortby.svg";
-const String ic_support = "assets/svg_assets/ic_support.svg";
-const String ic_trousers = "assets/svg_assets/ic_trousers.svg";
-const String ic_watch = "assets/svg_assets/ic_watch.svg";
+const String ic_facebook = "assets/icons/ic_facebook.svg";
+const String ic_backpack = "assets/icons/ic_backpack.svg";
+const String ic_bag = "assets/icons/ic_bag.svg";
+const String ic_call = "assets/icons/ic_call.svg";
+const String ic_categories = "assets/icons/ic_categories.svg";
+const String ic_chat = "assets/icons/ic_chat.svg";
+const String ic_cloth = "assets/icons/ic_cloth.svg";
+const String ic_coupon = "assets/icons/ic_coupon.svg";
+const String ic_drawer = "assets/icons/ic_drawer.svg";
+const String ic_eyeglasses = "assets/icons/ic_eyeglasses.svg";
+const String ic_filter = "assets/icons/ic_filter.svg";
+const String ic_heart = "assets/icons/ic_heart.svg";
+const String ic_home = "assets/icons/ic_home.svg";
+const String ic_hoodie = "assets/icons/ic_hoodie.svg";
+const String ic_location = "assets/icons/ic_location.svg";
+const String ic_logout = "assets/icons/ic_logout.svg";
+const String ic_order = "assets/icons/ic_order.svg";
+const String ic_rating = "assets/icons/ic_rating.svg";
+const String ic_remove = "assets/icons/ic_remove.svg";
+const String ic_search = "assets/icons/ic_search.svg";
+const String ic_shop = "assets/icons/ic_shop.svg";
+const String ic_shoppingcart = "assets/icons/ic_shoppingcart.svg";
+const String ic_skirt = "assets/icons/ic_skirt.svg";
+const String ic_sneaker = "assets/icons/ic_sneaker.svg";
+const String ic_sortby = "assets/icons/ic_sortby.svg";
+const String ic_support = "assets/icons/ic_support.svg";
+const String ic_trousers = "assets/icons/ic_trousers.svg";
+const String ic_watch = "assets/icons/ic_watch.svg";
 
 /*-----------------IC_Images_Assets--------------------*/
 const String ic_bg_lock = "assets/images/bg_lock.png";
@@ -123,3 +124,15 @@ const FontWeight semiBold = FontWeight.w600;
 const FontWeight bold = FontWeight.w700;
 const FontWeight extraBold = FontWeight.w800;
 const FontWeight dark = FontWeight.w900;
+
+
+/*--------------------SortBy List-------------------------------*/
+
+List<SortBy> _sortByOptions = [
+  SortBy('default', "Default", "asc"),
+  SortBy('popularity', "Popularity", "asc"),
+  SortBy('rating', "Average Rating", "asc"),
+  SortBy("date", "What's New", "asc"),
+  SortBy("price_asc", "Price: Low to High", "asc"),
+  SortBy("price_desc", "Price: high to low", "desc")
+];

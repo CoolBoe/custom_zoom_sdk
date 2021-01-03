@@ -6,6 +6,7 @@ import 'package:wooapp/helper/color.dart';
 import 'package:html/parser.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/cart.dart';
+import 'package:wooapp/widgets/widget_Shipping_Method.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/cart.dart';
@@ -21,26 +22,42 @@ class CartScreen extends StatefulWidget {
 
 class CartScreenState extends State<CartScreen> {
   CartModel cartData = CartModel();
+  int value = 0;
+  double discount_total;
+  double cart_subtotal;
+  double taxes;
+  String total;
+  double shipping_Flat;
+  double shipping_Free;
   @override
   void initState() {
     var cartProvider = Provider.of<CartProvider>(context, listen: false);
-    cartProvider.getCart();
+    cartProvider.getCartData();
     super.initState();
   }
 
   Widget CartProducts() {
     return SliverToBoxAdapter(
       child: new Consumer<CartProvider>(builder: (context, cartModel, child) {
-        cartData = cartModel.cartModel;
-        printLog("cartData", cartData.shippingMethod);
+        cartData = cartModel.getCart;
+        var source;
+         discount_total =double.parse(parse(cartData.discountTotal).documentElement.text.substring(1));
+         cart_subtotal =double.parse(parse(cartData.cartSubtotal).documentElement.text.substring(1).trim().toString());
+         taxes =double.parse(parse(cartData.taxes).documentElement.text.substring(1));
+         total =parse(cartData.total).documentElement.text.substring(1);
+         shipping_Flat =double.parse(parse(cartData.shippingMethod[0].shippingMethodPrice).documentElement.text.substring(1));
+         shipping_Free =double.parse(parse(cartData.shippingMethod[1].shippingMethodPrice).documentElement.text.substring(1));
+
+        printLog("carttotal", source);
         if (cartData != null && cartData.cartData != null) {
           return Column(
             children: <Widget>[
               CartList(cartData.cartData),
-              SliverPadding(
+              _promocode(),
+              Padding(
                 padding: const EdgeInsets.only(
                     top: 0.0, left: 30, right: 28, bottom: 10),
-                sliver: SliverToBoxAdapter(
+                child: Container(
                     child: Card(
                   elevation: 5,
                   color: Colors.white,
@@ -53,34 +70,30 @@ class CartScreenState extends State<CartScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Shipping Methods',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14)),
-                              ],
-                            ),
-                          ),
-                          ShippingList(cartData.shippingMethod),
-                          Padding(
+                          Text('Shipping Methods',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14)),
+                          ShippingCart(cartData.shippingMethod),
+                           Padding(
                             padding: const EdgeInsets.only(top: 8.0, right: 30),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text('Calculate Shipping',
-                                    style: TextStyle(
-                                        color: Colors.orange,
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10)),
-                              ],
-                            ),
+                            child: GestureDetector(
+                                onTap: () {
+                                  calculateShippingDialog();
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text('Calculate Shipping',
+                                        style: TextStyle(
+                                            color: Colors.orange,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10)),
+                                  ],
+                                )),
                           ),
                         ],
                       ),
@@ -88,10 +101,10 @@ class CartScreenState extends State<CartScreen> {
                   ),
                 )),
               ),
-              SliverPadding(
+              Padding(
                 padding: const EdgeInsets.only(
                     top: 0.0, left: 30, right: 28, bottom: 10),
-                sliver: SliverToBoxAdapter(
+                child: Container(
                     child: Card(
                   elevation: 10,
                   color: Color(0xFFFEDBD0),
@@ -133,7 +146,7 @@ class CartScreenState extends State<CartScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20.0),
-                                  child: Text('₹ 1150.00',
+                                  child: Text(cart_subtotal.toString(),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Poppins',
@@ -158,7 +171,7 @@ class CartScreenState extends State<CartScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20.0),
-                                  child: Text('₹ 50.00',
+                                  child: Text(getShippingPrice() ,
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Poppins',
@@ -183,7 +196,7 @@ class CartScreenState extends State<CartScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20.0),
-                                  child: Text('₹ 0.00',
+                                  child: Text(taxes.toString(),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Poppins',
@@ -208,7 +221,7 @@ class CartScreenState extends State<CartScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20.0),
-                                  child: Text('₹ 0.00',
+                                  child: Text(discount_total.toString(),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Poppins',
@@ -226,7 +239,7 @@ class CartScreenState extends State<CartScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 5.0),
+                             padding: const EdgeInsets.only(top: 5.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -241,7 +254,7 @@ class CartScreenState extends State<CartScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20.0),
-                                  child: Text('₹ 1200.00',
+                                  child: Text(getTotal(),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Poppins',
@@ -265,63 +278,6 @@ class CartScreenState extends State<CartScreen> {
       }),
     );
   }
-
-  Widget ShippingList(List<ShippingMethod> shippingMethod) {
-    return ListView.builder(
-        itemCount: shippingMethod.length,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 0.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 70,
-                  child: Text(shippingMethod[index].shippingMethodName,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 10)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: Text(
-                            parse(shippingMethod[index].shippingMethodPrice)
-                                .documentElement
-                                .text,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: Radio(
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          value: 1,
-                          activeColor: Colors.black,
-                          groupValue: 1,
-                          onChanged: (val) {},
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
   Widget _promocode() {
     return Padding(
       padding: const EdgeInsets.only(top: 10.0, left: 30, right: 30),
@@ -378,46 +334,40 @@ class CartScreenState extends State<CartScreen> {
   }
 
   Widget _CustomScrollView() {
-    final app = Provider.of<AppProvider>(context);
-
-    return app.isLoading
-        ? progressBar(context, orange)
-        : CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                pinned: true,
-                expandedHeight: 50,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text("Cart",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black)),
-                  centerTitle: true,
-                ),
-                floating: true,
-                leading: GestureDetector(
-                    onTap: () {
-                      changeScreenReplacement(context, MainPageScreen());
-                    },
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    )),
-                actions: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SvgPicture.asset('assets/icons/ic_search.svg'),
-                  )
-                ],
-              ),
-              CartProducts(),
-              SliverToBoxAdapter(
-                child: _promocode(),
-              ),
-            ],
-          );
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          pinned: true,
+          backgroundColor: white,
+          expandedHeight: 50,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text("Cart",
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black)),
+            centerTitle: true,
+          ),
+          floating: true,
+          leading: GestureDetector(
+              onTap: () {
+                changeScreenReplacement(context, MainPageScreen());
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              )),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SvgPicture.asset('assets/icons/ic_search.svg'),
+            )
+          ],
+        ),
+        CartProducts(),
+      ],
+    );
   }
 
   Widget CartList(List<CartDatum> cartData) {
@@ -577,7 +527,7 @@ class CartScreenState extends State<CartScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('₹ 700.00',
+                Text("₹ "+getTotal(),
                     style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'Poppins',
@@ -589,7 +539,7 @@ class CartScreenState extends State<CartScreen> {
                       padding: const EdgeInsets.only(left: 15.0),
                       child: GestureDetector(
                         onTap: () {
-                          changeScreenReplacement(context, CartScreen());
+                          getTotal();
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -617,5 +567,159 @@ class CartScreenState extends State<CartScreen> {
         ),
       ),
     );
+  }
+
+  Widget ShippingCart(List<ShippingMethod> shippingMethod){
+    return ListView.builder(
+        itemCount: shippingMethod.length,
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 70,
+                  child: Text(shippingMethod[index].shippingMethodName,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: Text(
+                            parse(shippingMethod[index].shippingMethodPrice)
+                                .documentElement
+                                .text,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10)),
+                      ),
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Radio(
+                          materialTapTargetSize:
+                          MaterialTapTargetSize.shrinkWrap,
+                          value: index,
+                          activeColor: Colors.black,
+                          groupValue: value,
+                          onChanged: (val) {
+                            printLog("onChanged", val);
+                            setState(() {
+                              value = val;
+                            });
+                            printLog("onSetChanged", val);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+  void calculateShippingDialog(){
+    showGeneralDialog(
+        barrierLabel: "label",
+        barrierDismissible: true,
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: Duration(milliseconds: 700),
+        context: context,
+        pageBuilder: (context, anim1, anim2) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(3))),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 30),
+                              child: Text("Calculate Shipping",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 30),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    Navigator.pop(context);
+                                  });
+                                },
+                                child: Container(
+                                    height: 35,
+                                    margin: EdgeInsets.zero,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.black,
+                                      size: 25,
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding:  const EdgeInsets.only(top: 20),
+                        child: Container(
+                          height: 40,
+                          width: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey[50]
+                            )
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        transitionBuilder: (context, anim1, anim2, child) {
+          return SlideTransition(
+            position:
+                Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+            child: child,
+          );
+        });
+  }
+
+  String getShippingPrice() {
+    return value==0 ? shipping_Flat.toString():shipping_Free.toString();
+  }
+
+  String getTotal() {
+    var total= discount_total+cart_subtotal+taxes+double.parse(getShippingPrice());
+  return total.toString();
   }
 }

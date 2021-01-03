@@ -9,40 +9,31 @@ import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class CartProvider with ChangeNotifier {
-  WebResponseModel webResponseModel;
-  CartServices cartServices = CartServices();
-  CartModel cartModel;
-
+  WebResponseModel _webResponseModel;
+  CartServices cartServices ;
+  CartModel _cartModel;
+  CartModel get getCart => _cartModel;
+  WebApiServices _webApiServices= new WebApiServices();
   CartProvider() {
-    getCart();
+    resetStreams();
   }
+  void resetStreams(){
+    _webApiServices = WebApiServices();
+   _cartModel = new CartModel();
+    _webResponseModel = new WebResponseModel();
+  }
+    getAddToCart({String id, String quantity})async{
+     _webResponseModel=await _webApiServices.getAddToCart(id, quantity);
+     notifyListeners();
+    }
 
-  Future<WebResponseModel> getAddToCart(
-      {String id,
-      String quantity,
-      String variation,
-      String variation_id}) async {
-    webResponseModel =
-        await cartServices.getAddToCart(id: id, quantity: quantity);
+  getAddToCartVariationProduct({String id, String quantity, String variation, String variation_id}) async{
+    _webResponseModel = await _webApiServices.getAddToCartVariationProduct(id, quantity, variation, variation_id);
     notifyListeners();
   }
 
-  Future<WebResponseModel> getAddToCartVariationProduct(
-      {String id,
-      String quantity,
-      String variation,
-      String variation_id}) async {
-    webResponseModel = await cartServices.getAddToCartVariationProduct(
-        id: id,
-        quantity: quantity,
-        variation: variation,
-        variation_id: variation_id);
-    notifyListeners();
-  }
-
-  Future<CartModel> getCart() async {
-    cartModel = await cartServices.getCart();
-    printLog("getAddToCart", cartModel);
-    notifyListeners();
-  }
+    getCartData() async{
+      _cartModel = await _webApiServices.getCart();
+      notifyListeners();
+    }
 }

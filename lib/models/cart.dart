@@ -31,7 +31,7 @@ class CartModel {
 
   factory CartModel.fromJson(Map<String, dynamic> json) => CartModel(
         chosenShippingMethod: json["chosen_shipping_method"],
-        shippingMethod: List<ShippingMethod>.from(
+        shippingMethod:json["shipping_method"]==null ? null : List<ShippingMethod>.from(
             json["shipping_method"].map((x) => ShippingMethod.fromJson(x))),
         discountTotal: json["discount_total"],
         cartSubtotal: json["cart_subtotal"],

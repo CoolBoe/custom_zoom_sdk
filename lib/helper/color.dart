@@ -17,3 +17,4 @@ Color black_38 = Colors.black38;
 Color grey_50 = Colors.grey.shade50;
 const Color grey = Colors.grey;
 const Color amber = Colors.amber;
+ Color pink_50 = Colors.pink[100];

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/color.dart';
-import 'package:wooapp/helper/productList.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
@@ -29,6 +28,9 @@ import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
 import 'package:wooapp/widgets/Item_builder.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
+import 'package:wooapp/widgets/widget_home_categories.dart';
+import 'package:wooapp/widgets/widget_home_featured.dart';
+import 'package:wooapp/widgets/widget_home_slider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key key}) : super(key: key);
@@ -38,39 +40,17 @@ class HomeView extends StatefulWidget {
 
 class HomeState extends State<HomeView> {
   bool _toggel = true;
-  UserPrefs userPrefs = UserPrefs();
-  final String ic_eyeglasses = "assets/icons/ic_eyeglasses.svg";
-  int pageCount = 4;
-  AppProvider app;
-  ProductsProvider productsProvider;
-  GlobalKey<ScaffoldState> _key = GlobalKey();
-  List<String> _images = List();
   List<ProductModel> productList = [];
 
-  int currentTab = 0;
-  int _selectItem = 0;
+
+
   @override
   void initState() {
-    userPrefs.init();
     super.initState();
-    _images
-      ..add(
-          "https://i.pinimg.com/originals/10/78/e8/1078e854e2933b6763c754d37198f762.png");
-    _images
-      ..add(
-          "https://app.tutiixx.com/wp-content/uploads/2019/01/T_7_front-600x600.jpg");
-    _images
-      ..add(
-          "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_4_front-600x600.jpg");
-    _images
-      ..add(
-          "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_7_front-600x600.jpg");
   }
 
   @override
   Widget build(BuildContext context) {
-    app = Provider.of<AppProvider>(context);
-    productsProvider = Provider.of<ProductsProvider>(context);
     return Scaffold(
       drawer: _buildDrawer(),
       body: Container(
@@ -79,413 +59,14 @@ class HomeState extends State<HomeView> {
   }
 
   Widget _CustomScrollView() {
-    app = Provider.of<AppProvider>(context);
-    productsProvider = Provider.of<ProductsProvider>(context);
-    productsProvider
-        .loadProducts(
-            sort: WebRequestConstants.SORT_BY_DEFAULT,
-            page: "1",
-            per_page: "10")
-        .then((value) => productList = value);
-
-    var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 2;
-    final double itemWidth = size.width / 2;
     return CustomScrollView(
       slivers: <Widget>[
-        SliverAppBar(
-          pinned: true,
-          backgroundColor: grey_50,
-          expandedHeight: 250,
-          floating: false,
-          centerTitle: true,
-          iconTheme: new IconThemeData(color: black),
-          flexibleSpace: FlexibleSpaceBar(
-            background: LimitedBox(
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Carousel(
-                  boxFit: BoxFit.fill,
-                  autoplay: true,
-                  animationCurve: Curves.fastOutSlowIn,
-                  animationDuration: Duration(milliseconds: 1000),
-                  dotSize: 2.0,
-                  dotIncreaseSize: 6.0,
-                  dotBgColor: transparent,
-                  dotColor: grey,
-                  dotPosition: DotPosition.bottomCenter,
-                  showIndicator: true,
-                  indicatorBgPadding: 6.0,
-                  images: [
-                    NetworkImage(
-                        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_7_front-600x600.jpg"),
-                    NetworkImage(
-                        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_6_front-600x600.jpg"),
-                    NetworkImage(
-                        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_2_front-600x600.jpg"),
-                    NetworkImage(
-                        "https://app.tutiixx.com/wp-content/uploads/2019/01/T_1_front-600x600.jpg")
-                  ],
-                ),
-              ),
-            ),
-          ),
-          title: Text(
-            'Woo App',
-            style: TextStyle(
-              color: black,
-              fontFamily: 'Poppins',
-              fontSize: 14.0,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: SvgPicture.asset('assets/icons/ic_search.svg'),
-            )
-          ],
-        ),
-        SliverPadding(
-          padding: EdgeInsets.only(top: 10, left: 30, right: 30),
-          sliver: SliverToBoxAdapter(
-            child: Container(
-              color: white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  GestureDetector(
-                      child: Text("All Categories",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                              color: black))),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          changeScreen(context, CategoriesScreen());
-                        },
-                        child: Text(
-                          "View All",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w500,
-                              color: black),
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_right_alt_rounded,
-                        color: black,
-                        size: 20,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.all(5),
-          sliver: SliverToBoxAdapter(
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 9, right: 9),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTab = 0;
-                        });
-                      },
-                      child: Container(
-                        height: 35,
-                        margin: EdgeInsets.zero,
-                        child: Card(
-                            margin: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            color: currentTab == 0 ? orange : white,
-                            elevation: 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    "assets/icons/ic_eyeglasses.svg",
-                                    color: currentTab == 0 ? white : black,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5),
-                                    child: Text(
-                                      "Glasses",
-                                      style: TextStyle(
-                                          color:
-                                              currentTab == 0 ? white : black,
-                                          fontSize: 8),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 9, right: 9),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTab = 1;
-                        });
-                      },
-                      child: Container(
-                        height: 35,
-                        margin: EdgeInsets.zero,
-                        child: Card(
-                            margin: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            color: currentTab == 1 ? orange : white,
-                            elevation: 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    "assets/icons/ic_hoodie.svg",
-                                    color: currentTab == 1 ? white : black,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5),
-                                    child: Text(
-                                      "Hoodies",
-                                      style: TextStyle(
-                                          color:
-                                              currentTab == 1 ? white : black,
-                                          fontSize: 8),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 9, right: 9),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTab = 2;
-                        });
-                      },
-                      child: Container(
-                        height: 35,
-                        margin: EdgeInsets.zero,
-                        child: Card(
-                            margin: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            color: currentTab == 2 ? orange : white,
-                            elevation: 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    "assets/icons/ic_backpack.svg",
-                                    color: currentTab == 2 ? white : black,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5),
-                                    child: Text(
-                                      "Backpack",
-                                      style: TextStyle(
-                                          color:
-                                              currentTab == 2 ? white : black,
-                                          fontSize: 8),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 9, right: 9),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentTab = 3;
-                        });
-                      },
-                      child: Container(
-                        height: 35,
-                        margin: EdgeInsets.zero,
-                        child: Card(
-                            margin: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            color: currentTab == 3 ? orange : white,
-                            elevation: 2,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SvgPicture.asset(
-                                    "assets/icons/ic_sneaker.svg",
-                                    color: currentTab == 3 ? white : black,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 0),
-                                    child: Text(
-                                      "Shoes",
-                                      style: TextStyle(
-                                          color:
-                                              currentTab == 3 ? white : black,
-                                          fontSize: 8),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.only(left: 30, right: 30),
-          sliver: SliverToBoxAdapter(
-            child: Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                        child: Text("Featured",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w600,
-                                color: black))),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "See More",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w500,
-                              color: black),
-                        ),
-                        Icon(
-                          Icons.arrow_right_alt_rounded,
-                          color: black,
-                          size: 20,
-                        )
-                      ],
-                    )
-                  ]),
-            ),
-          ),
-        ),
-        app.isLoading
-            ? SliverToBoxAdapter(
-                child: progressBar(context, orange),
-              )
-            : featuredListBuilder(context, productList),
-        SliverPadding(
-          padding: EdgeInsets.only(left: 30, right: 30),
-          sliver: SliverToBoxAdapter(
-            child: Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                        child: Text("TopSellers",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w600,
-                                color: black))),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "See More",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w500,
-                              color: black),
-                        ),
-                        Icon(
-                          Icons.arrow_right_alt_rounded,
-                          color: black,
-                          size: 20,
-                        )
-                      ],
-                    )
-                  ]),
-            ),
-          ),
-        ),
-        topSellerListBuilder()
+        imageCarousel(context),
+        WidgetCategories(),
       ],
     );
     ;
   }
-
-  Widget topSellerListBuilder() {
-    productsProvider = Provider.of<ProductsProvider>(context);
-    final items = productsProvider.products;
-    var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 2;
-    final double itemWidth = size.width / 2;
-    return SliverPadding(
-      padding: EdgeInsets.all(8),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200.0,
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          childAspectRatio: (itemWidth / itemHeight),
-        ),
-        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-          return _itemBuilder(context, index, items);
-        }, childCount: items.length),
-      ),
-    );
-  }
-
-  Widget _itemBuilder(
-      BuildContext context, int index, List<ProductModel> productList) {
-    return GestureDetector(
-        onTap: () {
-          changeScreen(
-              context, ProductScreen(productModel: productList[index]));
-        },
-        child: ProductWidget(
-          productModel: productList[index],
-        ));
-  }
-
   Widget _buildDrawer() {
     return Container(
         width: 250,
@@ -614,7 +195,7 @@ class HomeState extends State<HomeView> {
                                   setState(() {
                                     if (value) {
                                       toast(USER_LOGOUT);
-                                      changeScreen(context, SpleshScreen());
+                                      changeToNewScreen(context, SpleshScreen());
                                     }
                                   })
                                 });

@@ -44,96 +44,97 @@ class Validate {
   static const String LAST_NAME_MSG_INVALID_LENGTH =
       "Last name should be 3 to 20 Alphabetic Characters only.";
 
-  bool validEmailAddress(String emailAddress) {
-    String email = emailAddress.trim().toString();
-    if (email.length == 0) {
-      snackBar(EMAIL_MSG_EMPTY);
-      return false;
-    }
-    return validEmailPattern(emailAddress);
-  }
+}
 
-  bool validEmailPattern(String emailAddress) {
-    String email = emailAddress.trim().toString();
-    RegExp regExp = new RegExp(EMAIL_REGEX);
-    if (!regExp.hasMatch(emailAddress)) {
-      snackBar(EMAIL_MSG_INVALID);
-      return false;
-    }
-    return true;
-  }
+bool validEmailAddress(String emailAddress) {
+  String email = emailAddress.trim().toString();
+  if (email.length == 0) {
 
-  bool validMobileNumber(String mobile) {
-    String mobileNumber = mobile.trim().toString();
-    if (mobileNumber.length == 0) {
-      snackBar(MOBILENUMBER_MSG_EMPTY);
-      return false;
-    }
-    return validMobilePattern(mobile);
+    return false;
   }
+  return validEmailPattern(emailAddress);
+}
 
-  bool validMobilePattern(String mobile) {
-    String mobileNumber = mobile.trim().toString();
-    RegExp regExp = new RegExp(MOBILENUMBER_MSG_INVALID);
-    if (!regExp.hasMatch(mobile)) {
-      snackBar(MOBILENUMBER_MSG_INVALID);
-      return false;
-    }
-    return true;
+bool validEmailPattern(String emailAddress) {
+  String email = emailAddress.trim().toString();
+  RegExp regExp = new RegExp(Validate.EMAIL_REGEX);
+  if (!regExp.hasMatch(emailAddress)) {
+    snackBar(Validate.EMAIL_MSG_INVALID);
+    return false;
   }
+  return true;
+}
 
-  bool isValidString(String data) {
-    return data != null && !data.isEmpty;
+bool validMobileNumber(String mobile) {
+  String mobileNumber = mobile.trim().toString();
+  if (mobileNumber.length == 0) {
+    snackBar(Validate.MOBILENUMBER_MSG_EMPTY);
+    return false;
   }
+  return validMobilePattern(mobile);
+}
 
-  String getValidDecimal(String value) {
-    if (!isValidString(value)) {
-      return "0.00";
-    }
-    double netValue = double.parse(value);
-    assert(netValue is double);
-    return getValidDecimalFormat(netValue);
+bool validMobilePattern(String mobile) {
+  String mobileNumber = mobile.trim().toString();
+  RegExp regExp = new RegExp(Validate.MOBILENUMBER_MSG_INVALID);
+  if (!regExp.hasMatch(mobile)) {
+    snackBar(Validate.MOBILENUMBER_MSG_INVALID);
+    return false;
   }
+  return true;
+}
 
-  bool validFirstName(String editText) {
-    String firstName = editText.trim().toString();
-    if (firstName.length == 0) {
-      snackBar(FIRST_NAME_MSG_EMPTY);
-      return false;
-    }
-    if (firstName.length < 3 || firstName.length > 30) {
-      snackBar(FIRST_NAME_MSG_INVALID_LENGTH);
-      return false;
-    }
-    return true;
-  }
+bool isValidString(String data) {
+  return data != null && !data.isEmpty;
+}
 
-  bool validOtp(String otp, int length) {
-    if (otp.length == 0) {
-      snackBar(OTP_MSG_EMPTY);
-      return false;
-    }
-    if (otp.length < length) {
-      snackBar(OTP_MSG_INVALID);
-      return false;
-    }
-    return true;
+String getValidDecimal(String value) {
+  if (!isValidString(value)) {
+    return "0.00";
   }
+  double netValue = double.parse(value);
+  assert(netValue is double);
+  return getValidDecimalFormat(netValue);
+}
 
-  bool validLastName(String editText) {
-    String lastName = editText.trim().toString();
-    if (lastName.length == 0) {
-      snackBar(LAST_NAME_MSG_EMPTY);
-      return false;
-    }
-    if (lastName.length < 3 || lastName.length > 30) {
-      snackBar(LAST_NAME_MSG_INVALID_LENGTH);
-      return false;
-    }
-    return true;
+bool validFirstName(String editText) {
+  String firstName = editText.trim().toString();
+  if (firstName.length == 0) {
+    snackBar(Validate.FIRST_NAME_MSG_EMPTY);
+    return false;
   }
+  if (firstName.length < 3 || firstName.length > 30) {
+    snackBar(Validate.FIRST_NAME_MSG_INVALID_LENGTH);
+    return false;
+  }
+  return true;
+}
 
-  String getValidDecimalFormat(double value) {
-    return value.toStringAsFixed(2);
+bool validOtp(String otp, int length) {
+  if (otp.length == 0) {
+    snackBar(Validate.OTP_MSG_EMPTY);
+    return false;
   }
+  if (otp.length < length) {
+    snackBar(Validate.OTP_MSG_INVALID);
+    return false;
+  }
+  return true;
+}
+
+bool validLastName(String editText) {
+  String lastName = editText.trim().toString();
+  if (lastName.length == 0) {
+    snackBar(Validate.LAST_NAME_MSG_EMPTY);
+    return false;
+  }
+  if (lastName.length < 3 || lastName.length > 30) {
+    snackBar(Validate.LAST_NAME_MSG_INVALID_LENGTH);
+    return false;
+  }
+  return true;
+}
+
+String getValidDecimalFormat(double value) {
+  return value.toStringAsFixed(2);
 }
