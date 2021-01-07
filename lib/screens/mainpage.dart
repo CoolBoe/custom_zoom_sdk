@@ -4,7 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/providers/ThemeProvider.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/screens/cart.dart';
@@ -72,7 +74,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
           color: Colors.white,
         ),
         onPressed: () {
-          toast("phuuu");
+
+          changeScreen(context, CartScreen());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

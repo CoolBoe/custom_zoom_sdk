@@ -9,6 +9,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/WebResponseModel.dart';
 import 'package:wooapp/models/mockdata/item_colorpicker.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
@@ -17,10 +18,13 @@ import 'package:wooapp/models/sort_by.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/product.dart';
+import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/cart.dart';
+import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
+import 'package:wooapp/widgets/widget_related_products.dart';
 
 class ProductScreen extends StatefulWidget {
 
@@ -32,10 +36,18 @@ class ProductScreen extends StatefulWidget {
 }
 
 class ProductScreenState extends State<ProductScreen>{
+  GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  bool isApiCallProcess = false;
+  WebApiServices _webApiServices;
+  WebResponseModel _webResponseModel;
+  @override
+  void initState() {
+   _webApiServices = new WebApiServices();
+   _webResponseModel = new WebResponseModel();
+    super.initState();
+  }
 
   Widget _cartDone(){
-    final cart = Provider.of<CartProvider>(context);
-    final app = Provider.of<AppProvider>(context);
     return Padding(
       padding: const EdgeInsets.only(
           top: 10.0,
@@ -43,15 +55,7 @@ class ProductScreenState extends State<ProductScreen>{
           right: 30
       ),
       child: GestureDetector(onTap: (){
-        cart.getCartData().then((value) => {
-          if(value!=null){
-            printLog("cartData", value),
-            changeScreen(context, CartScreen())
-          }else{
-           toast(NETWORK_ERROR)
-          }
-
-        });
+        changeScreen(context, CartScreen());
       },
         child:  Container(
           height: 40.0,
@@ -70,15 +74,6 @@ class ProductScreenState extends State<ProductScreen>{
         ),),);
   }
   Widget _CustomScrollView(){
-    final productProvider = Provider.of<ProductsProvider>(context, listen: false);
-    if(widget.productModel.relatedIds.isNotEmpty){
-      for(int i=0; i<widget.productModel.relatedIds.length; i++){
-        printLog("relatedIdss", widget.productModel.relatedIds[i].toString());
-      }
-    }
-
-    List<ProductModel> modelList =[];
-    printLog("relatedIdmodelListss", modelList.length.toString());
     Attribute colorAttribute, sizeAttribute;
 
     String catergory = "Uncategorized";
@@ -88,7 +83,6 @@ class ProductScreenState extends State<ProductScreen>{
     };
     if(widget.productModel.attributes.isNotEmpty) {
       printLog("productmodeid", widget.productModel.id.toString());
-
        colorAttribute = widget.productModel.attributes[0] !=null ? widget.productModel.attributes[0] : null;
        sizeAttribute = widget.productModel.attributes.length ==2  ? widget.productModel.attributes[1] : null;
         printLog("productmodel", colorAttribute.options.length);
@@ -132,12 +126,6 @@ class ProductScreenState extends State<ProductScreen>{
           delegate: MySliverAppBar(expandedHeight: 350, productModel: widget.productModel),
           pinned: true,
         ),
-        SliverPadding(padding: const EdgeInsets.only(top: 0),
-         sliver: SliverToBoxAdapter(
-          child: SizedBox(
-            height: 0,
-          ),
-        ),),
         SliverPadding(
           padding: const EdgeInsets.only(top:150.0, left: 30, right:28, bottom: 10),
           sliver: SliverToBoxAdapter(
@@ -251,144 +239,23 @@ class ProductScreenState extends State<ProductScreen>{
           ),
         ),
         SliverPadding(
-          padding: const EdgeInsets.only(top:0.0, left: 10, right:8, bottom: 10),
+          padding: const EdgeInsets.only(top:10.0, left: 10, right:8, bottom: 10),
           sliver: SliverToBoxAdapter(
-              child:Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                 Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: Text("Related Product", style: TextStyle( color: Colors.black,
-                       fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 15),),
-                 ),
-                ],
-              )
+              child: WidgetRelatedProducts(labelName: "Related Product", products: widget.productModel.relatedIds,)
           ),
         ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.only(left:8.0),
-            child: Container(
-              height: 280,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: modelList.length,
-                itemBuilder: (context, index){
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(onTap: (){
-                      changeScreen(context, ProductScreen(productModel: modelList[index],));
-                    },
-                    child:Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(color: Colors.grey, width: 0.2),
-                          borderRadius: BorderRadius.all(Radius.circular(5.0))
-                      ),
-                      alignment: Alignment.topLeft,
-                      child: Column(
-                        children: <Widget>[
-                          Stack(
-                            children: <Widget>[
-                              Container(
-                                height: 180,
-                                child: FadeInImage(
-                                  placeholder: AssetImage('assets/images/bg_lock.png'),
-                                  image: NetworkImage(modelList.length >= 0 ? modelList[index].images[0].src : 'assets/images/bg_lock.png'),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(modelList.length >= 0 ? modelList[index].name : "Woo App",
-                              style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                                fontWeight: FontWeight.w600,),),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              new RichText(
-                                text: new TextSpan(
-                                  text: '',
-                                  children: <TextSpan>[
-                                    new TextSpan(
-                                      text:modelList.length >= 0 ?"₹ "+modelList[index].price+"   ": "₹ 200 ",
-                                      style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,),),
-                                    new TextSpan(
-                                      text:  modelList.length >= 0 ? "₹"+ modelList[index].regularPrice: "₹ 250",
-                                      style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0, decoration: TextDecoration.lineThrough,
-                                        fontWeight: FontWeight.w300,),),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children:<Widget>[
-                              RatingBar(
-                                  itemSize: 20,
-                                  initialRating:double.parse(modelList.length >= 0 ?modelList[index].ratingCount.toString(): "5"),
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  itemCount: 5,
-                                  itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                                  ratingWidget: RatingWidget(
-                                      full: new Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      half: new Icon(
-                                        Icons.star_half,
-                                        color: Colors.amber,
-                                      ),
-                                      empty: new Icon(
-                                        Icons.star_border,
-                                        color: Colors.amber,
-                                      )
-                                  ),
-                                  onRatingUpdate: (rating){
-                                    print(rating);
-                                  }
-                              ),
-                              Text(modelList.length >= 0 ? " {"+modelList[index].averageRating+"}" : "5",
-                                style: TextStyle( color: Colors.black,  fontFamily: 'Poppins', fontSize: 12.0,
-                                  fontWeight: FontWeight.w600,),),
-                            ],
-                          )
-                        ],
-                      ),
-                    ) ,)
-                  );
-                },
-              ),
-            ),
-          ),
-        )
       ],
     );
   }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+
   @override
   Widget build(BuildContext context) {
-    WebResponseModel cartResponse;
-    final cart = Provider.of<CartProvider>(context, listen: false);
-    final app = Provider.of<AppProvider>(context, listen: false);
     return
       Scaffold(
-        body: Container(
+        body: ProgressHUD( inAsyncCall: isApiCallProcess, opacity: 0.3, child: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Center(child: _CustomScrollView()),
-        ),
+        ),),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.all(0),
           child: Container(
@@ -420,8 +287,8 @@ class ProductScreenState extends State<ProductScreen>{
                               style: TextStyle(
                                   color: orange,
                                   fontFamily: 'Poppins',
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600, decoration: TextDecoration.lineThrough,decorationThickness: 2.85
+                                  fontSize: 14.0,
+                                  fontWeight: semiBold, decoration: TextDecoration.lineThrough,decorationThickness: 2.85
                               ),
                             ),
                           )),
@@ -430,8 +297,8 @@ class ProductScreenState extends State<ProductScreen>{
                         style: TextStyle(
                           color: black,
                           fontFamily: 'Poppins',
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 14.0,
+                          fontWeight: semiBold,
                         ),
                       )
                     ],
@@ -445,27 +312,31 @@ class ProductScreenState extends State<ProductScreen>{
                                 Radius.circular(5)),
                           ),
                           child: GestureDetector(
-                            onTap: ()async{
-
-                              cart.getAddToCart(id: widget.productModel.id.toString(), quantity: "1").then((value) => {
-                               if(value.code=="1"){
-                                 cartDialog(value.message)
-                               }else{
-                                 toast(value.message)
-                               }
-
+                            onTap: (){
+                              setState(() {
+                                isApiCallProcess = true;
                               });
-                            },
+                              _webApiServices.getAddToCart(widget.productModel.id, "1").then((value) {
+                              _webResponseModel = value;
+                              if(_webResponseModel.code=="1"){
+                                cartDialog(_webResponseModel.message);
+                              }else{
+                                toast(_webResponseModel.message);
+                              }
+                              setState(() {
+                                isApiCallProcess = false;
+                              });
+                              });
+                              },
                             child:  Padding(
                               padding: const EdgeInsets.only(top:5.0, bottom: 5.0, left: 0, right: 0),
-                              child: SvgPicture.asset('assets/icons/ic_shoppingcart.svg', color: Colors.orange,),
+                              child: SvgPicture.asset(ic_shoppingcart, color: orange,),
                             ),
                           )
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left:15.0),
                         child: GestureDetector(onTap: (){
-                          // Navigator.of(context).pushNamed(routes.CartScreen_Route);
                         },
                           child: Container(
                             decoration: BoxDecoration(
@@ -860,7 +731,4 @@ class MySliverAppBar extends SliverPersistentHeaderDelegate{
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate)=>true;
-
-
-
 }

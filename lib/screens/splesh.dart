@@ -86,7 +86,7 @@ class SpleshScreenState extends State<SpleshScreen> {
       ),
          child: ProgressHUD(child: new Form(key: globalKey,child: Column(
           children: <Widget>[
-          MyAppBar(),
+          AppBar(),
           Expanded(
             child: Padding(
                 padding: const EdgeInsets.only(
@@ -194,7 +194,7 @@ class SpleshScreenState extends State<SpleshScreen> {
     ));
   }
 }
-class MyAppBar extends StatelessWidget {
+class AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

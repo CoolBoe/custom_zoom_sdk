@@ -5,6 +5,9 @@ import 'package:wooapp/models/sort_by.dart';
 
 const String appName = 'WooApp';
 const String fontName = 'Poppins';
+const String app_Theme = 'app_theme';
+const String dark_Mode = 'dark_mode';
+const String light_Mode = 'light_mode';
 const String USER_EMAIL = 'email';
 const String IsLogin = 'islogin';
 const String USER_ID = 'id';
@@ -14,6 +17,7 @@ const String ACCESS_TOKEN = 'access_token';
 const String USER_FIRST_NAME = 'first_name';
 const String USER_LAST_NAME = 'last_name';
 const String USER_NAME = 'username';
+const String USER_ADDRESS = 'useraddress';
 const String USER_ROLE = 'role';
 const String IS_PAYING_CUSTOMER = 'is_paying_customer';
 const String STATE = 'state';

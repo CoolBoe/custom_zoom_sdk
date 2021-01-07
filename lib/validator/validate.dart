@@ -1,5 +1,6 @@
 import 'dart:ffi';
-
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class Validate {
@@ -87,12 +88,20 @@ bool validMobilePattern(String mobile) {
 bool isValidString(String data) {
   return data != null && !data.isEmpty;
 }
+double getValidDecimalInDouble(String value) {
+  if (!isValidString(value)) {
+    return 0.0;
+  }
+  double netValue = double.parse(value.replaceAll(',', ''));
+  assert(netValue is double);
+  return netValue;
+}
 
 String getValidDecimal(String value) {
   if (!isValidString(value)) {
     return "0.00";
   }
-  double netValue = double.parse(value);
+  double netValue = double.parse(value.replaceAll(',', ''));
   assert(netValue is double);
   return getValidDecimalFormat(netValue);
 }
@@ -137,4 +146,11 @@ bool validLastName(String editText) {
 
 String getValidDecimalFormat(double value) {
   return value.toStringAsFixed(2);
+}
+String getValidString(String amount){
+  if(isValidString(amount) && amount!= ""){
+    amount = parse(amount).documentElement.text.substring(1).trim();
+    printLog("amount",amount);
+    return amount;
+  }return null;
 }

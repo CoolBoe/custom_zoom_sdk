@@ -40,10 +40,6 @@ class HomeView extends StatefulWidget {
 
 class HomeState extends State<HomeView> {
   bool _toggel = true;
-  List<ProductModel> productList = [];
-
-
-
   @override
   void initState() {
     super.initState();

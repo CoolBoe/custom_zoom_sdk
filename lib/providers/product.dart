@@ -24,10 +24,12 @@ class ProductsProvider with ChangeNotifier {
   List<ProductModel> get allProductsByFeature => _productListByFeatured;
   List<ProductModel> get allproductListByRelated =>_productListByRelated;
   double get totalRecords => _productList.length.toDouble();
-  LoadMoreStatus _loadMoreStatus = LoadMoreStatus.STABLE;
-  LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
-  getLoadMoreStatus()=>_loadMoreStatus;
-  getLoadMoreByFeatureStatue()=>loadMoreStatus;
+  // LoadMoreStatus _loadMoreStatus = LoadMoreStatus.STABLE;
+  // LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
+  // LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
+  // getLoadMoreStatus()=>_loadMoreStatus;
+  // getLoadMoreByFeatureStatue()=>loadMoreStatus;
+  // getLoadMoreByRelatedStatue()=>loadMoreStatus;
 
   ProductsProvider(){
     resetStreams();
@@ -38,11 +40,11 @@ class ProductsProvider with ChangeNotifier {
     _productList = List<ProductModel>();
   }
   setLoadingState(LoadMoreStatus loadMoreStatus){
-    _loadMoreStatus = loadMoreStatus;
+    // _loadMoreStatus = loadMoreStatus;
     notifyListeners();
   }
   setLoadingStateByFeature(LoadMoreStatus loadMoreStatus){
-    _loadMoreStatus = loadMoreStatus;
+    // _loadMoreStatus = loadMoreStatus;
     notifyListeners();
   }
   setSortOrder(SortBy sortBy){
@@ -54,7 +56,7 @@ class ProductsProvider with ChangeNotifier {
     if(itemModel.length>0){
       _productList.addAll(itemModel);
     }
-    setLoadingState(LoadMoreStatus.STABLE);
+    // setLoadingState(LoadMoreStatus.STABLE);
     notifyListeners();
   }
   fetchProductByFeatured(pageNumber, {String sortBy, bool featured,}) async{
@@ -65,24 +67,26 @@ class ProductsProvider with ChangeNotifier {
         featured: true,
     );
     _productListByFeatured=[];
-    setLoadingStateByFeature(LoadMoreStatus.STABLE);
+    // setLoadingStateByFeature(LoadMoreStatus.STABLE);
     notifyListeners();
     if(itemModel.length>0){
       _productListByFeatured.addAll(itemModel);
     }
   }
   fetchProductByRelated(pageNumber, {String sortBy, List<int> productIDs,}) async{
+
     List<ProductModel> itemModel = await _webApiServices.getProducts(
       sort: this._sortBy.value,
       page: this.page,
       per_page: this.per_page,
       featured: true,
     );
+    printLog("fetchProductByRelated", itemModel);
     _productListByRelated=[];
-    setLoadingStateByFeature(LoadMoreStatus.STABLE);
+    // setLoadingStateByFeature(LoadMoreStatus.STABLE);
     notifyListeners();
     if(itemModel.length>0){
-      _productListByFeatured.addAll(itemModel);
+      _productListByRelated.addAll(itemModel);
     }
   }
 }

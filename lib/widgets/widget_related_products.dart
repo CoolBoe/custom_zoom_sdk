@@ -8,6 +8,7 @@ import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/services/product.dart';
+import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 
@@ -24,12 +25,12 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
   @override
   void initState() {
     var productList = Provider.of<ProductsProvider>(context, listen: false);
-    productList.fetchProducts(_page);
     productList.fetchProductByRelated(_page,productIDs: widget.products );
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
+
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -37,7 +38,9 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
         children: [
           Text("Related Product", style: TextStyle( color: Colors.black,
           fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 15),),
-          _productByRelated()
+          Container(
+              height: 280,
+              child: _productByRelated())
         ],
       ),
     );
@@ -45,9 +48,8 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
 
   Widget _productByRelated(){
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
-      if(productModel.allProductsByFeature!=null &&
-          productModel.allproductListByRelated.length>0 &&
-          productModel.getLoadMoreByFeatureStatue()!=LoadMoreStatus.INITIAL){
+      if(productModel.allproductListByRelated!=null &&
+          productModel.allproductListByRelated.length>0){
         return _buildproductList(productModel.allproductListByRelated);
       }else{
         return progressBar(context, orange);
@@ -57,25 +59,26 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
 
   Widget _buildproductList(List<ProductModel> productList) {
     return ListView.builder(
-        shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemCount: productList.length,
-        itemBuilder: (BuildContext context, int index){
-          return GestureDetector(
-              onTap: () {
-                changeScreen(
-                    context, ProductScreen(productModel: productList[index]));
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProductWidget(
-                  productModel: productList[index],
-                  width: 150,
-                ),
-              ));
-        }
-    );
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          itemCount: productList.length,
+          itemBuilder: (BuildContext context, int index){
+            return GestureDetector(
+                onTap: () {
+                  changeScreen(
+                      context, ProductScreen(productModel: productList[index]));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProductWidget(
+                    productModel: productList[index],
+                    width: 150,
+                  ),
+                ));
+          }
+      );
+
   }
 
 

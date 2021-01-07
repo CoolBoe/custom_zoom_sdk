@@ -101,7 +101,7 @@ class LoginScreenState extends State<LoginScreen> {
         resizeToAvoidBottomPadding: false,
         body: Column(
           children: <Widget>[
-            MyAppBar(),
+            AppBar(),
             Expanded(
               child: Padding(
                   padding: const EdgeInsets.only(
@@ -272,13 +272,10 @@ class LoginScreenState extends State<LoginScreen> {
                                         child: new Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: <Widget>[
-                                            GestureDetector(
-                                              onTap: () {},
-                                              child: SvgPicture.asset(
-                                                ic_facebook,
-                                                color: Colors.white,
-                                              ),
-                                            ),
+                                          SvgPicture.asset(
+                                          ic_facebook,
+                                          color: Colors.white,
+                                             ),
                                             SizedBox(width: 10),
                                             GestureDetector(
                                               onTap: () {},
@@ -381,7 +378,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class MyAppBar extends StatelessWidget {
+class AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(

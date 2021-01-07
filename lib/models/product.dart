@@ -202,7 +202,7 @@ class ProductModel {
         reviewsAllowed: json["reviews_allowed"],
         averageRating: json["average_rating"],
         ratingCount: json["rating_count"],
-        relatedIds: List<int>.from(json["related_ids"].map((x) => x)),
+        relatedIds: json["related_ids"] !=null && json["related_ids"].length > 0 ? List<int>.from(json["related_ids"].map((x) => x)):null,
         upsellIds: List<dynamic>.from(json["upsell_ids"].map((x) => x)),
         crossSellIds: List<dynamic>.from(json["cross_sell_ids"].map((x) => x)),
         parentId: json["parent_id"],

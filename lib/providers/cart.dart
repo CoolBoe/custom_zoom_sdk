@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/cart.dart';
+import 'package:wooapp/models/coupons.dart';
 import 'package:wooapp/services/cart.dart';
 import 'dart:convert';
 import 'package:wooapp/models/WebResponseModel.dart';
@@ -12,7 +13,10 @@ class CartProvider with ChangeNotifier {
   WebResponseModel _webResponseModel;
   CartServices cartServices ;
   CartModel _cartModel;
+  List<Coupons> _coupons;
+  int _cartItemCount;
   CartModel get getCart => _cartModel;
+  List<Coupons> get getCoupons => _coupons;
   WebApiServices _webApiServices= new WebApiServices();
   CartProvider() {
     resetStreams();
@@ -22,7 +26,7 @@ class CartProvider with ChangeNotifier {
    _cartModel = new CartModel();
     _webResponseModel = new WebResponseModel();
   }
-    getAddToCart({String id, String quantity})async{
+    getAddToCart({int id, String quantity})async{
      _webResponseModel=await _webApiServices.getAddToCart(id, quantity);
      notifyListeners();
     }
@@ -32,8 +36,30 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-    getCartData() async{
+  Future getUpdateToCart(String cartItemKey, int quantity, Function onCallBack)async{
+    _cartModel=await _webApiServices.getUpdateToCart(cartItemKey, quantity);
+
+    onCallBack(_cartModel);
+    notifyListeners();
+  }
+  getRemoveToCart({String cartItemKey})async{
+    _cartModel=await _webApiServices.getRemoveToCart(cartItemKey);
+    notifyListeners();
+  }
+  getClearToCart()async{
+    _webResponseModel=await _webApiServices.getClearToCart();
+    notifyListeners();
+  }
+  getCartItemCount()async{
+    _cartItemCount=await _webApiServices.getCartItemCount();
+    notifyListeners();
+  }
+  getCartData() async{
       _cartModel = await _webApiServices.getCart();
       notifyListeners();
-    }
+  }
+  getOfferData() async{
+    _coupons = await _webApiServices.getCoupons();
+    notifyListeners();
+  }
 }

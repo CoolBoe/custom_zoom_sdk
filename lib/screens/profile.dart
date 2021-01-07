@@ -1,6 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:wooapp/helper/color.dart';
+import 'package:wooapp/helper/constants.dart';
+import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/screens/delivery.dart';
+import 'package:wooapp/screens/editAccount.dart';
+import 'package:wooapp/screens/language.dart';
+import 'package:wooapp/screens/offer.dart';
+import 'package:wooapp/screens/order.dart';
+import 'package:wooapp/screens/paymet.dart';
+import 'package:wooapp/screens/privacy.dart';
+import 'package:wooapp/screens/settings.dart';
+import 'package:wooapp/screens/termOfUse.dart';
+import 'package:wooapp/utils/form_helper.dart';
+import 'package:wooapp/utils/widget_helper.dart';
+import 'package:wooapp/widgets/app_bar.dart';
+import 'package:wooapp/widgets/loading.dart';
+
+import 'notification.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key key}) : super(key: key);
@@ -11,72 +30,35 @@ class ProfileView extends StatefulWidget {
 class ProfileState extends State<ProfileView> {
   Widget _CustomScrollView() {
     List<ByCatgories> sortBy = [
-      ByCatgories("Account Details", 0, 'assets/icons/ic_home.svg'),
-      ByCatgories("Offers", 1, 'assets/icons/ic_shop.svg'),
-      ByCatgories("Notifications", 2, 'assets/icons/ic_categories.svg'),
-      ByCatgories("Delivery information", 3, 'assets/icons/ic_chat.svg'),
-      ByCatgories("Payment Information", 4, 'assets/icons/ic_call.svg'),
-      ByCatgories("Language", 5, 'assets/icons/ic_support.svg'),
-      ByCatgories("Privacy Settings", 6, 'assets/icons/ic_rating.svg'),
+      ByCatgories("Account Details", 0, ic_home),
+      ByCatgories("Offers", 1, ic_shop),
+      ByCatgories("Notifications", 2,ic_categories),
+      ByCatgories("Delivery information", 3, ic_chat),
+      ByCatgories("Payment Information", 4, ic_call),
+      ByCatgories("Language", 5, ic_support),
+      ByCatgories("Privacy Settings", 6, ic_rating),
     ];
     return Column(
       children: <Widget>[
-        AppBar(
-          elevation: 0.0,
-          title: Text("Account",
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black)),
-          centerTitle: true,
-          leading: GestureDetector(
-              onTap: () {
-                // Navigator.of(context).pushNamed(routes.MainPage_Route);
-              },
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              )),
-        ),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 15),
-              child: Card(
-                elevation: 10,
-                shape: CircleBorder(side: BorderSide.none),
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: CircleAvatar(
-                    radius: 50.0,
-                    backgroundImage: NetworkImage(
-                        'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80'),
-                    backgroundColor: Colors.black,
-                  ),
-                ),
-              ),
-            ),
+            circularImageView(imageUrl:  'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80',
+            onCallback: (value){
+
+            }),
             Column(
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(),
-                  child: Text("Phoeniixx Design",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black)),
+                  child: Text(BasePrefs.getString(USER_NAME),
+                      style: styleProvider(fontWeight: semiBold, size: 18, color: black)),
                 ),
                 Padding(
                   padding: EdgeInsets.only(),
                   child: Text("Member since 2019",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black)),
+                      style: styleProvider(fontWeight: regular, size: 10, color: black)),
                 ),
                 Container(
                     width: 150,
@@ -94,11 +76,7 @@ class ProfileState extends State<ProfileView> {
                               left: 30.0, right: 30, top: 5, bottom: 5),
                           child: Center(
                             child: Text('EDIT ACCOUNT',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 8)),
+                                style: styleProvider(fontWeight: regular, size: 8, color: white)),
                           ),
                         ),
                       ),
@@ -112,7 +90,10 @@ class ProfileState extends State<ProfileView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Padding(
+              GestureDetector(onTap: (){
+                changeScreen(context, OrderScreen());
+              },
+              child: Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -125,11 +106,7 @@ class ProfileState extends State<ProfileView> {
                       padding: const EdgeInsets.only(left: 8.0, right: 20),
                       child: Text(
                         'Orders',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 10,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500),
+                        style: styleProvider(fontWeight: medium, size: 10, color: black),
                       ),
                     ),
                     Container(
@@ -141,35 +118,36 @@ class ProfileState extends State<ProfileView> {
                     )
                   ],
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: SvgPicture.asset('assets/icons/ic_location.svg'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 20),
-                    child: Text(
-                      'My Address',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 10,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Container(
-                    height: 20,
-                    child: VerticalDivider(
-                      color: Colors.black,
-                      width: 2,
-                    ),
-                  )
-                ],
-              ),
-              Padding(
+              ),),
+              GestureDetector(onTap: (){
+                changeScreen(context, DeliveryScreen());
+              },
+              child: Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: <Widget>[
+                 Padding(
+                   padding: const EdgeInsets.only(left: 20.0),
+                   child: SvgPicture.asset(ic_location),
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.only(left: 8.0, right: 20),
+                   child: Text(
+                       'My Address',
+                       style: styleProvider(fontWeight: medium, size: 10, color: black)),
+                 ),
+                 Container(
+                   height: 20,
+                   child: VerticalDivider(
+                     color: Colors.black,
+                     width: 2,
+                   ),
+                 )
+               ],
+             ),),
+              GestureDetector(onTap: (){
+                changeScreen(context, SettingScreen());
+              },
+              child: Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -186,16 +164,12 @@ class ProfileState extends State<ProfileView> {
                       padding: const EdgeInsets.only(left: 8.0, right: 20),
                       child: Text(
                         'Settings',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 10,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500),
+                        style: styleProvider(fontWeight: medium, size: 10, color: black),
                       ),
                     ),
                   ],
                 ),
-              ),
+              ),),
             ],
           ),
         ),
@@ -205,11 +179,43 @@ class ProfileState extends State<ProfileView> {
             child: ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: sortBy.length,
+                physics: BouncingScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      switch(index){
+                        case 0:
+                          printLog("buttonClicked", "Account Details");
+                          changeScreen(context, EditAccountScreen());
+                          break;
+                        case 1:
+                          printLog("buttonClicked", "Offers");
+                          changeScreen(context, OfferScreen());
+                          break;
+                        case 2:
+                          printLog("buttonClicked", "Notifications");
+                          changeScreen(context, NotificationScreen());
+                          break;
+                        case 3:
+                          printLog("buttonClicked", "Delivery information");
+                          changeScreen(context, DeliveryScreen());
+                          break;
+                        case 4:
+                          printLog("buttonClicked", "Payment Information");
+                          changeScreen(context, PaymentScreen());
+                          break;
+                        case 5:
+                          printLog("buttonClicked", "Language");
+                          changeScreen(context, LanguageScreen());
+                          break;
+                        case 6:
+                          printLog("buttonClicked", "Privacy Settings");
+                          changeScreen(context, PrivacyScreen());
+                          break;
+                      }
+                    },
                     child: Container(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,11 +224,7 @@ class ProfileState extends State<ProfileView> {
                             padding: const EdgeInsets.only(top: 25.0),
                             child: Text(
                               sortBy[index].name,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 16),
+                                style: styleProvider(fontWeight: semiBold, size: 16, color: black),
                             ),
                           ),
                           Icon(
@@ -243,13 +245,10 @@ class ProfileState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: BaseAppBar(context, "Account",suffixIcon: Container()),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
-        child: RefreshIndicator(
-            onRefresh: () async {
-              await Future.value({});
-            },
-            child: Center(child: _CustomScrollView())),
+        child: _CustomScrollView(),
       ),
     );
   }

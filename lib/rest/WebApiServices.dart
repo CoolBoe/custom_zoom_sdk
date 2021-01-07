@@ -10,6 +10,7 @@ import 'package:wooapp/models/app.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/category.dart';
 import 'package:wooapp/models/WebResponseModel.dart';
+import 'package:wooapp/models/coupons.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/rest/woocommerce.dart';
@@ -20,9 +21,11 @@ import 'package:wooapp/widgets/loading.dart';
 class WebApiServices {
   var dio = Dio();
   Response response;
+  String BaseAuth =
+      'Basic ' + base64Encode(utf8.encode('${WebRequestConstants.BaseAuthId}:${WebRequestConstants.BaseAuthPass}'));
   Map<String, String> cookies = {};
-  Map<String, String> headers = {
-    HttpHeaders.contentTypeHeader: "application/json"
+  Map<String, String> headers =<String, String> {
+    HttpHeaders.contentTypeHeader: "application/json",
   };
   Future<bool> userLogin(String email, String password) async {
     try{
@@ -290,18 +293,19 @@ class WebApiServices {
     }
     }
 
-  Future<WebResponseModel> getAddToCart(String id, String quantity) async {
+  Future<WebResponseModel> getAddToCart(int id, String quantity) async {
   try{
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
     dio.interceptors.add(CookieManager(sj));
-    var params = new FormData.fromMap(
-        { 'id': id,
-          'quantity':quantity});
+    var params = { 'id': id,
+          'quantity':quantity};
     String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.ADD_CART;
+  await  printLog("getAddToCarturl", "$url====>$params");
     var response = await dio.post(url, options: new Options(headers: headers), data: params);
     if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+      printLog("getAddToCart", response);
       WebResponseModel model = WebResponseModel.fromJson(response.data);
       return model;
     } else {
@@ -338,19 +342,24 @@ class WebApiServices {
     }
   }
 
-  Future<WebResponseModel> getUpdateToCart(String cartItemKey, String quantity) async {
+  Future<CartModel> getUpdateToCart(String cartItemKey, int quantity) async {
     try{
       Directory tempDir = await getTemporaryDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
-      var params = new FormData.fromMap(
-          { WebRequestConstants.CART_ITEM_KEY: cartItemKey,
-            WebRequestConstants.QUANTITY:quantity,});
-      String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.CART_UPDATE;
-      var response = await dio.post(url, options: new Options(headers: headers), data: params);
+      String params = "";
+      if(cartItemKey!=null){
+        params+="?cart_item_key=$cartItemKey";
+      }
+      if(quantity!=null){
+        params+="&quantity=$quantity";
+      }
+      String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.CART_UPDATE +params;
+      var response = await dio.post(url, options: new Options(headers: headers));
+      printLog("API getUpdateToCart Massage", response.data);
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
-        WebResponseModel model = WebResponseModel.fromJson(response.data);
+        CartModel model =CartModel.fromJson(response.data);
         return model;
       } else {
         printLog("API getUpdateToCart Errorr Massage", response.data);
@@ -361,7 +370,7 @@ class WebApiServices {
     }
   }
 
-  Future<WebResponseModel> getRemoveToCart(String cartItemKey) async {
+  Future<CartModel> getRemoveToCart(String cartItemKey) async {
     try{
       Directory tempDir = await getTemporaryDirectory();
       String tempPath = tempDir.path;
@@ -373,7 +382,7 @@ class WebApiServices {
       String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.CART_REMOVE;
       var response = await dio.post(url, options: new Options(headers: headers), data: params);
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
-        WebResponseModel model = WebResponseModel.fromJson(response.data);
+        CartModel model =CartModel.fromJson(response.data);
         return model;
       } else {
         printLog("API getRemoveToCart Errorr Massage", response.data);
@@ -404,6 +413,52 @@ class WebApiServices {
     }
   }
 
+  Future<int> getCartItemCount() async {
+    try{
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      dio.interceptors.add(CookieManager(sj));
+      String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.CART_ITEM_COUNT;
+      var response = await dio.get(url, options: new Options(headers: headers));
+      if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+        int itemCount = response.data;
+        return itemCount;
+      } else {
+        printLog("API getCartItemCount Errorr Massage", response.data);
+        return null;
+      }} on DioError catch(e){
+      printLog("getCartItemCount", e.response);
+      return null;
+    }
+  }
+
+  Future<List<Coupons>> getCoupons() async {
+    try{
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      dio.interceptors.add(CookieManager(sj));
+      String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.COUPON;
+      var response = await dio.get(url, options: new Options(headers: {
+        HttpHeaders.authorizationHeader: BaseAuth
+      }));
+      if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+
+        Iterable l = response.data;
+        List<Coupons> Cupons = List<Coupons>.from(l.map((model)=> Coupons.fromJson(model)));
+       printLog("coupons", Cupons);
+       return Cupons;
+
+      } else {
+        printLog("API getCoupons Errorr Massage", response.data);
+        return null;
+      }} on DioError catch(e){
+      printLog("getCoupons", e.response);
+      return null;
+    }
+  }
+
   Future<CartModel> getCart() async {
     try{
       Directory tempDir = await getTemporaryDirectory();
@@ -413,7 +468,9 @@ class WebApiServices {
       String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.CART;
       var response = await dio.get(url, options: new Options(headers: headers));
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+
         CartModel model =CartModel.fromJson(response.data);
+        printLog("API getCart Data", model.cartData[0].quantity);
         return model;
       } else {
         printLog("API getCart Errorr Massage", response.data);
@@ -422,47 +479,5 @@ class WebApiServices {
       printLog("getCart", e.response);
       return null;
     }
-  }
-
-  void updateCookie(http.Response response) {
-    String allSetCookie = response.headers['set-cookie'];
-    printLog("allCookies", allSetCookie);
-    if (allSetCookie != null) {
-      var setCookies = allSetCookie.split(',');
-
-      for (var setCookie in setCookies) {
-        var cookies = setCookie.split(';');
-
-        for (var cookie in cookies) {
-          _setCookie(cookie);
-        }
-      }
-      printLog("allSetCookie", allSetCookie);
-      headers['cookie'] = _generateCookieHeader();
-    }
-  }
-
-  void _setCookie(String rawCookie) {
-    if (rawCookie.length > 0) {
-      var keyValue = rawCookie.split('=');
-      if (keyValue.length == 2) {
-        var key = keyValue[0].trim();
-        var value = keyValue[1];
-        // ignore keys that aren't cookies
-        if (key == 'path' || key == 'expires') return;
-        this.cookies[key] = value;
-      }
-    }
-  }
-
-  String _generateCookieHeader() {
-    String cookie = "";
-
-    for (var key in cookies.keys) {
-      if (cookie.length > 0) cookie += ";";
-      cookie += key + "=" + cookies[key];
-    }
-    printLog("_generateCookieHeader", cookie);
-    return cookie;
   }
 }

@@ -1,39 +1,53 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wooapp/helper/color.dart';
+import 'package:wooapp/helper/constants.dart';
+import 'package:wooapp/utils/widget_helper.dart';
 
 class FormHelper {
   static Widget textInput(
-    BuildContext context,
-    Object initialValue,
-    Function onChanged, {
-    bool isTextArea = false,
-    bool isNumberInput = false,
-    obscureText: false,
-    Function onValidate,
-    Widget prefixIcon,
-    Widget suffixIcon,
-    String color,
-    String textColor,
-  }) {
-    return TextFormField(
-      initialValue: initialValue != null ? initialValue.toString() : "",
-      decoration: fieldDecoration(
-        context,
-        "",
-        "",
-        suffixIcon: suffixIcon,
+      BuildContext context,
+      Object initialValue,
+      Function onChanged, {
+        Color focusColor,
+        Color borderColor,
+        bool isTextArea = false,
+        bool isNumberInput = false,
+        obscureText: false,
+        Function onValidate,
+        Widget prefixIcon,
+        Widget suffixIcon,
+      }) {
+    return Container(
+      height: 35,
+      child: TextFormField(
+
+        initialValue: initialValue != null ? initialValue.toString() : "",
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(bottom: 0.0),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: borderColor!=null ? borderColor: grey),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: focusColor!=null ? focusColor: orange),
+            ),
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: orange),
+            ),
+          suffix: suffixIcon,
+          hintText: initialValue,
+          hintStyle: styleProvider(fontWeight: regular, size: dp15, color: grey)
+        ),
+        obscureText: obscureText,
+        maxLines: !isTextArea ? 1 : 3,
+        keyboardType: isNumberInput ? TextInputType.number : TextInputType.text,
+        onChanged: (String value) {
+          return onChanged(value);
+        },
+        validator: (value) {
+          return onValidate(value);
+        },
       ),
-      style: new TextStyle(
-          fontFamily: "Poppins", fontWeight: FontWeight.w400, fontSize: 18),
-      obscureText: obscureText,
-      maxLines: !isTextArea ? 1 : 3,
-      keyboardType: isNumberInput ? TextInputType.number : TextInputType.text,
-      onChanged: (String value) {
-        return onChanged(value);
-      },
-      validator: (value) {
-        return onValidate(value);
-      },
     );
   }
 
@@ -65,15 +79,28 @@ class FormHelper {
     );
   }
 
-  static Widget fieldLabel(String labelName) {
+  static Widget fieldLabel(String labelName, FontWeight fontWeight, double size,{Widget suffixIcon, Widget prefixIcon, Color color}) {
     return new Padding(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
-      child: Text(
-        labelName,
-        style: new TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 15.0,
-        ),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: suffixIcon,
+          ),
+          Text(
+            labelName,
+            style: new TextStyle(
+                fontWeight: fontWeight,
+                fontSize: size,
+                color: color!=null ? color: null
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left:3.0, bottom: 7),
+            child: prefixIcon!=null ? prefixIcon : Icon(Icons.star, size: 5, color: color!=null ? color: null),
+          ),
+        ],
       ),
     );
   }
@@ -205,3 +232,57 @@ class FormHelper {
     );
   }
 }
+
+
+Widget circularImageView ({String imageUrl, Function onCallback}){
+  return Padding(
+    padding: const EdgeInsets.only(left: 20.0, right: 15),
+    child: Card(
+      elevation: 10,
+      shape: CircleBorder(side: BorderSide.none),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: CircleAvatar(
+          radius: 50.0,
+          backgroundImage: NetworkImage(imageUrl),
+          backgroundColor: Colors.black,
+        ),
+      ),
+    ),
+  );
+}
+
+class customButton extends StatelessWidget{
+  final GestureTapCallback onPressed;
+  String title;
+  customButton({@required this.onPressed, this.title});
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+        child:  Padding(
+          padding:
+          EdgeInsets.only(left: 20, top: 10, right: 20),
+          child: Container(
+              color: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Center(
+                    child: Text(title,
+                        style: styleProvider(fontWeight: regular, size: 14, color: white)),
+                  ),
+                ),
+              )),
+
+        ),
+        onPressed: onPressed);
+  }
+}
+
+

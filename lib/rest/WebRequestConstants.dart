@@ -10,7 +10,7 @@ class WebRequestConstants {
       "cs_3351fba7577bb78534600af478007e73f8babd4e";
   static const String getWPBaseUrl = "https://wooapp.themiixx.com";
 
-  String BaseAuth =
+    String BaseAuth =
       'Basic ' + base64Encode(utf8.encode('$BaseAuthId:$BaseAuthPass'));
   static const String COOKIES = "Cookie";
 
@@ -43,7 +43,7 @@ class WebRequestConstants {
   static const String CART_REMOVE = "cart/remove";
   static const String CART_CLEAR = "cart/clear";
   static const String CART_TOTAL = "cart/totals";
-  static const String COUPON = "cart/coupon";
+  static const String COUPON = "coupons";
   static const String REMOVE_COUPON = "cart/remove-coupon";
   static const String CART_ITEM_COUNT = "cart/item-count";
   static const String QUANTITY = "quantity";

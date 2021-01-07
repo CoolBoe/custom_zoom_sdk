@@ -269,8 +269,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
   Widget _productsByCategory(){
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allProducts!=null &&
-          productModel.allProducts.length>0 &&
-          productModel.getLoadMoreStatus()!=LoadMoreStatus.INITIAL){
+          productModel.allProducts.length>0){
         return _productsByCategoryBuilder(productModel.allProducts);
       }else{
         return progressBar(context, orange);
@@ -305,8 +304,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
   Widget _productByFeatured(){
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allProductsByFeature!=null &&
-          productModel.allProductsByFeature.length>0 &&
-          productModel.getLoadMoreByFeatureStatue()!=LoadMoreStatus.INITIAL){
+          productModel.allProductsByFeature.length>0){
         return _productByFeaturedBuilder(productModel.allProductsByFeature);
       }else{
         return progressBar(context, orange);

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/widgets/ProgressHUD.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 class BasePage extends StatefulWidget{
   ProductModel productModel;
@@ -13,15 +14,15 @@ class BasePage extends StatefulWidget{
 
 }
 class BasePageState<T extends BasePage> extends State<BasePage>{
-  bool isApiCallProcess = true;
+  bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {
     return Consumer<LoaderProvider>(builder: (context, loaderModel, child){
+      printLog("BasePage", loaderModel.isApiCallProcess);
       return  Scaffold(
-          body: ProgressHUD(child: pageUi(), inAsyncCall: isApiCallProcess, opacity: 0.3,)
+          body: ProgressHUD(child: pageUi(), inAsyncCall: loaderModel.isApiCallProcess, opacity: 0.3,)
       );
     });
-
   }
   Widget pageUi() {
     return null;

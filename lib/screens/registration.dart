@@ -302,8 +302,6 @@ class RegisterScreenState extends State<RegisterScreen> {
                                     padding: const EdgeInsets.only(top: dp10),
                                     child: GestureDetector(
                                       onTap: () {
-
-
                                         social_login.FBLogin()
                                             .signInFB()
                                             .then((value) {

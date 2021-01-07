@@ -1,7 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/helper/shared_perference.dart';
+import 'package:wooapp/providers/LoadProvider.dart';
+import 'package:wooapp/providers/ThemeProvider.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/category.dart';
@@ -23,18 +24,22 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
       providers: [
+      ChangeNotifierProvider.value(value: ThemeProvider()),
       ChangeNotifierProvider.value(value: AppProvider(), child: ShopView(),),
       ChangeNotifierProvider.value(value: UserProvider()),
+      ChangeNotifierProvider.value(value: LoaderProvider(), child: CartScreen(),),
       ChangeNotifierProvider.value(value: ProductsProvider(), child: HomeView(),),
       ChangeNotifierProvider.value(value: CartProvider(), child: CartScreen(),),
       ChangeNotifierProvider.value(value: CategoriesProvider(), child: HomeView(),)
   ],
-    child: MaterialApp(
+    child: Consumer<ThemeProvider>(
+      builder: (context, theme, _) => MaterialApp(
+      theme: theme.lightTheme,
       title: "Woo App",
       debugShowCheckedModeBanner: false,
       home: ScreensController(),
     )
-  ));
+  )));
 }
 class ScreensController extends StatelessWidget {
   @override

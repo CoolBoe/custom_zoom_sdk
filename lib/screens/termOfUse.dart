@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/screens/mainpage.dart';
+import 'package:wooapp/widgets/app_bar.dart';
 
 class TermsOfUseScreen extends StatefulWidget {
   const TermsOfUseScreen({Key key}) : super(key: key);
@@ -14,24 +15,7 @@ class TermsOfUseScreenState extends State<TermsOfUseScreen> {
   Widget _CustomScrollView() {
     return Column(
       children: <Widget>[
-        AppBar(
-          elevation: 0.0,
-          title: Text("Terms of Service",
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black)),
-          centerTitle: true,
-          leading: GestureDetector(
-              onTap: () {
-                changeScreenReplacement(context, MainPageScreen());
-              },
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              )),
-        ),
+        BaseAppBar(context, "Terms of Service"),
         Padding(
             padding: const EdgeInsets.all(20.0),
             child: Card(
