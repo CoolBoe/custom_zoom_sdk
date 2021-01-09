@@ -18,7 +18,6 @@ class FBLogin {
   bool isLoggedIn = false;
 
   Future<bool> signInFB() async {
-    BasePrefs.init();
     final FacebookLoginResult result = await fbLogin.logIn(['email']);
     switch (result.status) {
       case FacebookLoginStatus.error:
@@ -36,11 +35,11 @@ class FBLogin {
             'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
         final profile = JSON.jsonDecode(response.body);
         if (profile != null) {
-          BasePrefs.setString(USER_NAME, profile['name']);
-          BasePrefs.setString(USER_LAST_NAME, profile['last_name']);
-          BasePrefs.setString(USER_EMAIL, profile['email']);
-          BasePrefs.setString(USER_FB_ID, profile['id']);
-          BasePrefs.setString(SOCIAL_LOGIN_MODE, 'facebook');
+          BasePrefs.saveData(USER_NAME, profile['name']);
+          BasePrefs.saveData(USER_LAST_NAME, profile['last_name']);
+          BasePrefs.saveData(USER_EMAIL, profile['email']);
+          BasePrefs.saveData(USER_FB_ID, profile['id']);
+          BasePrefs.saveData(SOCIAL_LOGIN_MODE, 'facebook');
           isLoggedIn = true;
         } else {
           isLoggedIn = false;

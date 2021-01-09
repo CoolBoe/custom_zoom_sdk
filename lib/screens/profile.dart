@@ -52,7 +52,7 @@ class ProfileState extends State<ProfileView> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(),
-                  child: Text(BasePrefs.getString(USER_NAME),
+                  child: Text(BasePrefs.getString(USER_NAME).toString(),
                       style: styleProvider(fontWeight: semiBold, size: 18, color: black)),
                 ),
                 Padding(

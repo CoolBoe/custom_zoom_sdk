@@ -10,6 +10,7 @@ class WebRequestConstants {
       "cs_3351fba7577bb78534600af478007e73f8babd4e";
   static const String getWPBaseUrl = "https://wooapp.themiixx.com";
 
+  static const String getPlaceUrl = "https://location.wlfpt.co/api/v1/";
     String BaseAuth =
       'Basic ' + base64Encode(utf8.encode('$BaseAuthId:$BaseAuthPass'));
   static const String COOKIES = "Cookie";
@@ -35,6 +36,18 @@ class WebRequestConstants {
   static const String SORT = "sort";
   static const String PAGE = "page";
   static const String PER_PAGE = "per_page";
+
+
+  static const String UPDATE_BILLING = "update-billing";
+  static const String PAYTM_CHECKSUM = "paytm-checksum";
+  static const String PAYMENT = "payment";
+  static const String UPDATE_ORDER = "checkout/update-order";
+  static const String NEW_ORDER ="checkout/new-order";
+  static const String PAYMENT_GATEWAY = "checkout/payment-gateway";
+  static const String REVIEW_ORDER = "checkout/review-order";
+
+  static const String ORDER_ID = "ORDER_ID";
+  static const String CUST_ID_METHOD = "CUST_ID METHOD";
 
   /*--------------------------------Cart Filters-----------------------------------------------------*/
   static const String CART = "cart";
@@ -69,4 +82,10 @@ class WebRequestConstants {
   static const String SORT_BY_DATE = "date";
   static const String SORT_BY_PRICE_DESC = "price_desc";
   static const String SORT_BY_PRICE_ASC = "price_asc";
+
+  /*-------------------------------------Place Constants-----------------------------------------------------------------*/
+  static const String COUNTRIES = "countries";
+  static const String STATES = "states";
+  static const String CITIES = "cities";
+  static const String PLACE_FILTER = "filter";
 }

@@ -11,6 +11,9 @@ class FormHelper {
       Function onChanged, {
         Color focusColor,
         Color borderColor,
+        double size,
+        FontWeight fontWeight,
+        Color textColor,
         bool isTextArea = false,
         bool isNumberInput = false,
         obscureText: false,
@@ -19,7 +22,7 @@ class FormHelper {
         Widget suffixIcon,
       }) {
     return Container(
-      height: 35,
+      height: 60,
       child: TextFormField(
 
         initialValue: initialValue != null ? initialValue.toString() : "",
@@ -38,6 +41,7 @@ class FormHelper {
           hintText: initialValue,
           hintStyle: styleProvider(fontWeight: regular, size: dp15, color: grey)
         ),
+        style: styleProvider(fontWeight: fontWeight, size: size, color: textColor),
         obscureText: obscureText,
         maxLines: !isTextArea ? 1 : 3,
         keyboardType: isNumberInput ? TextInputType.number : TextInputType.text,
@@ -98,7 +102,7 @@ class FormHelper {
           ),
           Padding(
             padding: const EdgeInsets.only(left:3.0, bottom: 7),
-            child: prefixIcon!=null ? prefixIcon : Icon(Icons.star, size: 5, color: color!=null ? color: null),
+            child: prefixIcon,
           ),
         ],
       ),

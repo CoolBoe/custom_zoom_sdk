@@ -1,6 +1,7 @@
 /*-------------User Constants-----------*/
 
 import 'package:flutter/cupertino.dart';
+import 'package:wooapp/models/cityModel.dart';
 import 'package:wooapp/models/sort_by.dart';
 
 const String appName = 'WooApp';
@@ -139,4 +140,7 @@ List<SortBy> _sortByOptions = [
   SortBy("date", "What's New", "asc"),
   SortBy("price_asc", "Price: Low to High", "asc"),
   SortBy("price_desc", "Price: high to low", "desc")
+];
+List<CityModel> countryList = [
+  CityModel(id: "101", sortname: "IN", name: "India", phonecode: "91")
 ];

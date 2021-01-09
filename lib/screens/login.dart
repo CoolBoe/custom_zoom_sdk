@@ -57,22 +57,16 @@ class LoginScreenState extends State<LoginScreen> {
         snackBar("User Info Not Found");
       } else {
         authProvider
-            .social_login(
-                BasePrefs.getString(SOCIAL_LOGIN_MODE) != null
-                    ? BasePrefs.getString(SOCIAL_LOGIN_MODE)
-                    : "",
-                BasePrefs.getString(USER_NAME) != null
-                    ? BasePrefs.getString(USER_NAME)
-                    : "",
-                BasePrefs.getString(USER_FIRST_NAME) != null
-                    ? BasePrefs.getString(USER_FIRST_NAME)
-                    : "",
-                BasePrefs.getString(USER_LAST_NAME) != null
-                    ? BasePrefs.getString(USER_LAST_NAME)
-                    : "",
-                BasePrefs.getString(USER_EMAIL) != null
-                    ? BasePrefs.getString(USER_EMAIL)
-                    : "")
+            .social_login(mode: BasePrefs.getString(SOCIAL_LOGIN_MODE) !=null
+        ? BasePrefs.getString(SOCIAL_LOGIN_MODE) : "",
+        name: BasePrefs.getString(USER_NAME) !=null
+            ? BasePrefs.getString(USER_NAME) : "",
+        firstName:  BasePrefs.getString(USER_FIRST_NAME) !=null
+            ? BasePrefs.getString(USER_FIRST_NAME) : "",
+        lastName:  BasePrefs.getString(USER_LAST_NAME) !=null
+            ? BasePrefs.getString(USER_LAST_NAME) : "",
+        email:  BasePrefs.getString(USER_EMAIL) !=null
+            ? BasePrefs.getString(USER_EMAIL) : "")
             .then((value) {
           if (value) {
             toast(LOGIN_STATUS_TRUE);

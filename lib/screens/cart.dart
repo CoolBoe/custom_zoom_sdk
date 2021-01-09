@@ -48,7 +48,6 @@ class CartScreenState extends BasePageState<CartScreen> {
   @override
   Widget pageUi() {
     return CartProducts();
-
   }
   Widget pageBuilder(){
     return Scaffold(
@@ -80,24 +79,6 @@ class CartScreenState extends BasePageState<CartScreen> {
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14)),
                           cartData.shippingMethod!=null ? ShippingCart(cartData.shippingMethod) : Container(),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0, right: 30),
-                            child: GestureDetector(
-                                onTap: () {
-                                  calculateShippingDialog();
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text('Calculate Shipping',
-                                        style: TextStyle(
-                                            color: Colors.orange,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 10)),
-                                  ],
-                                )),
-                          ),
                         ],
                       ),
                     ),

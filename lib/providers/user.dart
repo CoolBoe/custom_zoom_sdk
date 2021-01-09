@@ -39,11 +39,11 @@ class UserProvider with ChangeNotifier {
     return login_Status;
   }
 
-  Future<bool> social_login(mode, name, firstName, lastName, email) async {
+  Future<bool> social_login({String mode, String name, String firstName, String lastName, String email}) async {
     printLog(
         "APISocialLogin:- ", "$mode + $name + $firstName+ $lastName+ $email");
      login_Status= await _webApiServices
-        .socialLogin(mode, name, firstName, lastName, email);
+        .socialLogin(mode: mode, name: name, firstName: firstName, lastName: lastName, email: email);
      if(login_Status){
        BasePrefs.init();
        BasePrefs.setString(USER_EMAIL, email);

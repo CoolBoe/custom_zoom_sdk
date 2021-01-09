@@ -6,12 +6,15 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:wooapp/helper/constants.dart';
+import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/app.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/category.dart';
 import 'package:wooapp/models/WebResponseModel.dart';
+import 'package:wooapp/models/cityModel.dart';
 import 'package:wooapp/models/coupons.dart';
 import 'package:wooapp/models/product.dart';
+import 'package:wooapp/models/user.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/rest/woocommerce.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -29,7 +32,7 @@ class WebApiServices {
   };
   Future<bool> userLogin(String email, String password) async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -55,7 +58,7 @@ class WebApiServices {
 
   Future<bool> userRegister(String name, String email, String password) async {
     try {
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar cookies = new PersistCookieJar(
           dir: tempPath, persistSession: true);
@@ -78,7 +81,7 @@ class WebApiServices {
 
   Future<bool> forgetPassword(String email) async{
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -107,7 +110,7 @@ class WebApiServices {
 
   Future<bool> changePassword(String user_id) async{
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -134,25 +137,35 @@ class WebApiServices {
     }
   }
 
-  Future<bool> socialLogin(String mode, String name, String email, String firstName, String lastName) async{
+  Future<bool> socialLogin(
+      {String mode,
+      String name,
+      String email,
+      String firstName,
+      String lastName}) async{
     try{
-    Directory tempDir = await getTemporaryDirectory();
+    Directory tempDir = await getApplicationDocumentsDirectory();
     String tempPath = tempDir.path;
     CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
     dio.interceptors.add(CookieManager(sj));
     String url  = WebRequestConstants.getBaseUrl +
         WebRequestConstants.getDomainUrl +
         WebRequestConstants.SOCIAL_LOGIN;
-    var params = new FormData.fromMap(
+    var params =
         { 'mode': mode,
           'name': name,
           'email': email,
           'first_name': firstName,
-          'last_name': lastName});
+          'last_name': lastName};
+    printLog("params", "mode=>$mode name=>$name email=>$email firstName=>$firstName lastName=>$lastName");
     var response = await dio.post(url, options: new Options(headers: headers), data: params);
+    printLog("socialResponse", response.data);
     if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
-      Map<String, dynamic> result = json.decode(response.data);
-      if (result['code'] == '1') {
+     UserModel model= UserModel.fromJson(response.data);
+      if (model.code == '1') {
+        BasePrefs.init();
+        BasePrefs.setString(USER_ID, model.details.id.toString());
+        printLog("UserIDD", BasePrefs.getString(USER_ID));
         return true;
       } else {
         return false;
@@ -170,7 +183,7 @@ class WebApiServices {
   Future<List<CategoryModel>> getCategories()async {
      List<CategoryModel> list =[];
      try{
-       Directory tempDir = await getTemporaryDirectory();
+       Directory tempDir = await getApplicationDocumentsDirectory();
        String tempPath = tempDir.path;
        CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
        dio.interceptors.add(CookieManager(sj));
@@ -228,7 +241,7 @@ class WebApiServices {
         if(productIDs!=null){
           parameter+="&include=${productIDs.join(",").toString()}";
         }
-        Directory tempDir = await getTemporaryDirectory();
+        Directory tempDir = await getApplicationDocumentsDirectory();
         String tempPath = tempDir.path;
         CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
         dio.interceptors.add(CookieManager(sj));
@@ -251,7 +264,7 @@ class WebApiServices {
 
   Future<PriceRangeModel> getPriceRange() async {
     try {
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -273,7 +286,7 @@ class WebApiServices {
 
   Future<ProductModel> getProductById(String id) async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -295,7 +308,7 @@ class WebApiServices {
 
   Future<WebResponseModel> getAddToCart(int id, String quantity) async {
   try{
-    Directory tempDir = await getTemporaryDirectory();
+    Directory tempDir = await getApplicationDocumentsDirectory();
     String tempPath = tempDir.path;
     CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
     dio.interceptors.add(CookieManager(sj));
@@ -319,7 +332,7 @@ class WebApiServices {
 
   Future<WebResponseModel> getAddToCartVariationProduct(String id, String quantity, String variation, String variation_id) async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -344,7 +357,7 @@ class WebApiServices {
 
   Future<CartModel> getUpdateToCart(String cartItemKey, int quantity) async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -372,7 +385,7 @@ class WebApiServices {
 
   Future<CartModel> getRemoveToCart(String cartItemKey) async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -395,7 +408,7 @@ class WebApiServices {
 
   Future<WebResponseModel> getClearToCart() async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -415,7 +428,7 @@ class WebApiServices {
 
   Future<int> getCartItemCount() async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -435,7 +448,7 @@ class WebApiServices {
 
   Future<List<Coupons>> getCoupons() async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
@@ -458,19 +471,88 @@ class WebApiServices {
       return null;
     }
   }
-
   Future<CartModel> getCart() async {
     try{
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.CART;
       var response = await dio.get(url, options: new Options(headers: headers));
+      printLog("cartResponse", response);
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
 
         CartModel model =CartModel.fromJson(response.data);
-        printLog("API getCart Data", model.cartData[0].quantity);
+
+        return model;
+      } else {
+        printLog("API getCart Errorr Massage", response.data);
+        return null;
+      }} on DioError catch(e){
+      printLog("getCart", e.response);
+      return null;
+    }
+  }
+
+  Future<List<CityModel>> getCountry() async{
+    try{
+      Directory tempDir = await getApplicationDocumentsDirectory();
+      String tempPath = tempDir.path;
+      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      dio.interceptors.add(CookieManager(sj));
+      String url  = WebRequestConstants.getPlaceUrl + WebRequestConstants.COUNTRIES;
+      var response = await dio.get(url, options: new Options(headers: headers));
+      if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+        Iterable l = response.data;
+        List<CityModel> model = List<CityModel>.from(l.map((model)=> CityModel.fromJson(model)));
+        printLog("API CityModel Data", model);
+        return model;
+      } else {
+        printLog("API getCart Errorr Massage", response.data);
+        return null;
+      }} on DioError catch(e){
+      printLog("getCart", e.response);
+      return null;
+    }
+  }
+
+  Future<List<CityModel>> getStates({String countryCode}) async{
+    try{
+      Directory tempDir = await getApplicationDocumentsDirectory();
+      String tempPath = tempDir.path;
+      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      dio.interceptors.add(CookieManager(sj));
+      String url  = WebRequestConstants.getPlaceUrl + WebRequestConstants.STATES+"?filter=$countryCode&type=code";
+      var response = await dio.get(url, options: new Options(headers: headers));
+      printLog("responsee", response);
+      if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+        Iterable l = response.data;
+        List<CityModel> model = List<CityModel>.from(l.map((model)=> CityModel.fromJson(model)));
+        printLog("API CityModel Data", model);
+        return model;
+      } else {
+        printLog("API getCart Errorr Massage", response.data);
+        return null;
+      }} on DioError catch(e){
+      printLog("getCart", e.response);
+      return null;
+    }
+  }
+  Future<CityModel> getCity({String state}) async{
+    try{
+      Directory tempDir = await getApplicationDocumentsDirectory();
+      String tempPath = tempDir.path;
+      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      dio.interceptors.add(CookieManager(sj));
+      var params = new FormData.fromMap(
+          { WebRequestConstants.PLACE_FILTER: state,
+          });
+      String url  = WebRequestConstants.getPlaceUrl + WebRequestConstants.CITIES;
+      var response = await dio.post(url, options: new Options(headers: headers), data: params);
+      if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+
+        CityModel model =CityModel.fromJson(response.data);
+        printLog("API CityModel Data", model);
         return model;
       } else {
         printLog("API getCart Errorr Massage", response.data);
