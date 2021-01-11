@@ -129,6 +129,7 @@ class ShopState extends BasePageState<ShopView> {
       ],
     );
   }
+
   Widget filterOptions(){
     return SliverPadding(
       padding: EdgeInsets.all(10),
@@ -315,6 +316,7 @@ class ShopState extends BasePageState<ShopView> {
       ],
     );
   }
+
   Widget _productList(){
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allProducts!=null &&
@@ -467,7 +469,6 @@ class ShopState extends BasePageState<ShopView> {
   }
   void filterByDialog() {
     var model = app.priceRange;
-
     showGeneralDialog(
         barrierLabel: "label",
         barrierDismissible: true,

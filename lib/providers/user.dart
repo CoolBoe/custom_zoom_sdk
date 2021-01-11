@@ -19,6 +19,9 @@ class UserProvider with ChangeNotifier {
   bool login_Status = false;
   bool loading = false;
   UserModel userModel;
+  Details userDetails;
+  Details get getuserDetails=>userDetails;
+  UserModel get userInfo=>userModel;
   String userId;
   Status get status => _status;
   TextEditingController email = TextEditingController();
@@ -28,15 +31,14 @@ class UserProvider with ChangeNotifier {
   TextEditingController countryCode = TextEditingController();
 
   UserProvider() {
+    userModel = new UserModel();
+    _webApiServices = new WebApiServices();
     _onStateChanged();
   }
 
-  Future<bool> logIn(email, password) async {
-    login_Status = await WebApiServices().userLogin(email, password);
-    if(login_Status){
-      BasePrefs.setString(USER_EMAIL, email);
-    }
-    return login_Status;
+  Future<Details> logIn(email, password) async {
+    userDetails = await WebApiServices().userLogin(email, password);
+    return userDetails;
   }
 
   Future<bool> social_login({String mode, String name, String firstName, String lastName, String email}) async {
@@ -55,11 +57,6 @@ class UserProvider with ChangeNotifier {
 
   Future<bool> registerUser(name, email, password) async {
     login_Status =await _webApiServices.userRegister(name, email, password);
-    if(login_Status){
-      BasePrefs.init();
-      BasePrefs.setString(USER_EMAIL, email);
-      BasePrefs.setString(USER_NAME, name);
-    }
     return login_Status;
   }
 
@@ -73,14 +70,13 @@ class UserProvider with ChangeNotifier {
 
   Future<void> _onStateChanged() async {
     await BasePrefs.init();
-    if (BasePrefs.getString(USER_NAME) == null) {
+    if (BasePrefs.getString(USER_MODEL) == null) {
       _status = Status.Unauthorized;
     } else {
       _status = Status.Authorized;
     }
     notifyListeners();
   }
-
   Future<bool> signOut() async {
     userId = "";
     _status = Status.Unauthorized;
@@ -93,6 +89,23 @@ class UserProvider with ChangeNotifier {
   bool isUser() {
     return userId != null ? true : false;
   }
+
+  Future<Details> getUserInfo() async{
+    userDetails = await _webApiServices.getUserInfo();
+    printLog("_webApiServices", userModel.toJson().toString());
+    notifyListeners();
+  }
+
+  Future<UserModel>getBillingpdate({String billing_email, String billing_phone, String billing_address_1, String billing_address_2,
+    String billing_city, bool checkbox, String user_id, String billing_first_name, String billing_last_name, String billing_company,
+    String billing_state, String billing_postcode, String billing_country}) async{
+      userModel = await _webApiServices.updateBilling(billing_email: billing_email, billing_phone: billing_phone, billing_address_1:billing_address_1,
+          billing_address_2:billing_address_2, billing_city:billing_city, checkbox:checkbox, user_id:user_id, billing_first_name:billing_first_name,
+          billing_last_name:billing_last_name, billing_company:billing_company, billing_state:billing_state, billing_postcode:billing_postcode,
+          billing_country:billing_country
+      );
+      notifyListeners();
+      }
 
   void clearController() {
     name.text = "";

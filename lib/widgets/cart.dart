@@ -30,14 +30,12 @@ class WidgetCartItem extends StatefulWidget{
 class _WidgetCartItemState extends State<WidgetCartItem>{
 
   LoaderProvider loader;
-  WebApiServices webApiServices;
   WebResponseModel webResponseModel;
   CartProvider cart;
   @override
   void initState() {
     loader = Provider.of<LoaderProvider>(context, listen: false);
     cart = Provider.of<CartProvider>(context, listen: false);
-    webApiServices = new WebApiServices();
     webResponseModel = new WebResponseModel();
     super.initState();
   }
@@ -91,7 +89,12 @@ class _WidgetCartItemState extends State<WidgetCartItem>{
                                     fontFamily: 'Poppins'),
                               ),
                               GestureDetector(onTap: (){
+                                printLog("onClick", "");
+                                loader.setLoadingStatus(true);
 
+                                cart.getRemoveToCart(cartItemKey: cartItem.cartItemKey, onCallBack: (value){
+                                  loader.setLoadingStatus(false);
+                                });
                               },
                               child:  CircleAvatar(
                                 radius: 10.0,

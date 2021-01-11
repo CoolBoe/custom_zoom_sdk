@@ -13,9 +13,7 @@ import 'package:wooapp/screens/offer.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/app_bar.dart';
-import 'package:wooapp/widgets/widget_Shipping_Method.dart';
-import 'package:wooapp/models/mockdata/item_model.dart';
-import 'package:wooapp/providers/app.dart';
+import 'package:wooapp/widgets/widgetShippingCart.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/widgets/loading.dart';
@@ -54,7 +52,10 @@ class CartScreenState extends BasePageState<CartScreen> {
       appBar:BaseAppBar(context, "Cart"),
       body: Column(
         children: <Widget>[
-          cartData.cartData!=null && cartData.cartData.length>0 ? cartList(cartData.cartData) : Container(),
+          cartData.cartData!=null && cartData.cartData.length>0 ? cartList(cartData.cartData) : Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: progressBar(context, orange),
+          ),
           _promocode(),
           Padding(
             padding: const EdgeInsets.only(
@@ -238,7 +239,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20.0),
-                                  child: Text("₹ "+totalPrice(),
+                                  child: Text("₹ $total",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Poppins',
@@ -276,7 +277,7 @@ class CartScreenState extends BasePageState<CartScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("₹ "+totalPrice(),
+                Text("₹ $total",
                     style: TextStyle(
                         color: Colors.black,
                         fontFamily: 'Poppins',
@@ -349,7 +350,7 @@ class CartScreenState extends BasePageState<CartScreen> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-                color: Colors.black,
+                color: cartData.coupon!=null && cartData.coupon.length>0 ? green : black,
                 borderRadius: BorderRadius.all(Radius.circular(5.0))),
             child: new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -366,7 +367,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 10.0),
                         child: Text(
-                          "Apply Promo Code/Voucher",
+                          cartData.coupon!=null && cartData.coupon.length>0 ? "Coupon Applied" : "Apply Promo Code/Voucher",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 14,
@@ -379,7 +380,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 20.0),
                     child: Icon(
-                      Icons.arrow_forward_ios_rounded,
+                     cartData.coupon!=null && cartData.coupon.length>0 ?  Icons.check_circle : Icons.arrow_forward_ios,
                       color: Colors.white,
                       size: 20,
                     ),
@@ -490,7 +491,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                                     padding: const EdgeInsets.only(
                                         left: 8.0, right: 8.0),
                                     child: Text(
-                                      cartData[index].quantity,
+                                      cartData[index].quantity.toString(),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 10,
@@ -522,67 +523,6 @@ class CartScreenState extends BasePageState<CartScreen> {
         });
   }
 
-  Widget ShippingCart(List<ShippingMethod> shippingMethod){
-    return ListView.builder(
-        itemCount: shippingMethod.length,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: 70,
-                  child: Text(shippingMethod[index].shippingMethodName,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 10)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5.0),
-                        child: Text(
-                            parse(shippingMethod[index].shippingMethodPrice)
-                                .documentElement
-                                .text,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10)),
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: Radio(
-                          materialTapTargetSize:
-                          MaterialTapTargetSize.shrinkWrap,
-                          value: index,
-                          activeColor: Colors.black,
-                          groupValue: value,
-                          onChanged: (val) {
-                            printLog("onChanged", val);
-                            setState(() {
-                              value = val;
-                            });
-                            printLog("onSetChanged", val);
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
-  }
   void calculateShippingDialog(){
     showGeneralDialog(
         barrierLabel: "label",
@@ -675,6 +615,7 @@ class CartScreenState extends BasePageState<CartScreen> {
         child: ListView.builder(
             itemCount: cartItem.length,
             shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               return WidgetCartItem(cartItem: cartItem[index],);
             }),
@@ -684,7 +625,7 @@ class CartScreenState extends BasePageState<CartScreen> {
   String totalPrice(){
     printLog("getshipp", getShippingPrice());
     double price = getValidDecimalInDouble(discount_total)+getValidDecimalInDouble(taxes)+getValidDecimalInDouble(cart_subtotal)+getValidDecimalInDouble(getShippingPrice());
-    return getValidDecimalFormat(price);
+    return total;
   }
 
 }

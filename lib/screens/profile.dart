@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/helper/color.dart';
@@ -5,9 +7,11 @@ import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/models/user.dart';
 import 'package:wooapp/screens/delivery.dart';
 import 'package:wooapp/screens/editAccount.dart';
 import 'package:wooapp/screens/language.dart';
+import 'package:wooapp/screens/myaddress.dart';
 import 'package:wooapp/screens/offer.dart';
 import 'package:wooapp/screens/order.dart';
 import 'package:wooapp/screens/paymet.dart';
@@ -38,13 +42,16 @@ class ProfileState extends State<ProfileView> {
       ByCatgories("Language", 5, ic_support),
       ByCatgories("Privacy Settings", 6, ic_rating),
     ];
+    BasePrefs.init();
+    var value= BasePrefs.getString(USER_MODEL);
+    Details userDetails = Details.fromJson(jsonDecode(value));
     return Column(
       children: <Widget>[
 
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            circularImageView(imageUrl:  'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80',
+            circularImageView(imageUrl: userDetails!=null ? userDetails.avatarUrl : "",
             onCallback: (value){
 
             }),
@@ -52,12 +59,12 @@ class ProfileState extends State<ProfileView> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(),
-                  child: Text(BasePrefs.getString(USER_NAME).toString(),
+                  child: Text(userDetails!=null ? "${userDetails.firstName} ${userDetails.lastName}" : "hi user",
                       style: styleProvider(fontWeight: semiBold, size: 18, color: black)),
                 ),
                 Padding(
                   padding: EdgeInsets.only(),
-                  child: Text("Member since 2019",
+                  child: Text(userDetails!=null ? userDetails.dateCreated : "",
                       style: styleProvider(fontWeight: regular, size: 10, color: black)),
                 ),
                 Container(
@@ -199,8 +206,8 @@ class ProfileState extends State<ProfileView> {
                           changeScreen(context, NotificationScreen());
                           break;
                         case 3:
-                          printLog("buttonClicked", "Delivery information");
-                          changeScreen(context, DeliveryScreen());
+                          printLog("buttonClicked", "My Address information");
+                          changeScreen(context, MyAddress());
                           break;
                         case 4:
                           printLog("buttonClicked", "Payment Information");

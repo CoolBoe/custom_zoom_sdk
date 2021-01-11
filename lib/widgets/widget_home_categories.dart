@@ -202,10 +202,10 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 10;
     final double itemWidth = size.width / 2;
-
     return Padding(
         padding: EdgeInsets.all(1),
         child:GridView.builder(
+          physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -259,7 +259,6 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                     )),
               ),
             );
-
           },
           itemCount: 4,
         )
@@ -315,6 +314,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
     return Container(
       child: ListView.builder(
           shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           itemCount: productList.length,
           itemBuilder: (BuildContext context, int index){

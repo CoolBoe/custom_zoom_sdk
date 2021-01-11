@@ -37,6 +37,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
         child: ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
             padding: EdgeInsets.zero,
             itemCount: sortBy.length,
             itemBuilder: (BuildContext context, int index) {

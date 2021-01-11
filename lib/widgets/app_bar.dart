@@ -22,7 +22,7 @@ import 'package:wooapp/helper/screen_navigator.dart';
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: prefixIcon!=null ? prefixIcon : Icon(
             Icons.arrow_back,
             color: Colors.black,
           )),

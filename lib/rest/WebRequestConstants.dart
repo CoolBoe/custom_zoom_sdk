@@ -37,8 +37,8 @@ class WebRequestConstants {
   static const String PAGE = "page";
   static const String PER_PAGE = "per_page";
 
-
-  static const String UPDATE_BILLING = "update-billing";
+  static const String CUSTOMERS = "customers";
+  static const String UPDATE_BILLING = "checkout/update-billing";
   static const String PAYTM_CHECKSUM = "paytm-checksum";
   static const String PAYMENT = "payment";
   static const String UPDATE_ORDER = "checkout/update-order";
@@ -63,6 +63,7 @@ class WebRequestConstants {
   static const String VARIATION = "variation";
   static const String VARIATION_ID = "variation_id";
   static const String CART_ITEM_KEY = "cart_item_key";
+  static const String REVIEWORDER = "review-order";
 
   /*-----------------------------Product Filters-----------------------------------------*/
   static const String CATEGORY = "category";

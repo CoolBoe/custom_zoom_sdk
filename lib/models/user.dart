@@ -1,6 +1,7 @@
 class UserModel {
   String code;
-  bool status;
+  String msg;
+  int status;
   String userId;
   String referEarn;
   String error;
@@ -12,6 +13,7 @@ class UserModel {
         this.userId,
         this.referEarn,
         this.error,
+        this.msg,
         this.details});
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class UserModel {
     userId = json['user_id'];
     referEarn = json['refer_earn'];
     error = json['error'];
+    msg = json['msg'];
     details =
     json['details'] != null ? new Details.fromJson(json['details']) : null;
   }

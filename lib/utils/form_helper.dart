@@ -21,13 +21,9 @@ class FormHelper {
         Widget prefixIcon,
         Widget suffixIcon,
       }) {
-    return Container(
-      height: 60,
-      child: TextFormField(
-
+    return TextFormField(
         initialValue: initialValue != null ? initialValue.toString() : "",
         decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: 0.0),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: borderColor!=null ? borderColor: grey),
             ),
@@ -39,11 +35,11 @@ class FormHelper {
             ),
           suffix: suffixIcon,
           hintText: initialValue,
-          hintStyle: styleProvider(fontWeight: regular, size: dp15, color: grey)
+          hintStyle: styleProvider(fontWeight: regular, size: dp15, color: black)
         ),
         style: styleProvider(fontWeight: fontWeight, size: size, color: textColor),
         obscureText: obscureText,
-        maxLines: !isTextArea ? 1 : 3,
+        maxLines: !isTextArea ? 1 : 1,
         keyboardType: isNumberInput ? TextInputType.number : TextInputType.text,
         onChanged: (String value) {
           return onChanged(value);
@@ -51,8 +47,7 @@ class FormHelper {
         validator: (value) {
           return onValidate(value);
         },
-      ),
-    );
+      );
   }
 
   static InputDecoration fieldDecoration(
@@ -259,7 +254,8 @@ Widget circularImageView ({String imageUrl, Function onCallback}){
 class customButton extends StatelessWidget{
   final GestureTapCallback onPressed;
   String title;
-  customButton({@required this.onPressed, this.title});
+  Color color;
+  customButton({@required this.onPressed, this.title, this.color});
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
@@ -273,7 +269,7 @@ class customButton extends StatelessWidget{
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.orange,
+                    color: color!=null ? color: orange,
                     borderRadius:
                     BorderRadius.all(Radius.circular(10)),
                   ),

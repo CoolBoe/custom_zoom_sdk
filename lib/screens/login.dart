@@ -1,88 +1,102 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
+import 'package:wooapp/models/user.dart';
+import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/providers/user.dart';
+import 'package:wooapp/screens/basePage.dart';
 import 'package:wooapp/screens/forgotPassword.dart';
 import 'package:wooapp/screens/mainpage.dart';
+import 'package:wooapp/utils/widget_helper.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/helper/social_login.dart' as social_login;
 import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/loading.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends BasePage {
   @override
   LoginScreenState createState() => LoginScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
-  final _key = GlobalKey<ScaffoldState>();
+class LoginScreenState extends BasePageState<LoginScreen> {
+  GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   bool cb_remember = false;
-  bool isApiCallProcess = false;
+  UserProvider user;
+  LoaderProvider loader;
   @override
-  Widget build(BuildContext context) {
-    final authProvider = Provider.of<UserProvider>(context, listen: false);
+  void initState() {
+    user = Provider.of<UserProvider>(context, listen: false);
+    loader = Provider.of<LoaderProvider>(context, listen: false);
+    super.initState();
+  }
 
-    void _getUser() {
-      if (!isValidString(authProvider.password.text.trim())) {
-        snackBar("Please Enter Your Password");
-      } else if (!isValidString(authProvider.email.text.trim())) {
-        snackBar("Please Enter Your Email ID");
-      } else {
-        authProvider
-            .logIn(authProvider.email.text, authProvider.password.text)
-            .then((value) {
-          if (value) {
-            // BasePrefs.setString(USER_NAME, profile['name']);
-            // BasePrefs.setString(USER_FIRST_NAME, profile['first_name']);
-            // BasePrefs.setString(USER_LAST_NAME, profile['last_name']);
-            // BasePrefs.setString(USER_EMAIL, profile['email']);
-            // BasePrefs.setString(USER_FB_ID, profile['id']);
-            // BasePrefs.setString(SOCIAL_LOGIN_MODE, 'facebook');
-            authProvider.clearController();
-            changeScreenReplacement(context, MainPageScreen());
-          }
-        });
-      }
-      setState(() {
-        isApiCallProcess = false;
+  void _getUser() {
+    BasePrefs.init();
+    if (!isValidString(user.password.text.trim()) ||!isValidString(user.email.text.trim()) ) {
+      loader.setLoadingStatus(false);
+      snackBar(InCompleteDataError);
+    } else {
+      user
+          .logIn(user.email.text, user.password.text)
+          .then((value) {
+            if(value!=null){
+              toast(LOGIN_STATUS_TRUE);
+              loader.setLoadingStatus(false);
+              BasePrefs.setString(USER_MODEL, jsonEncode(value));
+
+              var valuu = BasePrefs.getString(USER_MODEL);
+                     printLog("datadta", value.toJson().toString());
+              user.clearController();
+              changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
+            }else{
+              toast(LOGIN_STATUS_FALSE);
+            }
+
       });
     }
+  }
 
-    void _getFBUser() {
-      if (!isValidString(BasePrefs.getString(USER_NAME))) {
-        snackBar("User Info Not Found");
-      } else {
-        authProvider
-            .social_login(mode: BasePrefs.getString(SOCIAL_LOGIN_MODE) !=null
-        ? BasePrefs.getString(SOCIAL_LOGIN_MODE) : "",
-        name: BasePrefs.getString(USER_NAME) !=null
-            ? BasePrefs.getString(USER_NAME) : "",
-        firstName:  BasePrefs.getString(USER_FIRST_NAME) !=null
-            ? BasePrefs.getString(USER_FIRST_NAME) : "",
-        lastName:  BasePrefs.getString(USER_LAST_NAME) !=null
-            ? BasePrefs.getString(USER_LAST_NAME) : "",
-        email:  BasePrefs.getString(USER_EMAIL) !=null
-            ? BasePrefs.getString(USER_EMAIL) : "")
-            .then((value) {
-          if (value) {
-            toast(LOGIN_STATUS_TRUE);
-            changeScreen(
-                context,
-                MainPageScreen(
-                  currentTab: 0,
-                ));
-          } else {
-            toast(LOGIN_STATUS_FALSE);
-          }
-        });
-      }
+  void _getFBUser() {
+    if (!isValidString(BasePrefs.getString(USER_NAME))) {
+      snackBar("User Info Not Found");
+    } else {
+      user
+          .social_login(mode: BasePrefs.getString(SOCIAL_LOGIN_MODE) !=null
+          ? BasePrefs.getString(SOCIAL_LOGIN_MODE) : "",
+          name: BasePrefs.getString(USER_NAME) !=null
+              ? BasePrefs.getString(USER_NAME) : "",
+          firstName:  BasePrefs.getString(USER_FIRST_NAME) !=null
+              ? BasePrefs.getString(USER_FIRST_NAME) : "",
+          lastName:  BasePrefs.getString(USER_LAST_NAME) !=null
+              ? BasePrefs.getString(USER_LAST_NAME) : "",
+          email:  BasePrefs.getString(USER_EMAIL) !=null
+              ? BasePrefs.getString(USER_EMAIL) : "")
+          .then((value) {
+        if (value) {
+          toast(LOGIN_STATUS_TRUE);
+          changeScreen(
+              context,
+              MainPageScreen(
+                currentTab: 0,
+              ));
+        } else {
+          toast(LOGIN_STATUS_FALSE);
+        }
+      });
     }
+  }
 
-    return ProgressHUD(inAsyncCall: isApiCallProcess, child: Container(
+  @override
+  Widget pageUi() {
+    // TODO: implement pageUi
+    return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(ic_bg_login),
@@ -132,14 +146,7 @@ class LoginScreenState extends State<LoginScreen> {
                                         ),
                                         Expanded(
                                             child: new TextFormField(
-                                              controller: authProvider.email,
-                                              // validator: (val){
-                                              //   if (val.length==0){
-                                              //     return "Email cannot be empty";
-                                              //   }else{
-                                              //     return null;
-                                              //   }
-                                              // },
+                                              controller: user.email,
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
                                               ),
@@ -147,7 +154,8 @@ class LoginScreenState extends State<LoginScreen> {
                                               style: new TextStyle(
                                                   fontFamily: "Poppins",
                                                   fontWeight: FontWeight.w400,
-                                                  fontSize: 18),
+                                                  fontSize: 18,
+                                              color: white),
                                             )),
                                       ],
                                     ),
@@ -179,14 +187,7 @@ class LoginScreenState extends State<LoginScreen> {
                                           ),
                                           Expanded(
                                               child: new TextFormField(
-                                                // validator: (val){
-                                                //   if (val.length==0){
-                                                //     return "Password cannot be empty";
-                                                //   }else{
-                                                //     return null;
-                                                //   }
-                                                // },
-                                                controller: authProvider.password,
+                                                controller: user.password,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none),
                                                 keyboardType: TextInputType.visiblePassword,
@@ -194,7 +195,8 @@ class LoginScreenState extends State<LoginScreen> {
                                                 style: new TextStyle(
                                                     fontFamily: "Poppins",
                                                     fontWeight: FontWeight.w400,
-                                                    fontSize: 18),
+                                                    fontSize: 18,
+                                                color: white),
                                               )),
                                         ],
                                       ),
@@ -210,7 +212,7 @@ class LoginScreenState extends State<LoginScreen> {
                                   onTap: () async {
                                     if (cb_remember) {
                                       setState(() {
-                                        isApiCallProcess = true;
+                                        loader.setLoadingStatus(true);
                                       });
                                       _getUser();
                                     } else {
@@ -266,10 +268,10 @@ class LoginScreenState extends State<LoginScreen> {
                                         child: new Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: <Widget>[
-                                          SvgPicture.asset(
-                                          ic_facebook,
-                                          color: Colors.white,
-                                             ),
+                                            SvgPicture.asset(
+                                              ic_facebook,
+                                              color: Colors.white,
+                                            ),
                                             SizedBox(width: 10),
                                             GestureDetector(
                                               onTap: () {},
@@ -291,7 +293,7 @@ class LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
-    ), opacity: 0.3,);
+    );
   }
 
   Widget _cbRememberMe() {
@@ -321,7 +323,7 @@ class LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(width: 3.0),
-              GestureDetector(child: Text("Remember Me")),
+              GestureDetector(child: Text("Remember Me", style: styleProvider(color: white, size: 12),)),
             ],
           ),
           GestureDetector(

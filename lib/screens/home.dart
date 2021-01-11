@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math' as math;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +9,7 @@ import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/models/product.dart';
+import 'package:wooapp/models/user.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/category.dart';
@@ -43,6 +45,7 @@ class HomeState extends State<HomeView> {
   bool _toggel = true;
   @override
   void initState() {
+    BasePrefs.init();
     super.initState();
   }
 
@@ -65,6 +68,9 @@ class HomeState extends State<HomeView> {
     ;
   }
   Widget _buildDrawer() {
+    BasePrefs.init();
+    var value= BasePrefs.getString(USER_MODEL);
+    Details userDetails = Details.fromJson(jsonDecode(value));
     return Container(
         width: 250,
         child: ClipRRect(
@@ -84,12 +90,10 @@ class HomeState extends State<HomeView> {
                             children: <Widget>[
                               CircleAvatar(
                                 radius: 50.0,
-                                backgroundImage: NetworkImage(
-                                    'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80'),
+                                backgroundImage: NetworkImage(userDetails!=null ? userDetails.avatarUrl : ""),
                                 backgroundColor: transparent,
                               ),
-                              Text(
-                                'Phoeniixx Design',
+                              Text(userDetails!=null ? "${userDetails.firstName} ${userDetails.lastName}" : "hi user",
                                 style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,

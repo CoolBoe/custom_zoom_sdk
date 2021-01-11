@@ -9,9 +9,13 @@ const String fontName = 'Poppins';
 const String app_Theme = 'app_theme';
 const String dark_Mode = 'dark_mode';
 const String light_Mode = 'light_mode';
+const String USER_MODEL = 'user_model';
+const String InCompleteDataError = 'Please Complete Above Details';
+const String USERINFO = 'user_info';
 const String USER_EMAIL = 'email';
 const String IsLogin = 'islogin';
 const String USER_ID = 'id';
+const String MYADDRESSLISTS = 'my_address_lists';
 const String USER_MODEL_PREFS_KEY = 'user_model';
 const String USER_FB_ID = 'fb_id';
 const String ACCESS_TOKEN = 'access_token';
@@ -97,6 +101,8 @@ const String ic_watch = "assets/icons/ic_watch.svg";
 const String ic_bg_lock = "assets/images/bg_lock.png";
 const String ic_bg_login = "assets/images/bg_login.png";
 const String ic_drawer_png = "assets/images/ic_drawer.png";
+const String ic_oops_png = "assets/images/ic_oops.png";
+const String ic_money = "assets/images/ic_money.png";
 
 /*-----------------SizeBuilder---------------------------*/
 const double dp5 = 5.0;

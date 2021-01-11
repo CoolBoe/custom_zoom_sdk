@@ -27,13 +27,10 @@ class AppProvider with ChangeNotifier {
    _priceRangeModel = await  _webApiServices.getPriceRange();
    notifyListeners();
   }
-  fetchCountryLIst()async{
-    _citylist = await _webApiServices.getCountry();
-    printLog("fetchCountryLIst", _citylist);
-  }
   fetchStateLIst({String states})async{
     printLog("responsee", states);
     _citylist = await _webApiServices.getStates(countryCode: states);
     printLog("fetchStateLIst", _citylist);
+    notifyListeners();
   }
 }

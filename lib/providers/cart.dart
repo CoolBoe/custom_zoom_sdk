@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/coupons.dart';
+import 'package:wooapp/models/revieworder.dart';
 import 'package:wooapp/services/cart.dart';
 import 'dart:convert';
 import 'package:wooapp/models/WebResponseModel.dart';
@@ -15,7 +16,9 @@ class CartProvider with ChangeNotifier {
   CartModel _cartModel;
   List<Coupons> _coupons;
   int _cartItemCount;
+  ReviewOrder _reviewOrder;
   CartModel get getCart => _cartModel;
+  ReviewOrder get reviewOrder => _reviewOrder;
   List<Coupons> get getCoupons => _coupons;
   WebApiServices _webApiServices= new WebApiServices();
   CartProvider() {
@@ -42,8 +45,10 @@ class CartProvider with ChangeNotifier {
     onCallBack(_cartModel);
     notifyListeners();
   }
-  getRemoveToCart({String cartItemKey})async{
+  Future getRemoveToCart({String cartItemKey, Function onCallBack})async{
     _cartModel=await _webApiServices.getRemoveToCart(cartItemKey);
+    resetStreams();
+    onCallBack(_cartModel);
     notifyListeners();
   }
   getClearToCart()async{
@@ -60,6 +65,16 @@ class CartProvider with ChangeNotifier {
   }
   getOfferData() async{
     _coupons = await _webApiServices.getCoupons();
+    notifyListeners();
+  }
+  Future getApplyCoupons({String coupon_code, Function onCallBack})async{
+    _cartModel = await _webApiServices.getApplyCoupons(coupon_code: coupon_code);
+    resetStreams();
+    onCallBack(_cartModel);
+    notifyListeners();
+  }
+  Future getReviewOrder()async{
+    _reviewOrder = await _webApiServices.getReviewOrder();
     notifyListeners();
   }
 }

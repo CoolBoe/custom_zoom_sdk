@@ -9,12 +9,13 @@ import 'package:wooapp/widgets/loading.dart';
 class BasePage extends StatefulWidget{
   ProductModel productModel;
   BasePage({Key key,this.productModel}) : super(key: key);
+
+  get total => null;
   @override
   BasePageState createState()=>BasePageState();
 
 }
 class BasePageState<T extends BasePage> extends State<BasePage>{
-  bool isApiCallProcess = false;
   @override
   Widget build(BuildContext context) {
     return Consumer<LoaderProvider>(builder: (context, loaderModel, child){
@@ -27,5 +28,4 @@ class BasePageState<T extends BasePage> extends State<BasePage>{
   Widget pageUi() {
     return null;
   }
-  
 }
