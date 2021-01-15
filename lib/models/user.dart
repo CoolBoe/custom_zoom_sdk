@@ -52,8 +52,8 @@ class Details {
   String lastName;
   String role;
   String username;
-  Shipping billing;
-  Billing shipping;
+  Shipping shipping;
+  Billing billing;
   bool isPayingCustomer;
   int ordersCount;
   String totalSpent;
@@ -89,9 +89,9 @@ class Details {
     role = json['role'];
     username = json['username'];
     billing =
-    json['billing'] != null ? new Shipping.fromJson(json['billing']) : null;
+    json['billing'] != null ? new Billing.fromJson(json['billing']) : null;
     shipping = json['shipping'] != null
-        ? new Billing.fromJson(json['shipping'])
+        ? new Shipping.fromJson(json['shipping'])
         : null;
     isPayingCustomer = json['is_paying_customer'];
     ordersCount = json['orders_count'];
@@ -195,6 +195,8 @@ class Billing {
   String postcode;
   String country;
   String state;
+  String email;
+  String phone;
 
   Billing(
       {this.firstName,
@@ -205,7 +207,9 @@ class Billing {
         this.city,
         this.postcode,
         this.country,
-        this.state});
+        this.state,
+        this.email,
+        this.phone});
 
   Billing.fromJson(Map<String, dynamic> json) {
     firstName = json['first_name'];
@@ -217,6 +221,8 @@ class Billing {
     postcode = json['postcode'];
     country = json['country'];
     state = json['state'];
+    email = json['email'];
+    phone = json['phone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -230,6 +236,46 @@ class Billing {
     data['postcode'] = this.postcode;
     data['country'] = this.country;
     data['state'] = this.state;
+    data['email'] = this.email;
+    data['phone'] = this.phone;
+    return data;
+  }
+}
+
+class SocialLogin{
+  // BasePrefs.saveData(USER_NAME, profile['name']);
+  //           BasePrefs.saveData(USER_LAST_NAME, profile['last_name']);
+  //           BasePrefs.saveData(USER_EMAIL, profile['email']);
+  //           BasePrefs.saveData(USER_FB_ID, profile['id']);
+  //           BasePrefs.saveData(SOCIAL_LOGIN_MODE, 'facebook');
+  String mode;
+  String id;
+  String email;
+  String name;
+  String last_name;
+  SocialLogin(
+      {this.mode,
+        this.id,
+        this.email,
+        this.name,
+        this.last_name});
+
+  SocialLogin.fromJson(Map<String, dynamic> json) {
+    mode = json['mode'];
+    id = json['id'];
+    email = json['email'];
+    name = json['name'];
+    last_name = json['last_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['mode'] = this.mode;
+    data['id'] = this.id;
+    data['email'] = this.email;
+    data['name'] = this.name;
+    data['last_name'] = this.last_name;
+
     return data;
   }
 }

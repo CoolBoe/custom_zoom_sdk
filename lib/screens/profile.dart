@@ -44,14 +44,14 @@ class ProfileState extends State<ProfileView> {
     ];
     BasePrefs.init();
     var value= BasePrefs.getString(USER_MODEL);
-    Details userDetails = Details.fromJson(jsonDecode(value));
+    Details model = Details.fromJson(jsonDecode(value));
     return Column(
       children: <Widget>[
 
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            circularImageView(imageUrl: userDetails!=null ? userDetails.avatarUrl : "",
+            circularImageView(imageUrl: model!=null ? model.avatarUrl : "",
             onCallback: (value){
 
             }),
@@ -59,15 +59,21 @@ class ProfileState extends State<ProfileView> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(),
-                  child: Text(userDetails!=null ? "${userDetails.firstName} ${userDetails.lastName}" : "hi user",
+                  child: Text(model.firstName!=null && model.billing.firstName!="" ?
+                  model.firstName!=null && model.firstName!=""?
+                  "Dear ${model.firstName.toUpperCase()}" : "Dear ${model.billing.firstName.toUpperCase()}" :
+                  "Hi User",
                       style: styleProvider(fontWeight: semiBold, size: 18, color: black)),
                 ),
                 Padding(
                   padding: EdgeInsets.only(),
-                  child: Text(userDetails!=null ? userDetails.dateCreated : "",
+                  child: Text(model!=null ? model.dateCreated : "",
                       style: styleProvider(fontWeight: regular, size: 10, color: black)),
                 ),
-                Container(
+                GestureDetector(onTap: (){
+                  changeScreen(context, EditAccountScreen());
+                },
+                child: Container(
                     width: 150,
                     color: Colors.transparent,
                     child: Padding(
@@ -87,7 +93,7 @@ class ProfileState extends State<ProfileView> {
                           ),
                         ),
                       ),
-                    ))
+                    )),)
               ],
             ),
           ],
@@ -207,15 +213,14 @@ class ProfileState extends State<ProfileView> {
                           break;
                         case 3:
                           printLog("buttonClicked", "My Address information");
-                          changeScreen(context, MyAddress());
+                          changeScreen(context, DeliveryScreen(total: "",));
                           break;
                         case 4:
                           printLog("buttonClicked", "Payment Information");
                           changeScreen(context, PaymentScreen());
                           break;
                         case 5:
-                          printLog("buttonClicked", "Language");
-                          changeScreen(context, LanguageScreen());
+                          languageDialog();
                           break;
                         case 6:
                           printLog("buttonClicked", "Privacy Settings");
@@ -248,13 +253,151 @@ class ProfileState extends State<ProfileView> {
       ],
     );
   }
-
+  void languageDialog() {
+    showGeneralDialog(
+        barrierLabel: "label",
+        barrierDismissible: true,
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: Duration(milliseconds: 700),
+        context: context,
+        pageBuilder: (context, anim1, anim2) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(3))),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 30),
+                              child: Text("Choose Your Preferred Language",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 30),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    Navigator.pop(context);
+                                  });
+                                },
+                                child: Container(
+                                    height: 35,
+                                    margin: EdgeInsets.zero,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.black,
+                                      size: 25,
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                              padding:
+                              EdgeInsets.only(left: 00, top: 10, right: 00),
+                              child: Container(
+                                  width: 150,
+                                  color: Colors.transparent,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.orange,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 35.0,
+                                            right: 35,
+                                            top: 5,
+                                            bottom: 5),
+                                        child: Center(
+                                          child: Text('Hindi',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 12)),
+                                        ),
+                                      ),
+                                    ),
+                                  ))),
+                          Padding(
+                              padding:
+                              EdgeInsets.only(left: 00, top: 10, right: 00),
+                              child: Container(
+                                  width: 150,
+                                  color: Colors.transparent,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20.0,
+                                            right: 20,
+                                            top: 5,
+                                            bottom: 5),
+                                        child: Center(
+                                          child: Text('English',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 12)),
+                                        ),
+                                      ),
+                                    ),
+                                  ))),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        transitionBuilder: (context, anim1, anim2, child) {
+          return SlideTransition(
+            position:
+            Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+            child: child,
+          );
+        });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(context, "Account",suffixIcon: Container()),
+      appBar: BaseAppBar(context, "Account",suffixIcon: Container(), prefixIcon: Container()),
       body: Container(
-        decoration: BoxDecoration(color: Colors.white),
         child: _CustomScrollView(),
       ),
     );

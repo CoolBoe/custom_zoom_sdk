@@ -1,13 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:wooapp/helper/constants.dart';
-import 'package:wooapp/helper/shared_perference.dart';
-import 'package:wooapp/models/mockdata/item_sortby.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/models/sort_by.dart';
-import 'package:wooapp/rest/WebRequestConstants.dart';
-import 'package:wooapp/services/product.dart';
 import 'package:wooapp/widgets/loading.dart';
-import 'dart:convert';
 import 'package:wooapp/rest/WebApiServices.dart';
 
 enum LoadMoreStatus{INITIAL, LOADING, STABLE}

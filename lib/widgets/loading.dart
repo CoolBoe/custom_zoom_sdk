@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wooapp/helper/color.dart';
 
 class Loading extends StatelessWidget {
   @override
@@ -29,6 +30,7 @@ void toast(Object msg) {
     msg: msg.toString(),
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
+    backgroundColor: Colors.black
     // timeInSecForIosWeb: 2
   );
 }

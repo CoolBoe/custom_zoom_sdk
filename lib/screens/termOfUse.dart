@@ -15,7 +15,6 @@ class TermsOfUseScreenState extends State<TermsOfUseScreen> {
   Widget _CustomScrollView() {
     return Column(
       children: <Widget>[
-        BaseAppBar(context, "Terms of Service"),
         Padding(
             padding: const EdgeInsets.all(20.0),
             child: Card(
@@ -170,13 +169,10 @@ class TermsOfUseScreenState extends State<TermsOfUseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: BaseAppBar(context, "Terms of Service", suffixIcon: Container()),
       body: Container(
         decoration: BoxDecoration(color: Colors.white),
-        child: RefreshIndicator(
-            onRefresh: () async {
-              await Future.value({});
-            },
-            child: Center(child: _CustomScrollView())),
+        child: _CustomScrollView(),
       ),
     );
   }

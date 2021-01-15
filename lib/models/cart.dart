@@ -95,7 +95,7 @@ class CartDatum {
     soldInd: json["sold_ind"],
     manageStock: json["manage_stock"],
     stockQuanity: json["stock_quanity"],
-    quantity: json["quantity"],
+    quantity: json["quantity"].toString(),
     subtotal: json["subtotal"],
   );
 

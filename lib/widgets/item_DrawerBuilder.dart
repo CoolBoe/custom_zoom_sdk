@@ -47,10 +47,10 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                       _selectItem = index;
                       switch (_selectItem) {
                         case 0:
-                          changeScreen(context, MainPageScreen());
+                          changeScreen(context, MainPageScreen(currentTab: 1));
                           break;
                         case 1:
-                          changeScreen(context, MainPageScreen());
+                          changeScreen(context, MainPageScreen(currentTab: 1,));
                           break;
                         case 2:
                           changeScreen(context, CategoriesScreen());

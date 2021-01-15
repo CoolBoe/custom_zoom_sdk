@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:wooapp/models/cart.dart';
 
-Widget ShippingCart(List<ShippingMethod> shippingMethod){
+Widget ShippingCart({List<ShippingMethod> shippingMethod, String choosenMethod}){
   int value = 0;
+  String chosen_shipping_method= choosenMethod;
   return ListView.builder(
       itemCount: shippingMethod.length,
       physics: BouncingScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) {
+
         return Padding(
           padding: const EdgeInsets.only(top: 5.0),
           child: Row(

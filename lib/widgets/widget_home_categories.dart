@@ -11,11 +11,8 @@ import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/category.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
-import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/category.dart';
 import 'package:wooapp/screens/productScreen.dart';
-import 'package:wooapp/services/product.dart';
-import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 

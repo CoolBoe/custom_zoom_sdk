@@ -10,14 +10,19 @@ import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/cart.dart';
+import 'package:wooapp/models/order.dart';
 import 'package:wooapp/models/paymentGateway.dart';
 import 'package:wooapp/models/revieworder.dart';
 import 'package:wooapp/models/user.dart';
+import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/user.dart';
+import 'package:wooapp/screens/basePage.dart';
 import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/screens/delivery.dart';
+import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/offer.dart';
+import 'package:wooapp/services/razorpay.dart';
 import 'package:wooapp/utils/form_helper.dart';
 import 'package:wooapp/utils/widget_helper.dart';
 import 'package:wooapp/validator/validate.dart';
@@ -25,43 +30,67 @@ import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 import 'package:wooapp/widgets/widgetShippingCart.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:html/parser.dart';
+import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:wooapp/helper/color.dart';
+import 'package:wooapp/helper/constants.dart';
+import 'package:wooapp/providers/cart.dart';
+import 'package:wooapp/validator/validate.dart';
+import 'package:wooapp/widgets/loading.dart';
 
-class CheckOutScreen extends StatefulWidget {
-  final String totalAmount;
-
-  CheckOutScreen({@required this.totalAmount});
+class CheckOutScreen extends BasePage {
+  String total;
+  CheckOutScreen({Key key, this.total}) : super(key: key);
   @override
   _CheckOutScreenrState createState() => _CheckOutScreenrState();
 }
 
-class _CheckOutScreenrState extends State<CheckOutScreen> {
+class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
   int value = 0;
   String discount_total;
   String cart_subtotal;
   String taxes;
+  String paymentMethod = '';
+  String shippingMethod = '';
   int checkedIndex ;
   bool checked = false;
+  bool razorchecked = false;
   String total;
   String totalAmount;
+  ReviewOrder order;
+  UserProvider user;
+  CartProvider cart;
+  Details model;
+  Razorpay _razorpay;
+  LoaderProvider loader;
+  var userData;
   String shipping_Flat;
   String shipping_Free;
   @override
   void initState() {
-    var cart = Provider.of<CartProvider>(context, listen: false);
-    cart.getReviewOrder();
-    var user = Provider.of<UserProvider>(context, listen: false);
+    order = ReviewOrder();
+    model = Details();
+    cart = Provider.of<CartProvider>(context, listen: false);
+     cart.getReviewOrder();
+     user = Provider.of<UserProvider>(context, listen: false);
     user.getUserInfo();
+    loader = Provider.of<LoaderProvider>(context, listen: false);
+    _razorpay = new Razorpay();
+
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget pageUi(){
     return Scaffold(
       appBar: BaseAppBar(context, "Check Out"),
       body: UiBuilder(),
       bottomNavigationBar: bottomBar(),
     );
   }
+
 
   Widget bottomBar(){
    return Padding(
@@ -84,7 +113,7 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text("₹ ${widget.totalAmount}",
+              Text("₹ ${widget.total}",
                   style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Poppins',
@@ -96,7 +125,8 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
                     padding: const EdgeInsets.only(left: 15.0),
                     child: GestureDetector(
                       onTap: () {
-                        // changeScreen(context, CheckOutScreen(totalAmount: total));
+                     // createOrder(userId: model.id, paymentMethod: paymentMethod);
+                     thankyouDialog("For Your Orders");
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -128,6 +158,7 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
   Widget UiBuilder() {
     return Container(
       child:  new Consumer<CartProvider>(builder: (context, cartModel, child){
+
         if(cartModel.reviewOrder!=null){
           return reviewOrder(cartModel.reviewOrder);
         }else{
@@ -140,7 +171,7 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
     BasePrefs.init();
     discount_total = getValidString(order.discountTotal);
     cart_subtotal = getValidString(order.cartSubtotal);
-    taxes  = getValidString(order.cartTaxTotal.s12IGST);
+    taxes  =order.cartTaxTotal!=null ? getValidString(order.cartTaxTotal.s12IGST) : "";
     total = getValidString(order.cartOrderTotal);
     shipping_Flat= order.shippingMethod!=null && order.shippingMethod.length>0 ? getValidString(order.shippingMethod[0].shippingMethodPrice) : "00.00";
     shipping_Free= order.shippingMethod!=null && order.shippingMethod.length>1 ? getValidString(order.shippingMethod[1].shippingMethodPrice) : "00.00";
@@ -172,7 +203,7 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14)),
-                            order.shippingMethod!=null ? ShippingCart(order.shippingMethod) : Container(),
+                            order.shippingMethod!=null ? ShippingCart(shippingMethod: order.shippingMethod, choosenMethod: order.chosenShippingMethod) : Container(),
                           ],
                         ),
                       ),
@@ -332,7 +363,7 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 20.0),
-                                    child: Text("₹ "+total,
+                                    child: Text("₹ $total",
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontFamily: 'Poppins',
@@ -412,13 +443,13 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
 
   Widget addressBuilder(){
     BasePrefs.init();
-    var value= BasePrefs.getString(USER_MODEL);
-    Details model = Details.fromJson(jsonDecode(value));
+    userData= BasePrefs.getString(USER_MODEL);
+    model = userData !=null ? Details.fromJson(jsonDecode(userData)) : new Details();
     return Padding(
       padding: const EdgeInsets.only( top:10, bottom: 10),
       child: GestureDetector(
         onTap: (){
-          changeScreen(context, DeliveryScreen(total: widget.totalAmount,));
+          changeScreen(context, DeliveryScreen(total: widget.total,));
         },
         child:  Container(
           height: 100,
@@ -452,15 +483,17 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
                   width: 200,
                   child: RichText(
                     text: TextSpan(
-                        text: model.firstName!=null && model.firstName!=""? "${model.firstName}\n" : ""
-                            "Hi User",
+                        text: model.firstName!=null && model.billing.firstName!="" ?
+                        model.firstName!=null && model.firstName!=""?
+                        "Dear ${model.firstName.toUpperCase()}\n" : "Dear ${model.billing.firstName.toUpperCase()}\n" :
+                            "Hi User\n",
                         style: TextStyle(
                             color: Colors.black, fontSize: 18, fontFamily: fontName, fontWeight: medium),
                         children: <TextSpan>[
                           TextSpan(text: "Shipping Address:- ", style: TextStyle(
                                 color: Colors.black38, fontSize: 10),),
                           TextSpan(text: model.billing.postcode!=null && model.billing.postcode!="" ?
-                          "${model.billing.address1} ${model.billing.address2} ${model.billing.state} (${model.billing.postcode})" :"Add Your Shipping Address",
+                          "${model.billing.address1} ${model.billing.address2} ${model.billing.state} (${model.billing.postcode})" :"Address Not Found",
                             style: TextStyle(
                                 color: Colors.black38, fontSize: 10),)
                         ]
@@ -504,8 +537,11 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
                 checked = index == checkedIndex;
                 return GestureDetector(onTap: (){
                   setState(() {
+                    razorchecked= false;
                     checkedIndex = index;
+                    paymentMethod = gateway[index].gatewayId;
                   });
+
                 },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 10),
@@ -529,7 +565,39 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
                       ),
                     ),
                   ),);
-              })
+              }),
+          GestureDetector(
+            onTap: (){
+              setState(() {
+                checked = false;
+                checkedIndex = 10;
+                razorchecked = true;
+                paymentMethod = "razor";
+              });
+            },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: orange_50,
+                    border:Border.all(color: razorchecked ? orange : orange_50),
+                    boxShadow: [
+                      BoxShadow(color: razorchecked ? orange : orange_50, spreadRadius: 1)
+                    ],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                          width: 60,
+                          child: Image.asset(ic_money)),
+                      Text("Razor Pay", style: styleProvider(fontWeight: medium, size: 13, color: black),)
+                    ],
+                  ),
+                ),
+              ),
+          )
         ],
       ),
     );
@@ -538,5 +606,214 @@ class _CheckOutScreenrState extends State<CheckOutScreen> {
     printLog("getshipp", getShippingPrice());
     double price = getValidDecimalInDouble(discount_total)+getValidDecimalInDouble(taxes)+getValidDecimalInDouble(cart_subtotal)+getValidDecimalInDouble(getShippingPrice());
     return getValidDecimalFormat(price);
+  }
+
+  void createOrder({int userId, String paymentMethod, String shippingMethod}) {
+    var cart = Provider.of<CartProvider>(context, listen: false);
+    if(paymentMethod!=null && paymentMethod!=""){
+      cart.getNewOrder(userId: userId, paymentMethod: paymentMethod).then((value){
+        OrderModel orderModel =value;
+        switch(paymentMethod){
+          case "bacs":
+            cart.getUpdateOrder(order_id: orderModel.id.toString(), status: "on-hold").then((value){
+              if(value){
+                toast("Order Placed");
+                thankyouDialog("For Your Orders");
+              }else{
+                toast(NETWORK_ERROR);
+              }
+            });
+            thankyouDialog("For Your Orders");
+            break;
+          case "cheque":
+            cart.getUpdateOrder(order_id: orderModel.id.toString(), status: "processing").then((value){
+              if(value){
+                toast("Order Placed");
+                thankyouDialog("For Your Orders");
+              }else{
+                toast(NETWORK_ERROR);
+              }
+            });
+            break;
+          case "cod":
+            cart.getUpdateOrder(order_id: orderModel.id.toString(), status: "processing").then((value){
+              if(value){
+                toast("Order ");
+                thankyouDialog("For Your Orders");
+              }else{
+                toast(NETWORK_ERROR);
+              }
+            });
+            break;
+          case "paypal":
+            break;
+          case "razor":
+            RazorPaymentService razorPaymentService = new RazorPaymentService();
+            razorPaymentService.initPaymentGatway(context, orderModel.id.toString());
+            printLog("ddsakabj", orderModel.id.toString());
+            razorPaymentService.getPayment(context: context, amount: widget.total, name: model.billing.firstName,
+                email: model.billing.email,
+                mobile: model.billing.phone,
+                orderId: orderModel.orderKey);
+            thankyouDialog("For Your Orders");
+            break;
+          case "paytm":
+            break;
+        }
+      });
+    }else{
+      toast(PAY_METHOD_NOT_FOUND);
+    }
+  }
+  void thankyouDialog(String msg){
+    showGeneralDialog(
+        barrierLabel: "label",
+        barrierDismissible: false,
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: Duration(milliseconds: 700),
+        context: context,
+        pageBuilder:(context, anim1, anim2){
+          return Material(
+            type: MaterialType.transparency,
+            child:Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: 400,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 1.0),
+                          blurRadius: 6.0
+                      )
+                    ],
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(right: 30),
+                              child:  GestureDetector(
+                                onTap: (){setState(() {
+                                  Navigator.pop(context);
+                                });},
+                                child: Container(
+                                    height: 35,
+                                    margin: EdgeInsets.zero,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.black ,
+                                      size: 15,
+                                    )),
+                              ),
+                            ),
+                          ],),
+                      ),
+                      Stack(
+                        children: <Widget>[
+                          new Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                height: 150,
+                                width: 150,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(100)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey,
+                                          offset: Offset(0.0, 1.0),
+                                          blurRadius: 6.0
+                                      )
+                                    ]
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 130,
+                                    width: 130,
+                                    decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(100)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Colors.grey,
+                                              offset: Offset(0.0, 1.0),
+                                              blurRadius: 6.0
+                                          )
+                                        ]
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(40.0),
+                                      child: SvgPicture.asset(ic_likee, color: Colors.white,),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          new Positioned(
+                              bottom: 20,
+                              right: 0,
+                              left: 120,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child:  CircleAvatar(
+                                    radius: 15.0,
+                                    backgroundColor: Colors.green,
+                                    child: Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  )
+                              ))
+
+                        ],
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(top:10.0),
+                        child: Text('Thank You', style: TextStyle(color: Colors.black, fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 20),),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top:10.0),
+                        child: Text(msg, style: TextStyle(color: Colors.black, fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 12),),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top:20.0, left: 20, right:20, bottom: 20),
+                        child: customButton(title :"Continue Shopping", onPressed: (){
+                          MainPageScreenState().dispose();
+                         changeToNewScreen(context, MainPageScreen(currentTab: 0,), "/MainPage");
+                         dispose();
+                        }),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ) ,
+          );
+        },
+        transitionBuilder: (context, anim1, anim2, child){
+          return SlideTransition(position: Tween(begin: Offset(0,1), end: Offset(0,0)).animate(anim1),child: child,);
+        });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

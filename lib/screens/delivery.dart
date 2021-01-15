@@ -37,7 +37,6 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
   int _currentStep = 0;
   CartModel cartData = CartModel();
   GlobalKey<FormState> shippingForm = GlobalKey<FormState>();
-  GlobalKey<FormState> billingForm = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
   int value = 0;
   WebApiServices _webApiServices;
@@ -55,8 +54,6 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
   void initState() {
     _webApiServices = new WebApiServices();
     BasePrefs.init();
-    app = Provider.of<AppProvider>(context, listen: false);
-    app.fetchStateLIst(states: "IN");
     super.initState();
   }
   @override
@@ -64,27 +61,22 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
     return Scaffold(
       key: scaffoldState,
       appBar: BaseAppBar(context, "Delivery Information", suffixIcon: Container()),
-      body:stepper(),
+      body:stepperBuilder(),
       bottomNavigationBar: customButton(title: "Update",onPressed: (){
         if(!saveShippingForm()){
         toast("please complete above details");
         }else{
             var loader = Provider.of<LoaderProvider>(context, listen: false);
             loader.setLoadingStatus(true);
-           _webApiServices.updateBilling(user_id:userDetails.id.toString(), billing_email: userDetails.billing.email, billing_phone:userDetails.billing.phone,
-            billing_address_1: userDetails.billing.address1, billing_address_2:userDetails.billing.address2,
-            billing_city:userDetails.billing.city, billing_company: "", billing_country: userDetails.billing.country,
-            billing_first_name:userDetails.billing.firstName, billing_last_name: userDetails.billing.lastName,
-            billing_postcode:userDetails.billing.postcode, billing_state: userDetails.billing.state, checkbox: false).then((value){
+           _webApiServices.updateBilling(user_id:userDetails.id.toString(),shipping: userDetails.billing).then((value){
              toast(value.msg);
             if(value.status==1){
               Details details = value.details;
+              printLog("dtdtdtdt", details.toJson());
               BasePrefs.setString(USER_MODEL, json.encode(details));
-              changeScreen(context, CheckOutScreen(totalAmount: widget.total));
+              changeScreen(context, CheckOutScreen(total:widget.total));
               printLog("datafat", details.toJson().toString());
             }
-
-
              // _saveForNextUse(title, model);
              loader.setLoadingStatus(false);
            });
@@ -105,17 +97,8 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
       }),
     );
   }
-  Widget stepper(){
-    return new Consumer<AppProvider>(builder: (context, model, child){
-      printLog("getCityList", model.getCityList);
-      if(model.getCityList!=null && model.getCityList.length>0){
-        return stepperBuilder(model.getCityList);
-      }else{
-        return progressBar(context, orange);
-      }
-    });
-  }
-  Widget stepperBuilder(List<CityModel> list){
+
+  Widget stepperBuilder(){
     BasePrefs.init();
     var value= BasePrefs.getString(USER_MODEL);
     userDetails = Details.fromJson(jsonDecode(value));
@@ -195,7 +178,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                     padding: const EdgeInsets.only(top: 5),
                     child: cityDropList(
                         hint: "Select State",
-                        cityList: list,
+                        cityList: stateList,
                         onChanged: (model){
                           if(model!=null){
                             userDetails.billing.state = model.name;

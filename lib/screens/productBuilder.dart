@@ -25,6 +25,7 @@ import 'package:wooapp/screens/category.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/validator/validate.dart';
+import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
@@ -80,8 +81,8 @@ class ShopState extends BasePageState<ShopView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
+      appBar: BaseAppBar(context, "Products", prefixIcon: Container()),
       body: Container(
-          decoration: BoxDecoration(color: Colors.white),
          child: _CustomScrollView(context)),
     );
   }
@@ -119,7 +120,6 @@ class ShopState extends BasePageState<ShopView> {
   Widget _CustomScrollView(BuildContext context) {
     return CustomScrollView(
       slivers: <Widget>[
-        _appBar(),
         filterOptions(),
         SliverPadding(
           padding: const EdgeInsets.only(top:10, left:15.0, right: 15),

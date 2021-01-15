@@ -10,9 +10,9 @@ import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/screens/home.dart';
 import 'package:wooapp/screens/mainpage.dart';
+import 'package:wooapp/screens/paypal_payment.dart';
 import 'package:wooapp/screens/productBuilder.dart';
 import 'package:wooapp/screens/splesh.dart';
-import 'package:wooapp/services/service_locator.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 import 'package:wooapp/widgets/sortBy_Dialog.dart';
 import 'package:wooapp/widgets/widget_home_categories.dart';
@@ -38,6 +38,10 @@ void main() {
       title: "Woo App",
       debugShowCheckedModeBanner: false,
       home: ScreensController(),
+        routes: <String, WidgetBuilder>{
+        '/paypal':(BuildContext context)=>new PaypalPayment(),
+        '/MainPage':(BuildContext context)=>new MainPageScreen(currentTab: 0,),
+        },
     )
   )));
 }

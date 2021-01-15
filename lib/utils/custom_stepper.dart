@@ -34,7 +34,7 @@ class _CustomStepperState extends State<CustomStepper> {
                 },
                 child: CircleAvatar(
                   radius: 10.0,
-                  backgroundColor: Colors.orange[400],
+                  backgroundColor: Colors.orange[100],
                   child: Icon(
                     Icons.remove,
                     color: Colors.red,
@@ -61,7 +61,7 @@ class _CustomStepperState extends State<CustomStepper> {
               },
               child: CircleAvatar(
                 radius: 10.0,
-                backgroundColor: Colors.orange[400],
+                backgroundColor: Colors.orange[100],
                 child: Icon(
                   Icons.add,
                   color: Colors.red,

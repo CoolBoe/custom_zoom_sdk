@@ -29,271 +29,13 @@ class LoginScreenState extends BasePageState<LoginScreen> {
   GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   bool cb_remember = false;
   UserProvider user;
+  bool isApiInProcess = false;
   LoaderProvider loader;
   @override
   void initState() {
     user = Provider.of<UserProvider>(context, listen: false);
     loader = Provider.of<LoaderProvider>(context, listen: false);
     super.initState();
-  }
-
-  void _getUser() {
-    BasePrefs.init();
-    if (!isValidString(user.password.text.trim()) ||!isValidString(user.email.text.trim()) ) {
-      loader.setLoadingStatus(false);
-      snackBar(InCompleteDataError);
-    } else {
-      user
-          .logIn(user.email.text, user.password.text)
-          .then((value) {
-            if(value!=null){
-              toast(LOGIN_STATUS_TRUE);
-              loader.setLoadingStatus(false);
-              BasePrefs.setString(USER_MODEL, jsonEncode(value));
-
-              var valuu = BasePrefs.getString(USER_MODEL);
-                     printLog("datadta", value.toJson().toString());
-              user.clearController();
-              changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
-            }else{
-              toast(LOGIN_STATUS_FALSE);
-            }
-
-      });
-    }
-  }
-
-  void _getFBUser() {
-    if (!isValidString(BasePrefs.getString(USER_NAME))) {
-      snackBar("User Info Not Found");
-    } else {
-      user
-          .social_login(mode: BasePrefs.getString(SOCIAL_LOGIN_MODE) !=null
-          ? BasePrefs.getString(SOCIAL_LOGIN_MODE) : "",
-          name: BasePrefs.getString(USER_NAME) !=null
-              ? BasePrefs.getString(USER_NAME) : "",
-          firstName:  BasePrefs.getString(USER_FIRST_NAME) !=null
-              ? BasePrefs.getString(USER_FIRST_NAME) : "",
-          lastName:  BasePrefs.getString(USER_LAST_NAME) !=null
-              ? BasePrefs.getString(USER_LAST_NAME) : "",
-          email:  BasePrefs.getString(USER_EMAIL) !=null
-              ? BasePrefs.getString(USER_EMAIL) : "")
-          .then((value) {
-        if (value) {
-          toast(LOGIN_STATUS_TRUE);
-          changeScreen(
-              context,
-              MainPageScreen(
-                currentTab: 0,
-              ));
-        } else {
-          toast(LOGIN_STATUS_FALSE);
-        }
-      });
-    }
-  }
-
-  @override
-  Widget pageUi() {
-    // TODO: implement pageUi
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(ic_bg_login),
-          fit: BoxFit.fill,
-        ),
-      ),
-      child: Scaffold(
-        key: _key,
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomPadding: false,
-        body: Column(
-          children: <Widget>[
-            AppBar(),
-            Expanded(
-              child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 50.0, top: 0, right: 50.0, bottom: 20.0),
-                  child: Center(
-                      child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              _tvlogin(),
-                              _tvYourAccount(),
-                              _topPaddingLine(),
-                              Container(
-                                height: 60.0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.black38,
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0))),
-                                  child: new Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 10, left: 10, bottom: 2, right: 10),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: new Text("Email",
-                                              style: TextStyle(
-                                                  fontFamily: 'Poppins',
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.white)),
-                                        ),
-                                        Expanded(
-                                            child: new TextFormField(
-                                              controller: user.email,
-                                              decoration: InputDecoration(
-                                                border: InputBorder.none,
-                                              ),
-                                              keyboardType: TextInputType.emailAddress,
-                                              style: new TextStyle(
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w400,
-                                                  fontSize: 18,
-                                              color: white),
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: Container(
-                                  height: 60.0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.black38,
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0))),
-                                    child: new Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 5, left: 10, bottom: 2, right: 10),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: new Text("Password",
-                                                style: TextStyle(
-                                                    fontFamily: 'Poppins',
-                                                    fontSize: 10.0,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: Colors.white)),
-                                          ),
-                                          Expanded(
-                                              child: new TextFormField(
-                                                controller: user.password,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none),
-                                                keyboardType: TextInputType.visiblePassword,
-                                                obscureText: true,
-                                                style: new TextStyle(
-                                                    fontFamily: "Poppins",
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 18,
-                                                color: white),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              _sizebox(),
-                              _cbRememberMe(),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 40.0),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    if (cb_remember) {
-                                      setState(() {
-                                        loader.setLoadingStatus(true);
-                                      });
-                                      _getUser();
-                                    } else {
-                                      _key.currentState.showSnackBar(SnackBar(
-                                          content: Text(
-                                              "Please check Remember me to keep login")));
-                                    }
-                                    // Navigator.pushNamed(context, routes.MainPage_Route);
-                                  },
-                                  child: Container(
-                                    height: 50.0,
-                                    color: Colors.transparent,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(5.0))),
-                                      child: new Center(
-                                        child: new Text(
-                                          "SIGN",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      social_login.FBLogin().signInFB().then((value) {
-                                        if (value) {
-                                          printLog('fblogin', value);
-                                          _getFBUser();
-                                        }
-                                      });
-                                    },
-                                    child: Container(
-                                      height: 50.0,
-                                      color: Colors.transparent,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            border: Border.all(
-                                                color: Colors.white, width: 2.0),
-                                            borderRadius:
-                                            BorderRadius.all(Radius.circular(5.0))),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            SvgPicture.asset(
-                                              ic_facebook,
-                                              color: Colors.white,
-                                            ),
-                                            SizedBox(width: 10),
-                                            GestureDetector(
-                                              onTap: () {},
-                                              child: new Text("CONTINUE WITH FACEBOOK",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Poppins',
-                                                      fontSize: 12.0,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: Colors.white)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          )))),
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _cbRememberMe() {
@@ -371,6 +113,240 @@ class LoginScreenState extends BasePageState<LoginScreen> {
               fontWeight: FontWeight.w500,
               color: Colors.white),
         ));
+  }
+
+  @override
+  Widget pageUi() {
+    var loader = Provider.of<LoaderProvider>(context, listen: false);
+    // TODO: implement pageUi
+    return  Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(ic_bg_login),
+          fit: BoxFit.fill,
+        ),
+      ),
+      child: Scaffold(
+        key: _key,
+        backgroundColor: Colors.transparent,
+        resizeToAvoidBottomPadding: false,
+        body:Column(
+          children: <Widget>[
+            AppBar(),
+            Expanded(
+              child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 50.0, top: 0, right: 50.0, bottom: 20.0),
+                  child: Center(
+                      child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              _tvlogin(),
+                              _tvYourAccount(),
+                              _topPaddingLine(),
+                              Container(
+                                height: 60.0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.black38,
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(5.0))),
+                                  child: new Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 10, left: 10, bottom: 2, right: 10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: new Text("Email",
+                                              style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white)),
+                                        ),
+                                        Expanded(
+                                            child: new TextFormField(
+                                              controller: user.email,
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                              ),
+                                              keyboardType: TextInputType.emailAddress,
+                                              style: new TextStyle(
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 18,
+                                                  color: white),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Container(
+                                  height: 60.0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.black38,
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0))),
+                                    child: new Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 5, left: 10, bottom: 2, right: 10),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: new Text("Password",
+                                                style: TextStyle(
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: 10.0,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.white)),
+                                          ),
+                                          Expanded(
+                                              child: new TextFormField(
+                                                controller: user.password,
+                                                decoration: InputDecoration(
+                                                    border: InputBorder.none),
+                                                keyboardType: TextInputType.visiblePassword,
+                                                obscureText: true,
+                                                style: new TextStyle(
+                                                    fontFamily: "Poppins",
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18,
+                                                    color: white),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              _sizebox(),
+                              _cbRememberMe(),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 40.0),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    if (cb_remember) {
+
+                                      loader.setLoadingStatus(true);
+                                      BasePrefs.init();
+                                      if (!isValidString(user.password.text.trim()) ||!isValidString(user.email.text.trim()) ) {
+                                        setState(() {
+                                         loader.setLoadingStatus(false);
+                                        });
+                                        snackBar(InCompleteDataError);
+                                      } else {
+                                        user
+                                            .logIn(user.email.text, user.password.text)
+                                            .then((value) {
+                                          setState(() {
+                                            loader.setLoadingStatus(false);
+                                          });
+                                          if(value!=null){
+                                            toast(LOGIN_STATUS_TRUE);
+                                            BasePrefs.setString(USER_MODEL, jsonEncode(value));
+                                            user.clearController();
+                                            changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
+                                          }else{
+                                            toast(LOGIN_STATUS_FALSE);
+                                          }
+                                        });
+                                      }
+                                    } else {
+                                      _key.currentState.showSnackBar(SnackBar(
+                                          content: Text(
+                                              "Please check Remember me to keep login")));
+                                    }
+                                    // Navigator.pushNamed(context, routes.MainPage_Route);
+                                  },
+                                  child: Container(
+                                    height: 50.0,
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(5.0))),
+                                      child: new Center(
+                                        child: new Text(
+                                          "SIGN",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      var loader = Provider.of<LoaderProvider>(context, listen: false);
+                                      user.social_login(context: context).then((value) {
+                                        setState(() {
+                                          loader.setLoadingStatus(false);
+                                        });
+                                        if(value!=null){
+                                          toast(LOGIN_STATUS_TRUE);
+                                          BasePrefs.setString(USER_MODEL, jsonEncode(value));
+                                          printLog("responsesara", value.toJson().toString());
+                                          user.clearController();
+                                          changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
+                                        }else{
+                                          toast(LOGIN_STATUS_FALSE);
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 50.0,
+                                      color: Colors.transparent,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            border: Border.all(
+                                                color: Colors.white, width: 2.0),
+                                            borderRadius:
+                                            BorderRadius.all(Radius.circular(5.0))),
+                                        child: new Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              ic_facebook,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(width: 10),
+                                            GestureDetector(
+                                              onTap: () {},
+                                              child: new Text("CONTINUE WITH FACEBOOK",
+                                                  style: TextStyle(
+                                                      fontFamily: 'Poppins',
+                                                      fontSize: 12.0,
+                                                      fontWeight: FontWeight.w500,
+                                                      color: Colors.white)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          )))),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 

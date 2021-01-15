@@ -46,7 +46,6 @@ class OfferScreenState extends BasePageState{
                    var cart  = Provider.of<CartProvider>(context, listen: false);
                    cart.getApplyCoupons(coupon_code: cartItemKey, onCallBack: (value){
                      loader.setLoadingStatus(false);
-                     toast("Coupon Applied Successfully");
                      changeScreen(context, CartScreen());
                    });
                  }else{
@@ -107,7 +106,6 @@ class OfferScreenState extends BasePageState{
                   ),
                 ),
               )),
-          Column(),
           Padding(
             padding: const EdgeInsets.only(left:13.0),
             child: Text("Trending", style: styleProvider(fontWeight: semiBold, size: 14, color: black),),

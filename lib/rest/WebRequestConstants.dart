@@ -45,7 +45,7 @@ class WebRequestConstants {
   static const String NEW_ORDER ="checkout/new-order";
   static const String PAYMENT_GATEWAY = "checkout/payment-gateway";
   static const String REVIEW_ORDER = "checkout/review-order";
-
+  static const String ORDERS = "orders";
   static const String ORDER_ID = "ORDER_ID";
   static const String CUST_ID_METHOD = "CUST_ID METHOD";
 

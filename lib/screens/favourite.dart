@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
+import 'package:wooapp/helper/color.dart';
+import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
+import 'package:wooapp/models/product.dart';
+import 'package:wooapp/providers/product.dart';
+import 'package:wooapp/screens/productScreen.dart';
+import 'package:wooapp/utils/form_helper.dart';
+import 'package:wooapp/widgets/app_bar.dart';
+import 'package:wooapp/widgets/product.dart';
+import 'package:wooapp/widgets/progress_bar.dart';
+import 'package:wooapp/widgets/sortBy_Dialog.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({Key key}) : super(key: key);
@@ -10,51 +21,22 @@ class FavouriteScreen extends StatefulWidget {
 }
 
 class FavouriteScreenState extends State<FavouriteScreen> {
-  List<Item> itemList = [
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_6_front-600x600.jpg",
-        "Black Hoodie",
-        "₹ 450.00",
-        "4.5",
-        true,
-        "21"),
-    Item("https://app.tutiixx.com/wp-content/uploads/2019/01/T_6_front.jpg",
-        "T-Shirt", "₹ 400.00", "4.5", true, "0"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/T_5_front-600x600.jpg",
-        "T-Shirt",
-        "₹ 350.00",
-        "4.5",
-        true,
-        "0"),
-    Item("https://app.tutiixx.com/wp-content/uploads/2019/01/T_1_front.jpg",
-        "T-Shirt", "₹ 290.00", "4.5", true, "0"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_7_front-600x600.jpg",
-        "Hoodie",
-        "₹ 920.00",
-        "4.5",
-        true,
-        "0"),
-    Item(
-        "https://app.tutiixx.com/wp-content/uploads/2019/01/long-sleeve-tee-2-600x600.jpg",
-        "Long Sleeve Tee",
-        "₹ 220.00",
-        "4.5",
-        true,
-        "0"),
-  ];
   int currentTab = 0;
+  int sortByIndex = 0;
+  ProductsProvider productList;
+  int _page =1;
+  @override
+  void initState() {
+    productList = Provider.of<ProductsProvider>(context, listen: false);
+    productList.fetchProducts(_page);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: BaseAppBar(context, "Wishlist", prefixIcon: Container(), suffixIcon: Container()),
       body: Container(
-          decoration: BoxDecoration(color: Colors.white),
-          child: RefreshIndicator(
-              onRefresh: () async {
-                await Future.value({});
-              },
-              child: _CustomScrollView())),
+          child:  _CustomScrollView()),
     );
   }
 
@@ -64,34 +46,6 @@ class FavouriteScreenState extends State<FavouriteScreen> {
     final double itemWidth = size.width / 2;
     return CustomScrollView(
       slivers: <Widget>[
-        SliverAppBar(
-          pinned: true,
-          expandedHeight: 50,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text("Wishlist",
-                style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black)),
-            centerTitle: true,
-          ),
-          floating: true,
-          leading: GestureDetector(
-              onTap: () {
-                // Navigator.of(context).pushNamed(routes.MainPage_Route);
-              },
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              )),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SvgPicture.asset('assets/icons/ic_search.svg'),
-            )
-          ],
-        ),
         SliverPadding(
           padding: EdgeInsets.all(10),
           sliver: SliverToBoxAdapter(
@@ -102,11 +56,11 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                   Padding(
                       padding: EdgeInsets.only(left: 9, right: 9),
                       child: Text(
-                        '6 items',
+                        'Top Items',
                         style: TextStyle(
                             color: Colors.black,
                             fontFamily: 'Poppins',
-                            fontSize: 16.0,
+                            fontSize: 12.0,
                             fontWeight: FontWeight.w600),
                       )),
                   Padding(
@@ -161,158 +115,88 @@ class FavouriteScreenState extends State<FavouriteScreen> {
             ),
           ),
         ),
+        // SliverPadding(
+        //   padding: EdgeInsets.only(left: 30, right: 30),
+        //   sliver: SliverToBoxAdapter(
+        //     child: Container(
+        //       child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: <Widget>[
+        //             GestureDetector(
+        //                 child: Text("Featured",
+        //                     style: TextStyle(
+        //                         fontFamily: 'Poppins',
+        //                         fontSize: 14.0,
+        //                         fontWeight: FontWeight.w500,
+        //                         color: Colors.black))),
+        //             Row(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: <Widget>[
+        //                 Text(
+        //                   "See More",
+        //                   style: TextStyle(
+        //                       fontFamily: 'Poppins',
+        //                       fontSize: 10.0,
+        //                       fontWeight: FontWeight.w500,
+        //                       color: Colors.black),
+        //                 ),
+        //                 Icon(
+        //                   Icons.arrow_right_alt_rounded,
+        //                   color: Colors.black,
+        //                   size: 20,
+        //                 )
+        //               ],
+        //             )
+        //           ]),
+        //     ),
+        //   ),
+        // ),
         SliverPadding(
-          padding: EdgeInsets.only(left: 30, right: 30),
+          padding: const EdgeInsets.only(top:10, left:15.0, right: 15),
           sliver: SliverToBoxAdapter(
-            child: Container(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                        child: Text("Featured",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black))),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "See More",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black),
-                        ),
-                        Icon(
-                          Icons.arrow_right_alt_rounded,
-                          color: Colors.black,
-                          size: 20,
-                        )
-                      ],
-                    )
-                  ]),
-            ),
-          ),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.all(8),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: (itemWidth / itemHeight),
-            ),
-            delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
-              return _itemBuilder(context, index);
-            }, childCount: itemList.length),
-          ),
-        ),
+            child: _productList(),),
+        )
       ],
     );
   }
 
-  Widget _itemBuilder(BuildContext context, int index) {
-    double rating = double.parse(itemList[index].stars);
-    return Container(
-      height: 200,
-      alignment: Alignment.topLeft,
-      child: Column(
-        children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Container(
-                height: 180,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(itemList[index].item_image),
-                        fit: BoxFit.fill)),
-                // child: Image.network(itemList[index].item_image, fit: BoxFit.fill)
-              ),
-              new Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircleAvatar(
-                      radius: 12.0,
-                      backgroundColor: Colors.red[300],
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 15,
-                      ),
-                    )),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              itemList[index].item_name,
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: 'Poppins',
-                fontSize: 12.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          Text(
-            itemList[index].price,
-            style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Poppins',
-              fontSize: 12.0,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RatingBar(
-                  itemSize: 20,
-                  initialRating: rating,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 0),
-                  ratingWidget: RatingWidget(
-                      full: new Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      half: new Icon(
-                        Icons.star_half,
-                        color: Colors.amber,
-                      ),
-                      empty: new Icon(
-                        Icons.star_border,
-                        color: Colors.amber,
-                      )),
-                  onRatingUpdate: (rating) {
-                    print(rating);
-                  }),
-              Text(
-                " {" + itemList[index].stars + "}",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
+  Widget _productList(){
+    return new Consumer<ProductsProvider>(builder: (context, productModel, child){
+      if(productModel.allProducts!=null &&
+          productModel.allProducts.length>0
+      ){
+        return _buildProductList(productModel.allProducts);
+      }else{
+        return progressBar(context, orange);
+      }
+    });
   }
 
+  Widget _buildProductList(List<ProductModel> productList) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height / 1.32 - kToolbarHeight - 15) / 2;
+    final double itemWidth = size.width / 2;
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      padding: EdgeInsets.zero,
+      childAspectRatio: (itemWidth / itemHeight),
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      physics: ClampingScrollPhysics(),
+      children:productList.map((ProductModel model){
+        return GestureDetector(
+            onTap: () {
+              changeScreen(
+                  context, ProductScreen(productModel: model));
+            },
+            child: ProductWidget(
+              productModel: model,
+
+            ));
+      }).toList(),
+    );
+  }
   void SortByDialog() {
     showGeneralDialog(
         barrierLabel: "label",
@@ -326,7 +210,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 300,
+                height: 350,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -343,7 +227,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                             padding: EdgeInsets.only(left: 30),
                             child: GestureDetector(
                               onTap: () {
-                                setState(() {});
+                                Navigator.pop(context);
                               },
                               child: Container(
                                   height: 35,
@@ -388,9 +272,13 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                         ],
                       ),
                     ),
-                    // Expanded(
-                    //     child: sortByDialog(1)
-                    // )
+                    Container(
+                      height: 200,
+                      child: sortByDialog(sortByIndex),
+                    ),
+                   customButton(title: "APPLY",onPressed: (){
+                     Navigator.pop(context);
+                   })
                   ],
                 ),
               ),
@@ -400,7 +288,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
         transitionBuilder: (context, anim1, anim2, child) {
           return SlideTransition(
             position:
-                Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+            Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
             child: child,
           );
         });

@@ -7,6 +7,7 @@ import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
+import 'package:wooapp/main.dart';
 import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/models/user.dart';
@@ -32,7 +33,6 @@ import 'package:wooapp/widgets/product.dart';
 import 'package:wooapp/widgets/Item_builder.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 import 'package:wooapp/widgets/widget_home_categories.dart';
-import 'package:wooapp/widgets/widget_home_featured.dart';
 import 'package:wooapp/widgets/widget_home_slider.dart';
 
 class HomeView extends StatefulWidget {
@@ -70,7 +70,8 @@ class HomeState extends State<HomeView> {
   Widget _buildDrawer() {
     BasePrefs.init();
     var value= BasePrefs.getString(USER_MODEL);
-    Details userDetails = Details.fromJson(jsonDecode(value));
+    printLog("datdatd",value.toString());
+    Details model = Details.fromJson(jsonDecode(value));
     return Container(
         width: 250,
         child: ClipRRect(
@@ -90,16 +91,20 @@ class HomeState extends State<HomeView> {
                             children: <Widget>[
                               CircleAvatar(
                                 radius: 50.0,
-                                backgroundImage: NetworkImage(userDetails!=null ? userDetails.avatarUrl : ""),
+                                backgroundImage: NetworkImage(model!=null ? model.avatarUrl : ""),
                                 backgroundColor: transparent,
                               ),
-                              Text(userDetails!=null ? "${userDetails.firstName} ${userDetails.lastName}" : "hi user",
+                              Expanded(child: Text(model.firstName!=null && model.billing.firstName!="" ?
+                              model.firstName!=null && model.firstName!=""?
+                              "Dear ${model.firstName.toUpperCase()}" : "Dear ${model.billing.firstName.toUpperCase()}" :
+                              "Hi User",
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w400,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     color: white),
-                              ),
+                              )),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
@@ -109,7 +114,7 @@ class HomeState extends State<HomeView> {
                                       padding:
                                           const EdgeInsets.only(right: 5.0),
                                       child: Text(
-                                        'Dark Mode',
+                                        'Day Mode',
                                         style: TextStyle(
                                             color: white,
                                             fontSize: 10,
@@ -196,7 +201,7 @@ class HomeState extends State<HomeView> {
                                   setState(() {
                                     if (value) {
                                       toast(USER_LOGOUT);
-                                      changeToNewScreen(context, SpleshScreen());
+                                     changeToNewScreen(context,SpleshScreen(), "/SplashScreen");
                                     }
                                   })
                                 });
@@ -206,7 +211,7 @@ class HomeState extends State<HomeView> {
                               Padding(
                                 padding: const EdgeInsets.only(right: 10.0),
                                 child: SvgPicture.asset(
-                                  'assets/icons/ic_logout.svg',
+                                 ic_logout,
                                   width: 20,
                                   height: 20,
                                   color: white,
@@ -235,5 +240,10 @@ class HomeState extends State<HomeView> {
     setState(() {
       _toggel = !_toggel;
     });
+  }
+  @override
+  void dispose() {
+    // Add code before the super
+    super.dispose();
   }
 }

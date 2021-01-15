@@ -34,6 +34,7 @@ const String SOCIAL_LOGIN_MODE = 'mode';
 const String CATEGORY_ID = 'category_id';
 const String PIC_URL = 'pic_url';
 const String LOGIN_STATUS_TRUE = 'User Logged in Successfully';
+const String PAY_METHOD_NOT_FOUND = 'please select payment method';
 const String PRODUCT_BY = 'product_By';
 const String CHOOSE_CATEGORY = 'Choose Category';
 
@@ -96,7 +97,7 @@ const String ic_sortby = "assets/icons/ic_sortby.svg";
 const String ic_support = "assets/icons/ic_support.svg";
 const String ic_trousers = "assets/icons/ic_trousers.svg";
 const String ic_watch = "assets/icons/ic_watch.svg";
-
+const String ic_likee = "assets/icons/ic_like.svg";
 /*-----------------IC_Images_Assets--------------------*/
 const String ic_bg_lock = "assets/images/bg_lock.png";
 const String ic_bg_login = "assets/images/bg_login.png";
@@ -150,3 +151,60 @@ List<SortBy> _sortByOptions = [
 List<CityModel> countryList = [
   CityModel(id: "101", sortname: "IN", name: "India", phonecode: "91")
 ];
+
+List<CityModel> stateList =[
+  CityModel(id: "1", sortname: "", name: "Andaman and Nicobar Islands", phonecode: "91"),
+  CityModel(id: "2", sortname: "", name: "Andhra Pradesh", phonecode: "91"),
+  CityModel(id: "3", sortname: "", name: "Arunachal Pradesh", phonecode: "91"),
+  CityModel(id: "4", sortname: "", name: "Assam", phonecode: "91"),
+  CityModel(id: "5", sortname: "", name: "Bihar", phonecode: "91"),
+  CityModel(id: "5", sortname: "", name: "Chandigarh", phonecode: "91"),
+  CityModel(id: "6", sortname: "", name: "Chhattisgarh", phonecode: "91"),
+  CityModel(id: "7", sortname: "", name: "Dadra and Nagar Haveli", phonecode: "91"),
+  CityModel(id: "8", sortname: "", name: "Daman and Diu", phonecode: "91"),
+  CityModel(id: "9", sortname: "", name: "Delhi", phonecode: "91"),
+  CityModel(id: "9", sortname: "", name: "Goa", phonecode: "91"),
+  CityModel(id: "10", sortname: "", name: "Gujarat", phonecode: "91"),
+  CityModel(id: "11", sortname: "", name: "Haryana", phonecode: "91"),
+  CityModel(id: "12", sortname: "", name: "Himachal Pradesh", phonecode: "91"),
+  CityModel(id: "13", sortname: "", name: "Jammu and Kashmir", phonecode: "91"),
+  CityModel(id: "14", sortname: "", name: "Jharkhand", phonecode: "91"),
+  CityModel(id: "15", sortname: "", name: "Karnataka", phonecode: "91"),
+  CityModel(id: "16", sortname: "", name: "Kenmore", phonecode: "91"),
+  CityModel(id: "17", sortname: "", name: "Kerala", phonecode: "91"),
+  CityModel(id: "18", sortname: "", name: "Lakshadweep", phonecode: "91"),
+  CityModel(id: "19", sortname: "", name: "Madhya Pradesh", phonecode: "91"),
+  CityModel(id: "20", sortname: "", name: "Maharashtra", phonecode: "91"),
+  CityModel(id: "21", sortname: "", name: "Manipur", phonecode: "91"),
+  CityModel(id: "22", sortname: "", name: "Meghalaya", phonecode: "91"),
+  CityModel(id: "23", sortname: "", name: "Mizoram", phonecode: "91"),
+  CityModel(id: "24", sortname: "", name: "Nagaland", phonecode: "91"),
+  CityModel(id: "25", sortname: "", name: "Narora", phonecode: "91"),
+  CityModel(id: "26", sortname: "", name: "Natwar", phonecode: "91"),
+  CityModel(id: "27", sortname: "", name: "Odisha", phonecode: "91"),
+  CityModel(id: "28", sortname: "", name: "Paschim Medinipu", phonecode: "91"),
+  CityModel(id: "29", sortname: "", name: "Pondicherry", phonecode: "91"),
+  CityModel(id: "30", sortname: "", name: "Punjab", phonecode: "91"),
+  CityModel(id: "31", sortname: "", name: "Rajasthan", phonecode: "91"),
+  CityModel(id: "32", sortname: "", name: "Sikkim", phonecode: "91"),
+  CityModel(id: "33", sortname: "", name: "Tamil Nadu", phonecode: "91"),
+  CityModel(id: "34", sortname: "", name: "Telangana", phonecode: "91"),
+  CityModel(id: "35", sortname: "", name: "Tripura", phonecode: "91"),
+  CityModel(id: "36", sortname: "", name: "Uttar Pradesh", phonecode: "91"),
+  CityModel(id: "37", sortname: "", name: "Uttarakhand", phonecode: "91"),
+  CityModel(id: "38", sortname: "", name: "Vaishali", phonecode: "91"),
+  CityModel(id: "39", sortname: "", name: "West Bengal", phonecode: "91"),
+
+
+
+
+
+
+];
+
+/*-------------------------payment--------------------------------*/
+const String paypalURL = "https://api.sandbox.paypal.com";
+const String paypalClientId = "AQpctZmexFjg0jjRFncorRO5ZbOTlARoFdEMWc3A3Sh2qEKXkRoLcdPaaXfAuNxnQItCVFCQl5oUTkOf";
+const String paypalSecretKey = "EIwYvq2epkKfi6df2ZBqU8Rh2lGNGYTPY-2cMDCesEegsmAo5WXPEhzK3fElsyqSiyPMwR8_QArOxKw5";
+const String returnURL = "return.snippetcoder.com";
+const String cancelURL = "cancel.snippetcoder.com";

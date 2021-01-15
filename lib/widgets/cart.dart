@@ -9,16 +9,8 @@ import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/providers/cart.dart';
-import 'package:wooapp/providers/product.dart';
-import 'package:wooapp/rest/WebApiServices.dart';
-import 'package:wooapp/rest/WebRequestConstants.dart';
-import 'package:wooapp/screens/productScreen.dart';
-import 'package:wooapp/services/product.dart';
 import 'package:wooapp/utils/custom_stepper.dart';
-import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/loading.dart';
-import 'package:wooapp/widgets/product.dart';
-import 'package:wooapp/widgets/progress_bar.dart';
 
 class WidgetCartItem extends StatefulWidget{
   CartDatum cartItem;
@@ -79,15 +71,15 @@ class _WidgetCartItemState extends State<WidgetCartItem>{
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
+                              Expanded(child: Text(
                                 cartItem.name,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 18,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Poppins'),
-                              ),
+                              )),
                               GestureDetector(onTap: (){
                                 printLog("onClick", "");
                                 loader.setLoadingStatus(true);
@@ -98,7 +90,7 @@ class _WidgetCartItemState extends State<WidgetCartItem>{
                               },
                               child:  CircleAvatar(
                                 radius: 10.0,
-                                backgroundColor: Colors.red,
+                                backgroundColor: Colors.red[200],
                                 child: Icon(
                                   Icons.close,
                                   color: Colors.white,

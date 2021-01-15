@@ -2,18 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
 import 'package:wooapp/providers/ThemeProvider.dart';
 import 'package:wooapp/providers/app.dart';
+import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/screens/favourite.dart';
 import 'package:wooapp/screens/home.dart';
 import 'package:wooapp/screens/profile.dart';
 import 'package:wooapp/screens/productBuilder.dart';
+import 'package:wooapp/utils/widget_helper.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class MainPageScreen extends StatefulWidget {
@@ -21,15 +24,14 @@ class MainPageScreen extends StatefulWidget {
   MainPageScreen({Key key, this.currentTab}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return MainPageScreenState(currentTab);
+    return MainPageScreenState();
   }
 }
 
 class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
   bool _toggel = true;
-  int currentTab;
 
-  MainPageScreenState(this.currentTab);
+
   final List<Widget> screens = [
     HomeView(),
     ShopView(),
@@ -46,8 +48,13 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
     ByCatgories("Terms of Service", 5, 'assets/icons/ic_support.svg'),
     ByCatgories("Give Feedback", 6, 'assets/icons/ic_rating.svg'),
   ];
-
-  final PageStorageBucket bucket = PageStorageBucket();
+  @override
+    void initState() {
+     var cart = Provider.of<CartProvider>(context, listen: false);
+     cart.getCartItemCount();
+      super.initState();
+    }
+    final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen(int screenId) {
     switch (screenId) {
       case 0:
@@ -64,17 +71,23 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageStorage(
-        child: currentScreen(currentTab),
+        child: currentScreen(widget.currentTab),
         bucket: bucket,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
-        child: SvgPicture.asset(
-          ic_shoppingcart,
-          color: Colors.white,
+        child: Stack(
+          children: <Widget>[
+            new Align(
+              child: SvgPicture.asset(
+                ic_shoppingcart,
+                color: Colors.white,
+              ),
+            ),
+            cartItem()
+          ],
         ),
         onPressed: () {
-
           changeScreen(context, CartScreen());
         },
       ),
@@ -94,8 +107,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                     minWidth: 80,
                     onPressed: () {
                       setState(() {
-                        currentTab = 0;
-                        currentScreen(currentTab);
+                        widget.currentTab = 0;
+                        currentScreen(widget.currentTab);
                       });
                     },
                     child: Column(
@@ -103,7 +116,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_home.svg",
-                          color: currentTab == 0 ? Colors.orange : Colors.grey,
+                          color: widget.currentTab == 0 ? Colors.orange : Colors.grey,
                         )
                       ],
                     ),
@@ -112,8 +125,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                     minWidth: 80,
                     onPressed: () {
                       setState(() {
-                        currentTab = 1;
-                        currentScreen(currentTab);
+                        widget.currentTab = 1;
+                        currentScreen(widget.currentTab);
                       });
                     },
                     child: Column(
@@ -121,7 +134,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_shop.svg",
-                          color: currentTab == 1 ? Colors.orange : Colors.grey,
+                          color: widget.currentTab == 1 ? Colors.orange : Colors.grey,
                         )
                       ],
                     ),
@@ -135,8 +148,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                     minWidth: 80,
                     onPressed: () {
                       setState(() {
-                        currentTab = 2;
-                        currentScreen(currentTab);
+                        widget.currentTab = 2;
+                        currentScreen(widget.currentTab);
                       });
                     },
                     child: Column(
@@ -144,7 +157,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_heart.svg",
-                          color: currentTab == 2 ? Colors.orange : Colors.grey,
+                          color: widget.currentTab == 2 ? Colors.orange : Colors.grey,
                         )
                       ],
                     ),
@@ -153,8 +166,8 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                     minWidth: 80,
                     onPressed: () {
                       setState(() {
-                        currentTab = 3;
-                        currentScreen(currentTab);
+                        widget.currentTab = 3;
+                        currentScreen(widget.currentTab);
                       });
                     },
                     child: Column(
@@ -162,7 +175,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_profile.svg",
-                          color: currentTab == 3 ? Colors.orange : Colors.grey,
+                          color: widget.currentTab == 3 ? Colors.orange : Colors.grey,
                         )
                       ],
                     ),
@@ -174,5 +187,31 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
         ),
       ),
     );
+  }
+  @override
+  void dispose() {
+    // Add code before the super
+    super.dispose();
+  }
+
+  Widget cartItem() {
+    return new Consumer<CartProvider>(builder:(context, cartModel, child){
+      if(cartModel.totalCartItem!=null && cartModel.totalCartItem>0){
+        return new Positioned(
+            right: 0,
+            child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child:  Container(
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    decoration: BoxDecoration(
+                      color: green_400,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(cartModel.totalCartItem.toString(), style: styleProvider(fontWeight: medium, size: 14, color: white),))
+            ));
+      }else{
+        return Container();
+      }
+    });
   }
 }

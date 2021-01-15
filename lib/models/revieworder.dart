@@ -117,7 +117,7 @@ class Product {
         : null;
     variationId = json['variation_id'];
     productName = json['product_name'];
-    productQty = json['product_qty'];
+    productQty = json['product_qty'].toString();
     productTotal = json['product_total'];
   }
 

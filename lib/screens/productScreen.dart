@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,7 @@ import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
+import 'package:wooapp/widgets/widgetVariableProduct.dart';
 import 'package:wooapp/widgets/widget_related_products.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -40,13 +43,18 @@ class ProductScreenState extends State<ProductScreen>{
   bool isApiCallProcess = false;
   WebApiServices _webApiServices;
   WebResponseModel _webResponseModel;
+  int colorIndex = 0;
+  int sizeIndex = 0;
+  int logoIndex = 0;
+  int variationId ;
+  Variation variation;
   @override
   void initState() {
    _webApiServices = new WebApiServices();
    _webResponseModel = new WebResponseModel();
+   variation = new Variation();
     super.initState();
   }
-
   Widget _cartDone(){
     return Padding(
       padding: const EdgeInsets.only(
@@ -81,15 +89,9 @@ class ProductScreenState extends State<ProductScreen>{
     if(widget.productModel.categories!=null){
       catergory= widget.productModel.categories[0].name;
     };
-    if(widget.productModel.attributes.isNotEmpty) {
-      printLog("productmodeid", widget.productModel.id.toString());
-       colorAttribute = widget.productModel.attributes[0] !=null ? widget.productModel.attributes[0] : null;
-       sizeAttribute = widget.productModel.attributes.length ==2  ? widget.productModel.attributes[1] : null;
-        printLog("productmodel", colorAttribute.options.length);
-        List<String> colorValue = [];
-        List<String> sizeValue = [];
-       printLog("colorArray", colorValue.toString());
-       printLog("sizeArray", sizeValue.toString());
+    List<NetworkImage> imgeLisr  = List<NetworkImage>();
+    for(int i=0; i<widget.productModel.images.length; i++){
+      imgeLisr.add(NetworkImage(widget.productModel.images[i].src));
     }
     return CustomScrollView(
       slivers: [
@@ -122,12 +124,109 @@ class ProductScreenState extends State<ProductScreen>{
             )
           ],
         ),
-        SliverPersistentHeader(
-          delegate: MySliverAppBar(expandedHeight: 350, productModel: widget.productModel),
-          pinned: true,
+        SliverToBoxAdapter(
+          child: Container(
+            height: 400,
+            child: Stack(
+              overflow: Overflow.visible,
+              children: [
+                Container(
+                  height: 300,
+                  child: Container(
+                    height: 300,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200]
+                    ),
+                    child:Carousel(
+                        boxFit: BoxFit.fill,
+                        autoplay: true,
+                        animationCurve: Curves.fastOutSlowIn,
+                        animationDuration: Duration(milliseconds: 1000),
+                        dotSize: 2.0,
+                        dotIncreaseSize: 6.0,
+                        dotBgColor: Colors.transparent,
+                        dotColor: grey_50,
+                        dotPosition: DotPosition.bottomCenter,
+                        showIndicator: true,
+                        indicatorBgPadding: 6.0,
+                        images:imgeLisr
+                    ),
+                  ),
+                ),
+                Positioned(
+                   top: 240,
+                    left: MediaQuery.of(context).size.width/13,
+                    child: Card(
+                      elevation: 3,
+                      child:  SizedBox(
+                        height:widget.productModel.type == Type.VARIABLE  ? 170: 145,
+                        width: MediaQuery.of(context).size.width/1.2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left:30.0, top: 8, right: 8, bottom: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  GestureDetector(onTap: (){
+                                    printLog("ftyftftf", "bjbug");
+                                  },
+                                    child: Text(widget.productModel.name,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black)),),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 30),
+                                    child:  Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Icon( Icons.star, color: Colors.orange,size: 20,),
+                                        Text("{"+ widget.productModel.ratingCount.toString()+ "}",
+
+                                            style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.black)),
+                                      ],
+                                    ),
+                                  ),
+                                ],),
+                              SizedBox(
+                                height: widget.productModel.type == Type.VARIABLE  ? 10: 20,
+                              ),
+                              Text(parse(widget.productModel.description).documentElement.text,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: dp10,
+                                    fontWeight: medium,
+                                    color: black,
+                                  )),
+                              GestureDetector(
+                                onTap: (){
+
+                                  printLog("ftyftftf", "bjbug");
+                                },
+                                child: varibleProvider(widget.productModel.attributes),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+          ),
         ),
         SliverPadding(
-          padding: const EdgeInsets.only(top:150.0, left: 30, right:28, bottom: 10),
+          padding: widget.productModel.type == Type.VARIABLE  ? EdgeInsets.only(top:20.0, left: 30, right:28, bottom: 10) :
+          EdgeInsets.only(top:0.0, left: 30, right:28, bottom: 10),
           sliver: SliverToBoxAdapter(
               child:Card(
                 elevation: 10,
@@ -247,7 +346,178 @@ class ProductScreenState extends State<ProductScreen>{
       ],
     );
   }
+  Widget varibleProvider(List<Attribute>attributeList ){
+    return  Container(
+        child: ListView.builder(
+          padding: EdgeInsets.zero,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemBuilder: (context, index){
+            return  Padding(
+                padding: const EdgeInsets.only(top:15.0),
+                child: variableBuilder(attributeList[index])
+            );
+          }, itemCount:attributeList.length,)
+    );
+  }
+  Widget variableBuilder(Attribute attribute){
 
+    switch (attribute.name){
+      case Name.COLOR:
+        Iterable l = attribute.options;
+        List<OptionClass> model = List<OptionClass>.from(l.map((model)=> OptionClass.fromJson(model)));
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text("Color :",
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black)),
+            Padding(
+              padding: const EdgeInsets.only(left:10.0),
+              child: Container(
+                width: 200,
+                height: 20,
+                child:  ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: ClampingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    variationId = model[colorIndex].termId;
+                    this.variation.paColor= model[colorIndex].slug;
+                    return Padding(
+                      padding: const EdgeInsets.only(left:8.0, ),
+                      child: GestureDetector(onTap: (){
+                        setState(() {
+                          colorIndex= index;
+                          this.variation.paColor= model[0].slug;
+                          variationId = model[index].termId;
+                        });
+                      },
+                          child:  Container(
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color:  colorIndex==index ? Colors.orange : Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(5.0))
+                            ),
+                            child: Center(
+                              child: Text(
+                                model[index].name, style: TextStyle(color:  colorIndex==index ?  Colors.white: Colors.black, fontWeight: medium, fontSize: 12), textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          )),
+                    );
+                  },itemCount: attribute.options.length,
+                ),
+              ),
+            )
+          ],
+        );
+        break;
+      case Name.LOGO:
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text("Logo :",
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black)),
+            Padding(
+              padding: const EdgeInsets.only(left:10.0),
+              child: Container(
+                width: 200,
+                height: 20,
+                child:  ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: ClampingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    this.variation.logo= attribute.options[logoIndex];
+                    return GestureDetector(onTap: (){
+                      setState(() {
+                        logoIndex= index;
+                        this.variation.logo= attribute.options[index];
+                      });
+                    },
+                        child:  Container(
+                          width: 50,
+                          decoration: BoxDecoration(
+                              color:  logoIndex==index ? Colors.orange : Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(5.0))
+                          ),
+                          child: Center(
+                            child: Text(
+                              attribute.options[index], style: TextStyle(color:  logoIndex==index ?  Colors.white: Colors.black, fontWeight: medium, fontSize: 12), textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ));
+                  },itemCount: attribute.options.length,
+                ),
+              ),
+            )
+          ],
+        );
+        break;
+      case Name.SIZE:
+        Iterable l = attribute.options;
+        List<OptionClass> model = List<OptionClass>.from(l.map((model)=> OptionClass.fromJson(model)));
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text("Size :",
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black)),
+            Padding(
+              padding: const EdgeInsets.only(left:10.0),
+              child: Container(
+                width: 200,
+                height: 20,
+                child:  ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: ClampingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    this.variation.paSize= model[sizeIndex].slug;
+                    return GestureDetector(onTap: (){
+                      setState(() {
+                        sizeIndex = index;
+                        this.variation.paSize= model[index].slug.toString();
+                      });
+                    },
+                        child:  Container(
+                          width: 60,
+                          decoration: BoxDecoration(
+                              color:  sizeIndex==index ? Colors.orange : Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(5.0))
+                          ),
+                          child: Center(
+                            child: Text(
+                              model[index].name, style: TextStyle(color:  sizeIndex==index ?  Colors.white: Colors.black, fontWeight: medium, fontSize: 12), textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ));
+                  },itemCount: attribute.options.length,
+                ),
+              ),
+            )
+          ],
+        );
+        break;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return
@@ -287,7 +557,7 @@ class ProductScreenState extends State<ProductScreen>{
                               style: TextStyle(
                                   color: orange,
                                   fontFamily: 'Poppins',
-                                  fontSize: 14.0,
+                                  fontSize: 20.0,
                                   fontWeight: semiBold, decoration: TextDecoration.lineThrough,decorationThickness: 2.85
                               ),
                             ),
@@ -297,7 +567,7 @@ class ProductScreenState extends State<ProductScreen>{
                         style: TextStyle(
                           color: black,
                           fontFamily: 'Poppins',
-                          fontSize: 14.0,
+                          fontSize: 20.0,
                           fontWeight: semiBold,
                         ),
                       )
@@ -313,20 +583,40 @@ class ProductScreenState extends State<ProductScreen>{
                           ),
                           child: GestureDetector(
                             onTap: (){
-                              setState(() {
-                                isApiCallProcess = true;
-                              });
-                              _webApiServices.getAddToCart(widget.productModel.id, "1").then((value) {
-                              _webResponseModel = value;
-                              if(_webResponseModel.code=="1"){
-                                cartDialog(_webResponseModel.message);
-                              }else{
-                                toast(_webResponseModel.message);
+                              VariableProduct vproduct  = VariableProduct(id: widget.productModel.id,
+                              quantity: 1, variationId: variationId, variation: variation);
+                              if(widget.productModel.type != Type.VARIABLE ){
+                                setState(() {
+                                  isApiCallProcess = true;
+                                });
+                                _webApiServices.getAddToCart(widget.productModel.id, "1").then((value) {
+                                  _webResponseModel = value;
+                                  if(_webResponseModel.code=="1"){
+                                    cartDialog(_webResponseModel.message);
+                                  }else{
+                                    toast(_webResponseModel.message);
+                                  }
+                                  setState(() {
+                                    isApiCallProcess = false;
+                                  });
+                                });
                               }
-                              setState(() {
-                                isApiCallProcess = false;
-                              });
-                              });
+                              else{
+                                setState(() {
+                                  isApiCallProcess = true;
+                                });
+                                _webApiServices.getAddToCartVariationProduct(variableProduct:vproduct).then((value) {
+                                  _webResponseModel = value;
+                                  if(_webResponseModel.code=="1"){
+                                    cartDialog(_webResponseModel.message);
+                                  }else{
+                                    toast(_webResponseModel.message);
+                                  }
+                                  setState(() {
+                                    isApiCallProcess = false;
+                                  });
+                                });
+                              }
                               },
                             child:  Padding(
                               padding: const EdgeInsets.only(top:5.0, bottom: 5.0, left: 0, right: 0),
@@ -504,231 +794,55 @@ class ProductScreenState extends State<ProductScreen>{
         });
   }
 }
-class MySliverAppBar extends SliverPersistentHeaderDelegate{
-  final double expandedHeight;
-  ProductModel productModel;
 
-  MySliverAppBar({@required this.expandedHeight, this.productModel});
-  List<ColorBy> sortByColor = [
-    ColorBy(Colors.green, Colors.green[100],false),
-    ColorBy(Colors.orange, Colors.orange[100], false),
-    ColorBy(Colors.blue, Colors.blue[100], false),
-    ColorBy(Colors.grey, Colors.grey[100], false),
-    ColorBy(Colors.red, Colors.red[100], false),
-    ColorBy(Colors.yellow, Colors.yellow[100], false),
-  ];
-  List<SortBy> sortBy = [
-    SortBy("xs", "XS", ""),
-    SortBy("s", "S", ""),
-    SortBy("m","M", ""),
-    SortBy("l","L", ""),
-    SortBy("xl","XL", ""),
-    SortBy("xxl","XXL", ""),
-  ];
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    bool IsColorAttribute;
-    bool IsSizeAttribute;
-    if(productModel.attributes!=null){
-      for (int i=0; i<productModel.attributes.length; i++){
-         if(productModel.attributes[i].name=="Color"){
-           IsColorAttribute=true;
-         }if(productModel.attributes[i].name=="Size"){
-           IsSizeAttribute=true;
-         }
-      }
-    }
+class VariableProduct {
+  VariableProduct({
+    this.id,
+    this.quantity,
+    this.variationId,
+    this.variation,
+  });
 
-    List<NetworkImage> imgeLisr  = List<NetworkImage>();
-    for(int i=0; i<productModel.images.length; i++){
-     imgeLisr.add(NetworkImage(productModel.images[i].src));
-    }
-    return Stack(
-      fit: StackFit.expand,
-      overflow: Overflow.visible,
-      children: [
-        Container(
-          height: 350,
-          decoration: BoxDecoration(
-              color: Colors.grey[200]
-          ),
-          child:Carousel(
-            boxFit: BoxFit.fill,
-            autoplay: true,
-            animationCurve: Curves.fastOutSlowIn,
-            animationDuration: Duration(milliseconds: 1000),
-            dotSize: 2.0,
-            dotIncreaseSize: 6.0,
-            dotBgColor: Colors.transparent,
-            dotColor: grey_50,
-            dotPosition: DotPosition.bottomCenter,
-            showIndicator: true,
-            indicatorBgPadding: 6.0,
-            images:imgeLisr
-          ),
-        ),
-        Center(
-          child: Opacity(
-            opacity: shrinkOffset / expandedHeight,
-            child: Text(
-              '',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w700,
-                fontSize: 23,
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-            top: expandedHeight/1.1-shrinkOffset,
-            left: MediaQuery.of(context).size.width/13,
-            child: Opacity(
-              opacity: 1-shrinkOffset/expandedHeight,
-              child: Card(
-                elevation: 3,
-                child:  SizedBox(
-                  height: 170,
-                  width: MediaQuery.of(context).size.width/1.2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left:30.0, top: 8, right: 8, bottom: 8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(productModel.name,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black)),
-                            Padding(
-                              padding: EdgeInsets.only(right: 30),
-                              child:  Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Icon( Icons.star, color: Colors.orange,size: 20,),
-                                  Text("{"+ productModel.ratingCount.toString()+ "}",
+  int id;
+  int quantity;
+  int variationId;
+  Variation variation;
 
-                                      style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black)),
-                                ],
-                              ),
-                            ),
-                          ],),
-                        Text(parse(productModel.description).documentElement.text,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: dp10,
-                                fontWeight: medium,
-                                color: black,
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.only(top:15.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text("Size :",
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black)),
-                              Padding(
-                                padding: const EdgeInsets.only(left:10.0),
-                                child: Container(
-                                  height: 20,
-                                  child: ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(onTap: (){
+  factory VariableProduct.fromJson(Map<String, dynamic> json) => VariableProduct(
+    id: json["id"],
+    quantity: json["quantity"],
+    variationId: json["variation_id"],
+    variation: Variation.fromJson(json["variation"]),
+  );
 
-                                      },
-                                          child:  Container(
-                                            width: 30,
-                                            decoration: BoxDecoration(
-                                                color:  Colors.white,
-                                                borderRadius: BorderRadius.all(Radius.circular(5.0))
-                                            ),
-                                            child: Center(child: Text(sortBy[index].text, style: TextStyle(color:  Colors.black), textAlign: TextAlign.center,)),
-                                          ));
-                                    },itemCount: sortBy.length,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top:10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text("Color :",
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black)),
-                              Padding(
-                                padding: const EdgeInsets.only(left:10.0),
-                                child: Container(
-                                  height: 50.0,
-                                  child: ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(onTap: (){
-                                      },
-                                          child:  Container(
-                                            height: 25,
-                                            width: 25,
-                                            padding: EdgeInsets.only(left: 5, right: 5),
-                                            margin: EdgeInsets.only(left: 5, right: 5),
-                                            decoration: ShapeDecoration(
-                                                color: sortByColor[index].centerColor,
-                                                shape: CircleBorder(
-                                                    side: BorderSide(width: 6,
-                                                        color: sortByColor[index].borderColor )
-                                                )
-                                            ),
-                                          ));
-                                    },itemCount: sortBy.length,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )),
-      ],
-    );
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "quantity": quantity,
+    "variation_id": variationId,
+    "variation": variation.toJson(),
+  };
+}
 
-  }
-  @override
-  // TODO: implement maxExtent
-  double get maxExtent => expandedHeight;
+class Variation {
+  Variation({
+    this.paColor,
+    this.paSize,
+    this.logo
+  });
 
-  @override
-  // TODO: implement minExtent
-  double get minExtent => kToolbarHeight;
+  String paColor;
+  String paSize;
+  String logo;
 
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate)=>true;
+  factory Variation.fromJson(Map<String, dynamic> json) => Variation(
+    paColor: json["pa_color"],
+    paSize: json["pa_size"],
+    logo: json["logo"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "pa_color": paColor,
+    "pa_size": paSize,
+    "logo":logo
+  };
 }
