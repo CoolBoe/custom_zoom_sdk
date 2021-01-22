@@ -5,15 +5,15 @@ import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/order.dart';
 import 'package:wooapp/widgets/loading.dart';
 
-class WidgetOrderItem extends StatefulWidget{
+class WidgetLineItem extends StatefulWidget{
 
-  OrderModel orderItem;
-  WidgetOrderItem({this.orderItem});
+  LineItems lineItems;
+  WidgetLineItem({this.lineItems});
   @override
-  WidgetOrderItemState createState()=>WidgetOrderItemState();
+  WidgetLineItemState createState()=>WidgetLineItemState();
 
 }
-class WidgetOrderItemState extends State<WidgetOrderItem>{
+class WidgetLineItemState extends State<WidgetLineItem>{
 
   @override
   void initState() {
@@ -24,7 +24,6 @@ class WidgetOrderItemState extends State<WidgetOrderItem>{
     return widgetBuilder();
   }
   Widget widgetBuilder() {
-    printLog("datadtadtf", widget.orderItem.lineItems);
     return Container(
         child: Padding(
           padding: const EdgeInsets.only(top:10.0),
@@ -32,7 +31,7 @@ class WidgetOrderItemState extends State<WidgetOrderItem>{
             alignment: Alignment.topLeft,
             decoration: BoxDecoration(color: pink_10,
                 border: Border.all(
-                color: grey_400, width: 1.0),
+                    color: grey_400, width: 1.0),
                 borderRadius:
                 BorderRadius.all(Radius.circular(dp10))
             ),
@@ -44,8 +43,8 @@ class WidgetOrderItemState extends State<WidgetOrderItem>{
                 children: <Widget>[
                   Container(
                     width: 90,
-                    child: Image.network(widget.orderItem.lineItems !=null && widget.orderItem.lineItems.length>0?
-                    widget.orderItem.lineItems[0].img_src : ""),
+                    child: Image.network(widget.lineItems !=null?
+                    widget.lineItems.img_src : ""),
                   ),
                   Container(
                     width: 200,
@@ -57,7 +56,7 @@ class WidgetOrderItemState extends State<WidgetOrderItem>{
                         Row(
                           children: [
                             Expanded(child: Text(
-                              widget.orderItem.lineItems !=null && widget.orderItem.lineItems.length>0 ? widget.orderItem.lineItems[0].name : "",
+                              widget.lineItems !=null ? widget.lineItems.name : "",
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: Colors.black,
@@ -65,50 +64,25 @@ class WidgetOrderItemState extends State<WidgetOrderItem>{
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Poppins'),
                             )),
-                            Visibility(
-                              visible: widget.orderItem.lineItems.length>1,
-                              child: Text(
-                                "one more Item",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Poppins'),
-                              ),),
                           ],
                         ),
                         SizedBox(height: 5,),
                         Text(
-                          "₹ ${widget.orderItem.total.toString()}",
+                          widget.lineItems.sku.toString(),
                           style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.grey,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'Poppins'),
                         ),
                         SizedBox(height: 5,),
                         Text(
-                        widget.orderItem.orderStatus!=null ?  "Order Status:- ${widget.orderItem.orderStatus}" :  "Order Status:- Pending",
+                          "₹ ${widget.lineItems.total.toString()}",
                           style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
                               fontFamily: 'Poppins'),
-                        ),
-                        SizedBox(height: 20,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              widget.orderItem.billing.firstName!=null ?  "Order By:- ${widget.orderItem.billing.firstName}" :  "",
-                              style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Poppins'),
-                            ),
-                          ],
                         ),
                       ],
                     ),

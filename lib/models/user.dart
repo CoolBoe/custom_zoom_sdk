@@ -20,7 +20,7 @@ class UserModel {
     code = json['code'];
     status = json['status'];
     userId = json['user_id'];
-    referEarn = json['refer_earn'];
+    referEarn = json['refer_earn'] is String ? json['refer_earn']:"Not Found";
     error = json['error'];
     msg = json['msg'];
     details =

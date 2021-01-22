@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
 import 'package:wooapp/models/user.dart';
+import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/delivery.dart';
 import 'package:wooapp/screens/editAccount.dart';
 import 'package:wooapp/screens/language.dart';
@@ -43,15 +45,26 @@ class ProfileState extends State<ProfileView> {
       ByCatgories("Privacy Settings", 6, ic_rating),
     ];
     BasePrefs.init();
-    var value= BasePrefs.getString(USER_MODEL);
-    Details model = Details.fromJson(jsonDecode(value));
+    Details model;
+    if( BasePrefs.getString(USER_MODEL)!=null){
+      var value= BasePrefs.getString(USER_MODEL);
+      printLog("datdatd",value.toString());
+      model = Details.fromJson(jsonDecode(value));
+    }
+    String date;
+    if(model.dateCreated!=null){
+      DateTime tempDate =  DateTime.parse(model.dateCreated);
+      date = DateFormat("MM/yyyy").format(tempDate);
+    }
+
+    var user= Provider.of<UserProvider>(context, listen: false);
     return Column(
       children: <Widget>[
 
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            circularImageView(imageUrl: model!=null ? model.avatarUrl : "",
+            circularImageView(imageUrl: user.getProfileImage(),
             onCallback: (value){
 
             }),
@@ -59,7 +72,9 @@ class ProfileState extends State<ProfileView> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(),
-                  child: Text(model.firstName!=null && model.billing.firstName!="" ?
+                  child: Text(
+                      model==null ? "Hi User":
+                      model.firstName!=null && model.billing.firstName!="" ?
                   model.firstName!=null && model.firstName!=""?
                   "Dear ${model.firstName.toUpperCase()}" : "Dear ${model.billing.firstName.toUpperCase()}" :
                   "Hi User",
@@ -67,7 +82,7 @@ class ProfileState extends State<ProfileView> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(),
-                  child: Text(model!=null ? model.dateCreated : "",
+                  child: Text(model!=null ? "Member Since: $date" : "",
                       style: styleProvider(fontWeight: regular, size: 10, color: black)),
                 ),
                 GestureDetector(onTap: (){
@@ -104,7 +119,7 @@ class ProfileState extends State<ProfileView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               GestureDetector(onTap: (){
-                changeScreen(context, OrderScreen());
+                changeScreen(context, OrderHistory());
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 20.0),

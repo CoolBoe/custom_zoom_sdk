@@ -12,6 +12,10 @@ class CategoriesProvider with ChangeNotifier {
   List<CategoryModel> categories ;
   List<CategoryModel> get allCategories=> categories;
 
+  CategoriesProvider.initialize(){
+    fetchCategories();
+  }
+
   fetchCategories()async{
     categories  = await WebApiServices().getCategories();
     notifyListeners();

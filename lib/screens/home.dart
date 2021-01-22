@@ -15,6 +15,7 @@ import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/category.dart';
 import 'package:wooapp/providers/product.dart';
+import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/category.dart';
 import 'package:wooapp/screens/mainpage.dart';
@@ -27,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/screens/splesh.dart';
+import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/item_DrawerBuilder.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
@@ -62,6 +64,35 @@ class HomeState extends State<HomeView> {
     return CustomScrollView(
       slivers: <Widget>[
         imageCarousel(context),
+       SliverToBoxAdapter(
+         child:  Container(
+           height: 230,
+           color: grey_200,
+           child:   Carousel(
+             boxFit: BoxFit.fill,
+             autoplay: true,
+             animationCurve: Curves.fastOutSlowIn,
+             animationDuration: Duration(milliseconds: 1000),
+             dotSize: 2.0,
+             dotIncreaseSize: 6.0,
+             dotBgColor: transparent,
+             dotColor: grey,
+             dotPosition: DotPosition.bottomCenter,
+             showIndicator: true,
+             indicatorBgPadding: 6.0,
+             images: [
+               NetworkImage(
+                   "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_7_front-600x600.jpg"),
+               NetworkImage(
+                   "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_6_front-600x600.jpg"),
+               NetworkImage(
+                   "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_2_front-600x600.jpg"),
+               NetworkImage(
+                   "https://app.tutiixx.com/wp-content/uploads/2019/01/T_1_front-600x600.jpg")
+             ],
+           ),
+         ),
+       ),
         WidgetCategories(),
       ],
     );
@@ -69,9 +100,13 @@ class HomeState extends State<HomeView> {
   }
   Widget _buildDrawer() {
     BasePrefs.init();
-    var value= BasePrefs.getString(USER_MODEL);
-    printLog("datdatd",value.toString());
-    Details model = Details.fromJson(jsonDecode(value));
+    Details model;
+    if( BasePrefs.getString(USER_MODEL)!=null){
+      var value= BasePrefs.getString(USER_MODEL);
+      printLog("datdatd",value.toString());
+       model = Details.fromJson(jsonDecode(value));
+    }
+    var user= Provider.of<UserProvider>(context, listen: false);
     return Container(
         width: 250,
         child: ClipRRect(
@@ -91,10 +126,12 @@ class HomeState extends State<HomeView> {
                             children: <Widget>[
                               CircleAvatar(
                                 radius: 50.0,
-                                backgroundImage: NetworkImage(model!=null ? model.avatarUrl : ""),
+                                backgroundImage: NetworkImage(user.getProfileImage()),
                                 backgroundColor: transparent,
                               ),
-                              Expanded(child: Text(model.firstName!=null && model.billing.firstName!="" ?
+                              Expanded(child: Text(
+                                model==null ? "Hi User":
+                                model.firstName!=null && model.billing.firstName!="" ?
                               model.firstName!=null && model.firstName!=""?
                               "Dear ${model.firstName.toUpperCase()}" : "Dear ${model.billing.firstName.toUpperCase()}" :
                               "Hi User",

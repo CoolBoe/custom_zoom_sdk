@@ -17,6 +17,7 @@ import 'package:wooapp/models/user.dart';
 import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/user.dart';
+import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/screens/basePage.dart';
 import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/screens/delivery.dart';
@@ -124,9 +125,29 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: GestureDetector(
-                      onTap: () {
-                     // createOrder(userId: model.id, paymentMethod: paymentMethod);
-                     thankyouDialog("For Your Orders");
+                      onTap: () async{
+                        var loader = Provider.of<LoaderProvider>(context, listen: false);
+                        loader.setLoadingStatus(true);
+                        BasePrefs.init();
+                        Details model;
+                        if( BasePrefs.getString(USER_MODEL)!=null){
+                          var value= BasePrefs.getString(USER_MODEL);
+                          printLog("datdatd",value.toString());
+                          model = Details.fromJson(jsonDecode(value));
+                        }
+                        WebApiServices().updateBilling(user_id:model.id.toString(),shipping: model.billing).then((value){
+                          if(value.status==1){
+                            Details details = value.details;
+                            printLog("dtdtdtdt", details.toJson());
+                            BasePrefs.setString(USER_MODEL, json.encode(details));
+                            changeScreen(context, CheckOutScreen(total:widget.total));
+                            printLog("datafat", details.toJson().toString());
+                          }
+                          // _saveForNextUse(title, model);
+                          loader.setLoadingStatus(false);
+                          createOrder(userId: model.id, paymentMethod: paymentMethod);
+                        });
+
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -617,13 +638,11 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
           case "bacs":
             cart.getUpdateOrder(order_id: orderModel.id.toString(), status: "on-hold").then((value){
               if(value){
-                toast("Order Placed");
                 thankyouDialog("For Your Orders");
               }else{
-                toast(NETWORK_ERROR);
+                toast("Order Placed");
               }
             });
-            thankyouDialog("For Your Orders");
             break;
           case "cheque":
             cart.getUpdateOrder(order_id: orderModel.id.toString(), status: "processing").then((value){
@@ -631,7 +650,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                 toast("Order Placed");
                 thankyouDialog("For Your Orders");
               }else{
-                toast(NETWORK_ERROR);
+                toast("Order Placed");
               }
             });
             break;
@@ -641,11 +660,12 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                 toast("Order ");
                 thankyouDialog("For Your Orders");
               }else{
-                toast(NETWORK_ERROR);
+                toast("Order Placed");
               }
             });
             break;
           case "paypal":
+            toast(NETWORK_ERROR);
             break;
           case "razor":
             RazorPaymentService razorPaymentService = new RazorPaymentService();
@@ -655,9 +675,9 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                 email: model.billing.email,
                 mobile: model.billing.phone,
                 orderId: orderModel.orderKey);
-            thankyouDialog("For Your Orders");
             break;
           case "paytm":
+            toast(NETWORK_ERROR);
             break;
         }
       });
@@ -795,9 +815,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top:20.0, left: 20, right:20, bottom: 20),
                         child: customButton(title :"Continue Shopping", onPressed: (){
-                          MainPageScreenState().dispose();
-                         changeToNewScreen(context, MainPageScreen(currentTab: 0,), "/MainPage");
-                         dispose();
+                         changeScreen(context, MainPageScreen(currentTab: 0,));
                         }),
                       )
                     ],

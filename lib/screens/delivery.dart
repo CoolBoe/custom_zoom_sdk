@@ -81,7 +81,6 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
              loader.setLoadingStatus(false);
            });
         }
-
       },),
     );
   }

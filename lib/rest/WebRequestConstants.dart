@@ -36,7 +36,6 @@ class WebRequestConstants {
   static const String SORT = "sort";
   static const String PAGE = "page";
   static const String PER_PAGE = "per_page";
-
   static const String CUSTOMERS = "customers";
   static const String UPDATE_BILLING = "checkout/update-billing";
   static const String PAYTM_CHECKSUM = "paytm-checksum";
@@ -45,7 +44,7 @@ class WebRequestConstants {
   static const String NEW_ORDER ="checkout/new-order";
   static const String PAYMENT_GATEWAY = "checkout/payment-gateway";
   static const String REVIEW_ORDER = "checkout/review-order";
-  static const String ORDERS = "orders";
+  static const String ORDERS = "order-list";
   static const String ORDER_ID = "ORDER_ID";
   static const String CUST_ID_METHOD = "CUST_ID METHOD";
 
@@ -57,6 +56,7 @@ class WebRequestConstants {
   static const String CART_CLEAR = "cart/clear";
   static const String CART_TOTAL = "cart/totals";
   static const String COUPON = "coupons";
+  static const String CART_COUPON = "cart/coupon";
   static const String REMOVE_COUPON = "cart/remove-coupon";
   static const String CART_ITEM_COUNT = "cart/item-count";
   static const String QUANTITY = "quantity";

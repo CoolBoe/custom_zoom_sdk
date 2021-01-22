@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/screens/searchProduct.dart';
 
   Widget BaseAppBar (BuildContext context, String pageName,{Widget prefixIcon, Widget suffixIcon}) {
     return AppBar(
@@ -29,7 +30,11 @@ import 'package:wooapp/helper/screen_navigator.dart';
       actions: <Widget>[
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: suffixIcon!=null ? suffixIcon : SvgPicture.asset(ic_search),
+          child: suffixIcon!=null ? suffixIcon : GestureDetector(onTap: (){
+          changeScreen(context, SearchScreen());
+          },
+          child: SvgPicture.asset(ic_search),
+          )
         )
       ],
     );

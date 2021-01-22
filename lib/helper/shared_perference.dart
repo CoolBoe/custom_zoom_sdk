@@ -40,8 +40,8 @@ class BasePrefs {
   }
 
 
-  static String getString(String key, [String defValue]) {
-    return _preferences.getString(key);
+  static String getString(String key, {String defValue}) {
+    return _preferences.getString(key)!=null ?_preferences.getString(key) : defValue;
   }
 
   static Future<bool> setString(String key, String value) async {

@@ -14,6 +14,7 @@ class ProductsProvider with ChangeNotifier {
   List<ProductModel> _productListByFeatured ;
   List<ProductModel> _productListByRelated;
   SortBy _sortBy;
+  bool loader= false;
   List<ProductModel> get allProducts => _productList;
   List<ProductModel> get allProductsByFeature => _productListByFeatured;
   List<ProductModel> get allproductListByRelated =>_productListByRelated;
@@ -25,9 +26,12 @@ class ProductsProvider with ChangeNotifier {
   // getLoadMoreByFeatureStatue()=>loadMoreStatus;
   // getLoadMoreByRelatedStatue()=>loadMoreStatus;
 
-  ProductsProvider(){
-    resetStreams();
+  ProductsProvider.initialize(){
+    _productList = List<ProductModel>();
+    _webApiServices= WebApiServices();
     _sortBy = SortBy("default", "Default", "asc");
+    fetchProducts(1);
+    fetchProductByFeatured(1);
   }
   void resetStreams() {
     _webApiServices = WebApiServices();
@@ -46,10 +50,13 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
   fetchProducts(pageNumber, {String sortBy, String str_search, String brand, String max_price, String min_price, String on_sale, bool featured, String category_id,}) async{
+    loader= true;
+    printLog("fetchProducts", str_search);
     List<ProductModel> itemModel = await _webApiServices.getProducts(sort: this._sortBy.value, category_id: category_id, page: this.page, per_page: this.per_page, str_search: str_search, brand: brand, featured: featured, on_sale: on_sale, max_price: max_price, min_price: min_price);
     if(itemModel.length>0){
       _productList.addAll(itemModel);
     }
+    loader= false;
     // setLoadingState(LoadMoreStatus.STABLE);
     notifyListeners();
   }

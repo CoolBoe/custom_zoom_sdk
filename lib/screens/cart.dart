@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,11 +8,15 @@ import 'package:wooapp/helper/color.dart';
 import 'package:html/parser.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
+import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/screens/basePage.dart';
 import 'package:wooapp/screens/checkout.dart';
+import 'package:wooapp/screens/login.dart';
 import 'package:wooapp/screens/offer.dart';
+import 'package:wooapp/screens/registration.dart';
+import 'package:wooapp/screens/splesh.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/app_bar.dart';
@@ -37,6 +43,7 @@ class CartScreenState extends BasePageState<CartScreen> {
   String total;
   String totalAmount;
   String shipping_Flat;
+  Timer _timer;
   String shipping_Free;
   @override
   void initState() {
@@ -118,8 +125,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14)),
+                                          fontWeight: FontWeight.w600, fontSize: 14)),
                                 ],
                               ),
                             ),
@@ -298,7 +304,12 @@ class CartScreenState extends BasePageState<CartScreen> {
                       child: Visibility(visible:cartData.cartData!=null && cartData.cartData.length>0,
                         child: GestureDetector(
                           onTap: () {
-                            changeScreen(context, CheckOutScreen(total: total));
+                            BasePrefs.init();
+                            if(BasePrefs.getString(USER_MODEL)!=null){
+                              changeScreen(context, CheckOutScreen(total: total));
+                            }else{
+                              loginDialog();
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -352,7 +363,8 @@ class CartScreenState extends BasePageState<CartScreen> {
       padding: const EdgeInsets.only(top: 10.0, left: 30, right: 30),
       child: GestureDetector(
         onTap: () {
-          changeScreenReplacement(context, OfferScreen());
+          changeScreenReplacement(context, OfferScreen(list: cartData.coupon,));
+
         },
         child: Card(
           elevation: 2,
@@ -637,5 +649,153 @@ class CartScreenState extends BasePageState<CartScreen> {
     double price = getValidDecimalInDouble(discount_total)+getValidDecimalInDouble(taxes)+getValidDecimalInDouble(cart_subtotal)+getValidDecimalInDouble(getShippingPrice());
     return total;
   }
-
+  void loginDialog() {
+    showGeneralDialog(
+        barrierLabel: "label",
+        barrierDismissible: true,
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: Duration(milliseconds: 700),
+        context: context,
+        pageBuilder: (context, anim1, anim2) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(3))),
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 30),
+                              child: Text("LOGIN",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text("You need to login/register first",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                         GestureDetector(onTap: (){
+                           Navigator.pop(context);
+                         _timer=   new Timer(Duration(microseconds: 1000), (){
+                             changeScreen(context, LoginScreen());
+                           });
+                         },
+                         child: Padding(
+                             padding:
+                             EdgeInsets.only(left: 00, top: 10, right: 00),
+                             child: Container(
+                                 width: 150,
+                                 color: Colors.transparent,
+                                 child: Padding(
+                                   padding: const EdgeInsets.all(8.0),
+                                   child: Container(
+                                     height: 40,
+                                     decoration: BoxDecoration(
+                                       color: Colors.orange,
+                                       borderRadius: BorderRadius.all(
+                                           Radius.circular(10)),
+                                     ),
+                                     child: Padding(
+                                       padding: const EdgeInsets.only(
+                                           left: 35.0,
+                                           right: 35,
+                                           top: 5,
+                                           bottom: 5),
+                                       child: Center(
+                                         child: Text('Login',
+                                             style: TextStyle(
+                                                 color: Colors.white,
+                                                 fontFamily: 'Poppins',
+                                                 fontWeight: FontWeight.w400,
+                                                 fontSize: 12)),
+                                       ),
+                                     ),
+                                   ),
+                                 ))),),
+                        GestureDetector(onTap: (){
+                          Navigator.pop(context);
+                          changeScreen(context, SpleshScreen());
+                        },
+                        child:   Padding(
+                            padding:
+                            EdgeInsets.only(left: 00, top: 10, right: 00),
+                            child: Container(
+                                width: 150,
+                                color: Colors.transparent,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10)),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0,
+                                          right: 20,
+                                          top: 5,
+                                          bottom: 5),
+                                      child: Center(
+                                        child: Text('Register',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'Poppins',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12)),
+                                      ),
+                                    ),
+                                  ),
+                                ))),),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+        transitionBuilder: (context, anim1, anim2, child) {
+          return SlideTransition(
+            position:
+            Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+            child: child,
+          );
+        });
+  }
 }

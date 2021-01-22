@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
@@ -13,10 +16,11 @@ import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/widgets/loading.dart';
 
-enum Status { Unauthorized, Authorized }
+enum Status { Unauthorized, Authorized, Guest }
 
 class UserProvider with ChangeNotifier {
   Status _status = Status.Unauthorized;
+  bool updateBilling = false;
   String errorMessage;
   WebApiServices _webApiServices = WebApiServices();
   bool login_Status = false;
@@ -24,6 +28,7 @@ class UserProvider with ChangeNotifier {
   UserModel userModel;
   Details userDetails;
   final fbLogin = FacebookLogin();
+
   Details get getuserDetails=>userDetails;
   UserModel get userInfo=>userModel;
   String userId;
@@ -34,7 +39,7 @@ class UserProvider with ChangeNotifier {
   TextEditingController mobile = TextEditingController();
   TextEditingController countryCode = TextEditingController();
 
-  UserProvider() {
+  UserProvider.initialize() {
     userModel = new UserModel();
     _webApiServices = new WebApiServices();
     _onStateChanged();
@@ -62,9 +67,14 @@ class UserProvider with ChangeNotifier {
         printLog('FacebookLoginResult', result.errorMessage);
         final String token = result.accessToken.token;
         final response = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,picture.height(200),email&access_token=${token}');
         final profile = JSON.jsonDecode(response.body);
         if (profile != null) {
+          BasePrefs.init();
+
+          String Data=  profile['picture']['data']['url'];
+          printLog("Datadt", Data);
+          BasePrefs.setString(AVTAR_URL, Data);
           toast("logging via facebook");
           loader.setLoadingStatus(true);
           userDetails= await _webApiServices
@@ -76,6 +86,44 @@ class UserProvider with ChangeNotifier {
         break;
     }return null;
   }
+
+
+  Future<Details> google_login({BuildContext context})async{
+    await Firebase.initializeApp();
+    var loader = Provider.of<LoaderProvider>(context, listen: false);
+    loader.setLoadingStatus(false);
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount googleSignInAccount= await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication= await googleSignInAccount.authentication;
+
+    final AuthCredential credential= GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    final UserCredential authResult = await _auth.signInWithCredential(credential);
+    final User user = authResult.user;
+
+    if(user!=null){
+      BasePrefs.init();
+      loader.setLoadingStatus(true);
+      assert(!user.isAnonymous);
+      assert(await user.getIdToken()!=null);
+      final User currentUser = _auth.currentUser;
+      assert(user.uid==currentUser.uid);
+      BasePrefs.setString(AVTAR_URL, currentUser.photoURL);
+      userDetails= await _webApiServices
+          .socialLogin(mode: 'google', name: currentUser.displayName, firstName: currentUser.displayName, lastName: "", email: currentUser.email);
+      loader.setLoadingStatus(false);
+      notifyListeners();
+      return userDetails;
+    }else{
+
+      return null;
+    }
+
+}
 
   Future<SocialLogin> signInFB() async {
     final FacebookLoginResult result = await fbLogin.logIn(['email']);
@@ -124,7 +172,7 @@ class UserProvider with ChangeNotifier {
   Future<void> _onStateChanged() async {
     await BasePrefs.init();
     if (BasePrefs.getString(USER_MODEL) == null) {
-      _status = Status.Unauthorized;
+      _status = Status.Guest;
     } else {
       _status = Status.Authorized;
     }
@@ -147,6 +195,15 @@ class UserProvider with ChangeNotifier {
     userDetails = await _webApiServices.getUserInfo();
     printLog("_webApiServices", userModel.toJson().toString());
     notifyListeners();
+  }
+
+  String getProfileImage(){
+    BasePrefs.init();
+    if(BasePrefs.getString(AVTAR_URL)!=null){
+      return BasePrefs.getString(AVTAR_URL);
+    }else{
+      return Thumbnail_User;
+    }
   }
 
   // Future<UserModel>getBillingpdate({String billing_email, String billing_phone, String billing_address_1, String billing_address_2,

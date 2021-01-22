@@ -5,28 +5,55 @@ import 'package:wooapp/models/user.dart';
 List<OrderModel> orderModelFromJson(String str) => List<OrderModel>.from(json.decode(str).map((x) => OrderModel.fromJson(x)));
 
 String orderModelToJson(List<OrderModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class OrderHistory {
+  OrderHistory({
+    this.status,
+    this.msg,
+    this.data,
+  });
+
+  int status;
+  String msg;
+  List<OrderModel> data;
+
+  factory OrderHistory.fromJson(Map<String, dynamic> json) => OrderHistory(
+    status: json["status"],
+    msg: json["msg"],
+    data: List<OrderModel>.from(json["data"].map((x) => OrderModel.fromJson(x))),
+
+  );
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "msg": msg,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
+}
+
 class OrderSummary {
+  OrderSummary({
+    this.status,
+    this.msg,
+    this.data,
+  });
+
   int status;
   String msg;
   OrderModel data;
 
-  OrderSummary({this.status, this.msg, this.data});
+  factory OrderSummary.fromJson(Map<String, dynamic> json) => OrderSummary(
+    status: json["status"],
+    msg: json["msg"],
+    data: OrderModel.fromJson(json["data"]),
 
-  OrderSummary.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    msg = json['msg'];
-    data = json['data'] != null ? new OrderModel.fromJson(json['data']) : null;
-  }
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['msg'] = this.msg;
-    if (this.data != null) {
-      data['data'] = this.data.toJson();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "msg": msg,
+    "data": data.toJson(),
+  };
 }
 
 class OrderModel {
@@ -36,7 +63,7 @@ class OrderModel {
   String orderKey;
   String createdVia;
   String version;
-  String status;
+  String orderStatus;
   String currency;
   String dateCreated;
   String dateCreatedGmt;
@@ -68,6 +95,7 @@ class OrderModel {
   List<LineItems> lineItems;
   List<TaxLines> taxLines;
   List<ShippingLines> shippingLines;
+  List<CouponLines> couponLines;
   String currencySymbol;
   Links lLinks;
 
@@ -78,7 +106,7 @@ class OrderModel {
         this.orderKey,
         this.createdVia,
         this.version,
-        this.status,
+        this.orderStatus,
         this.currency,
         this.dateCreated,
         this.dateCreatedGmt,
@@ -106,6 +134,7 @@ class OrderModel {
         this.lineItems,
         this.taxLines,
         this.shippingLines,
+        this.couponLines,
         this.currencySymbol,
         this.lLinks});
 
@@ -116,6 +145,7 @@ class OrderModel {
     orderKey = json['order_key'];
     createdVia = json['created_via'];
     version = json['version'];
+    orderStatus = json['status'];
     currency = json['currency'];
     dateCreated = json['date_created'];
     dateCreatedGmt = json['date_created_gmt'];
@@ -142,12 +172,7 @@ class OrderModel {
     paymentMethodTitle = json['payment_method_title'];
     transactionId = json['transaction_id'];
     cartHash = json['cart_hash'];
-    if (json['meta_data'] != null) {
-      metaData = new List<MetaData>();
-      json['meta_data'].forEach((v) {
-        metaData.add(new MetaData.fromJson(v));
-      });
-    }
+
     if (json['line_items'] != null) {
       lineItems = new List<LineItems>();
       json['line_items'].forEach((v) {
@@ -166,6 +191,12 @@ class OrderModel {
         shippingLines.add(new ShippingLines.fromJson(v));
       });
     }
+    if (json['coupon_lines'] != null) {
+      couponLines = new List<CouponLines>();
+      json['coupon_lines'].forEach((v) {
+        couponLines.add(new CouponLines.fromJson(v));
+      });
+    }
     currencySymbol = json['currency_symbol'];
     lLinks = json['_links'] != null ? new Links.fromJson(json['_links']) : null;
   }
@@ -178,7 +209,7 @@ class OrderModel {
     data['order_key'] = this.orderKey;
     data['created_via'] = this.createdVia;
     data['version'] = this.version;
-    data['status'] = this.status;
+    data['status'] = this.orderStatus;
     data['currency'] = this.currency;
     data['date_created'] = this.dateCreated;
     data['date_created_gmt'] = this.dateCreatedGmt;
@@ -210,9 +241,7 @@ class OrderModel {
     data['date_completed'] = this.dateCompleted;
     data['date_completed_gmt'] = this.dateCompletedGmt;
     data['cart_hash'] = this.cartHash;
-    if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
-    }
+
     if (this.lineItems != null) {
       data['line_items'] = this.lineItems.map((v) => v.toJson()).toList();
     }
@@ -222,6 +251,9 @@ class OrderModel {
     if (this.shippingLines != null) {
       data['shipping_lines'] =
           this.shippingLines.map((v) => v.toJson()).toList();
+    }
+    if (this.couponLines != null) {
+      data['coupon_lines'] = this.couponLines.map((v) => v.toJson()).toList();
     }
     data['currency_symbol'] = this.currencySymbol;
     if (this.lLinks != null) {
@@ -236,21 +268,6 @@ class MetaData {
   String key;
   String value;
 
-  MetaData({this.id, this.key, this.value});
-
-  MetaData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    key = json['key'];
-    value = json['value'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['key'] = this.key;
-    data['value'] = this.value;
-    return data;
-  }
 }
 
 class LineItems {
@@ -266,8 +283,9 @@ class LineItems {
   String totalTax;
   List<Taxes> taxes;
   String sku;
-  int price;
+  double price;
   Null parentName;
+  String img_src;
 
   LineItems(
       {this.id,
@@ -283,7 +301,8 @@ class LineItems {
         this.taxes,
         this.sku,
         this.price,
-        this.parentName});
+        this.parentName,
+        this.img_src});
 
   LineItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -303,8 +322,9 @@ class LineItems {
       });
     }
     sku = json['sku'];
-    price = json['price'];
+    price = json['price'] is int ? double.parse(json['price'].toString()) : json['price'];
     parentName = json['parent_name'];
+    img_src = json['img_src'];
   }
 
   Map<String, dynamic> toJson() {
@@ -325,6 +345,7 @@ class LineItems {
     data['sku'] = this.sku;
     data['price'] = this.price;
     data['parent_name'] = this.parentName;
+    data['img_src'] = this.img_src;
     return data;
   }
 }
@@ -423,12 +444,7 @@ class ShippingLines {
     instanceId = json['instance_id'];
     total = json['total'];
     totalTax = json['total_tax'];
-    if (json['meta_data'] != null) {
-      metaData = new List<MetaData>();
-      json['meta_data'].forEach((v) {
-        metaData.add(new MetaData.fromJson(v));
-      });
-    }
+
   }
 
   Map<String, dynamic> toJson() {
@@ -439,13 +455,36 @@ class ShippingLines {
     data['instance_id'] = this.instanceId;
     data['total'] = this.total;
     data['total_tax'] = this.totalTax;
-    if (this.metaData != null) {
-      data['meta_data'] = this.metaData.map((v) => v.toJson()).toList();
-    }
+
     return data;
   }
 }
+class CouponLines {
+  int id;
+  String code;
+  String discount;
+  String discountTax;
+  List<MetaData> metaData;
 
+  CouponLines(
+      {this.id, this.code, this.discount, this.discountTax, this.metaData});
+
+  CouponLines.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    code = json['code'];
+    discount = json['discount'];
+    discountTax = json['discount_tax'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['code'] = this.code;
+    data['discount'] = this.discount;
+    data['discount_tax'] = this.discountTax;
+    return data;
+  }
+}
 
 class Links {
   List<Self> self;
@@ -485,3 +524,5 @@ class Self {
     return data;
   }
 }
+
+

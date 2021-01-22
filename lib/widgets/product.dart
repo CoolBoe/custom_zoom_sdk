@@ -62,17 +62,7 @@ class ProductWidget extends StatelessWidget {
                       ),
                     ),
                 ),),
-              )
-              // new Align(
-              //   alignment: Alignment.topRight,
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(8.0),
-              //     child: SvgPicture.asset(
-              //       ic_heart,
-              //       color: red,
-              //     ),
-              //   ),
-              // )
+              ),
             ],
           ),
           Padding(
@@ -125,6 +115,7 @@ class ProductWidget extends StatelessWidget {
                     itemSize: 20,
                     initialRating: rating,
                     minRating: 1,
+                    ignoreGestures: true,
                     direction: Axis.horizontal,
                     allowHalfRating: true,
                     itemCount: 5,

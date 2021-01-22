@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -23,6 +24,7 @@ import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/cart.dart';
+import 'package:wooapp/screens/searchProduct.dart';
 import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
@@ -48,11 +50,14 @@ class ProductScreenState extends State<ProductScreen>{
   int logoIndex = 0;
   int variationId ;
   Variation variation;
+  bool isAdded = false;
   @override
   void initState() {
+    BasePrefs.init();
    _webApiServices = new WebApiServices();
    _webResponseModel = new WebResponseModel();
    variation = new Variation();
+
     super.initState();
   }
   Widget _cartDone(){
@@ -63,7 +68,10 @@ class ProductScreenState extends State<ProductScreen>{
           right: 30
       ),
       child: GestureDetector(onTap: (){
-        changeScreen(context, CartScreen());
+        Navigator.pop(context);
+       new Timer(Duration(microseconds: 200), (){
+         changeScreen(context, CartScreen());
+       });
       },
         child:  Container(
           height: 40.0,
@@ -82,8 +90,6 @@ class ProductScreenState extends State<ProductScreen>{
         ),),);
   }
   Widget _CustomScrollView(){
-    Attribute colorAttribute, sizeAttribute;
-
     String catergory = "Uncategorized";
     String colorType = "";
     if(widget.productModel.categories!=null){
@@ -120,7 +126,10 @@ class ProductScreenState extends State<ProductScreen>{
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: SvgPicture.asset(ic_search),
+              child: GestureDetector(onTap: (){
+                changeScreen(context, SearchScreen());
+              },
+              child: SvgPicture.asset(ic_search),),
             )
           ],
         ),
@@ -184,9 +193,41 @@ class ProductScreenState extends State<ProductScreen>{
                                     child:  Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
+                                        GestureDetector(onTap: (){
+                                          BasePrefs.init();
+                                          List<ProductModel> wishList = [];
+                                          if(!isAdded){
+                                            if(BasePrefs.getString(WISHLIST)!=null && BasePrefs.getString(WISHLIST)!=""){
+                                              var value = BasePrefs.getString(WISHLIST);
+                                              wishList= (json.decode(value) as List<dynamic>)
+                                                  .map<ProductModel>((item) => ProductModel.fromJson(item))
+                                                  .toList();
+                                              wishList.add(widget.productModel);
+                                              var data = json.encode(wishList);
+                                              BasePrefs.setString(WISHLIST, data);
+                                              printLog("encodedList", wishList.length);
+                                              setState(() {
+                                                isAdded = true;
+                                              });
+                                              toast("Item added to WishList");
+                                            }
+                                            else{
+                                              wishList.add(widget.productModel);
+                                              var data = json.encode(wishList);
+                                              BasePrefs.setString(WISHLIST, data);
+                                              setState(() {
+                                                isAdded = true;
+                                              });
+                                              toast("Item added to WishList");
+                                            }
+                                          }else{
+                                            toast("Item Already Added");
+                                          }
+                                        },
+                                        child: Icon( isAdded ? Icons.favorite: Icons.favorite_border,
+                                          color: Colors.orange,size: 20,),),
                                         Icon( Icons.star, color: Colors.orange,size: 20,),
                                         Text("{"+ widget.productModel.ratingCount.toString()+ "}",
-
                                             style: TextStyle(
                                                 fontFamily: 'Poppins',
                                                 fontSize: 10.0,
@@ -520,6 +561,17 @@ class ProductScreenState extends State<ProductScreen>{
   }
   @override
   Widget build(BuildContext context) {
+    if(BasePrefs.getString(WISHLIST)!=null && BasePrefs.getString(WISHLIST)!=""){
+      var value = BasePrefs.getString(WISHLIST);
+    List<ProductModel> wishList= (json.decode(value) as List<dynamic>)
+          .map<ProductModel>((item) => ProductModel.fromJson(item))
+          .toList();
+      for(int i=0; i<wishList.length; i++){
+        if(wishList[i].id == widget.productModel.id){
+          isAdded = true;
+        }
+      }
+    }
     return
       Scaffold(
         body: ProgressHUD( inAsyncCall: isApiCallProcess, opacity: 0.3, child: Container(
@@ -627,6 +679,40 @@ class ProductScreenState extends State<ProductScreen>{
                       Padding(
                         padding: const EdgeInsets.only(left:15.0),
                         child: GestureDetector(onTap: (){
+                          VariableProduct vproduct  = VariableProduct(id: widget.productModel.id,
+                              quantity: 1, variationId: variationId, variation: variation);
+                          if(widget.productModel.type != Type.VARIABLE ){
+                            setState(() {
+                              isApiCallProcess = true;
+                            });
+                            _webApiServices.getAddToCart(widget.productModel.id, "1").then((value) {
+                              _webResponseModel = value;
+                              if(_webResponseModel.code=="1"){
+                              changeScreen(context, CartScreen());
+                              }else{
+                                toast(_webResponseModel.message);
+                              }
+                              setState(() {
+                                isApiCallProcess = false;
+                              });
+                            });
+                          }
+                          else{
+                            setState(() {
+                              isApiCallProcess = true;
+                            });
+                            _webApiServices.getAddToCartVariationProduct(variableProduct:vproduct).then((value) {
+                              _webResponseModel = value;
+                              if(_webResponseModel.code=="1"){
+                               changeScreen(context, CartScreen());
+                              }else{
+                                toast(_webResponseModel.message);
+                              }
+                              setState(() {
+                                isApiCallProcess = false;
+                              });
+                            });
+                          }
                         },
                           child: Container(
                             decoration: BoxDecoration(

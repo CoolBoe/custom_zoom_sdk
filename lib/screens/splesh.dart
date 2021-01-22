@@ -30,7 +30,7 @@ class SpleshScreen extends BasePage {
 
 class SpleshScreenState extends BasePageState<SpleshScreen> {
   bool isLoggedIn = false;
-  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+
   bool hidePassword = true;
   bool isApiCallProcess = false;
   var fbProfile;
@@ -152,6 +152,51 @@ class SpleshScreenState extends BasePageState<SpleshScreen> {
                                       ),
                                       SizedBox(width: 10),
                                       new Text("CONTINUE WITH FACEBOOK",
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 12.0,
+                                              fontWeight: medium,
+                                              color: white))
+                                    ],
+                                  ),
+                                )),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: dp10),
+                          child: Container(
+                            height: dp50,
+                            color: transparent,
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: transparent,
+                                    border: Border.all(color: white, width: 2.0),
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(dp5))),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    var loader = Provider.of<LoaderProvider>(context, listen: false);
+                                    loader.setLoadingStatus(true);
+                                    user.google_login(context: context).then((value) {
+                                      if(value!=null){
+                                        toast(LOGIN_STATUS_TRUE);
+                                        BasePrefs.setString(USER_MODEL, jsonEncode(value));
+                                        printLog("responsesara", value.toJson().toString());
+                                        user.clearController();
+                                        changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
+                                      }else{
+                                        toast(LOGIN_STATUS_FALSE);
+                                      }
+                                    });
+                                    },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        height: 20,
+                                        width: 20,child:  Image.asset(ic_google_png),),
+                                      SizedBox(width: 10),
+                                      new Text("CONTINUE WITH GOOGLE",
                                           style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 12.0,

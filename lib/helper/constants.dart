@@ -13,6 +13,7 @@ const String USER_MODEL = 'user_model';
 const String InCompleteDataError = 'Please Complete Above Details';
 const String USERINFO = 'user_info';
 const String USER_EMAIL = 'email';
+const String WISHLIST = 'wishList';
 const String IsLogin = 'islogin';
 const String USER_ID = 'id';
 const String MYADDRESSLISTS = 'my_address_lists';
@@ -24,6 +25,7 @@ const String USER_LAST_NAME = 'last_name';
 const String USER_NAME = 'username';
 const String USER_ADDRESS = 'useraddress';
 const String USER_ROLE = 'role';
+const String AVTAR_URL = 'avtar_url';
 const String IS_PAYING_CUSTOMER = 'is_paying_customer';
 const String STATE = 'state';
 const String PHONE = 'phone';
@@ -55,6 +57,7 @@ const String BYSEARCH = '6';
 
 /*----------Error Massage----------------------*/
 const String NETWORK_ERROR = 'Something Went Wrong';
+const String DATA_NOT_FOUND = 'Data Not Found';
 const String LOGIN_STATUS_FALSE = 'User Login Failed';
 const String EMAIL_NOT_FOUND = 'Email Id Not Found';
 const String USER_NOT_FOUND = 'User Not Found';
@@ -69,6 +72,7 @@ const int HTTP_CODE_404 = 404;
 const int HTTP_CODE_500 = 500;
 
 /*----------------IC_SVG_Image-------------------------*/
+const String Thumbnail_User ="https://secure.gravatar.com/avatar/0ebdca653970c966ce5e8bf84a1d0a5a?s=96&d=mm&r=g";
 const String ic_facebook = "assets/icons/ic_facebook.svg";
 const String ic_backpack = "assets/icons/ic_backpack.svg";
 const String ic_bag = "assets/icons/ic_bag.svg";
@@ -103,7 +107,11 @@ const String ic_bg_lock = "assets/images/bg_lock.png";
 const String ic_bg_login = "assets/images/bg_login.png";
 const String ic_drawer_png = "assets/images/ic_drawer.png";
 const String ic_oops_png = "assets/images/ic_oops.png";
+const String ic_google_png = "assets/images/ic_google.png";
 const String ic_money = "assets/images/ic_money.png";
+const String ic_nodata_png = "assets/images/ic_nodata.png";
+const String ic_promocode_png = "assets/images/ic_promocode.png";
+const String ic_more_png = "assets/images/ic_more.png";
 
 /*-----------------SizeBuilder---------------------------*/
 const double dp5 = 5.0;

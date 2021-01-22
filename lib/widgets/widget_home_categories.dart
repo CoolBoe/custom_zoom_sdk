@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +15,7 @@ import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/screens/category.dart';
 import 'package:wooapp/screens/productScreen.dart';
+import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 
@@ -25,6 +28,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
   int currentTab = 0;
   int _page =1;
   int categoryId= 15;
+  Timer _time;
   String tagName ="Uncategorized";
   ScrollController _scrollController = new ScrollController();
   double offset = 0.0 ;
@@ -63,7 +67,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top:dp10, left: dp30, right: dp30),
+              padding: const EdgeInsets.only(top:dp10, left: 10, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -86,7 +90,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 10.0,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: regular,
                               color: black),
                         ),
                       ),
@@ -105,7 +109,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
               child:_categoriesList(),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 30, right: 30),
+              padding: EdgeInsets.only(left: 10, right: 10),
               child: Container(
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,8 +118,8 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                           child: Text(tagName,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14.0,
+                                  fontWeight: medium,
                                   color: black))),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -125,7 +129,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                             style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 10.0,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: regular,
                                 color: black),
                           ),
                           Icon(
@@ -142,7 +146,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                 height: 270,
                 child: _productsByCategory()),
             Padding(
-              padding: EdgeInsets.only(left: 30, right: 30),
+              padding: EdgeInsets.only(left: 10, right: 10),
                 child: Container(
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,8 +155,8 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                             child: Text("Featured",
                                 style: TextStyle(
                                     fontFamily: 'Poppins',
-                                    fontSize: 12.0,
-                                    fontWeight: semiBold,
+                                    fontSize: 14.0,
+                                    fontWeight: medium,
                                     color: black))),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -162,7 +166,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                               style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 10.0,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: regular,
                                   color: black),
                             ),
                             Icon(
@@ -191,7 +195,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
       ){
         return _buildCategoryList(categoryModel.allCategories);
       }else{
-        return progressBar(context, orange);
+        return ShimmerList(listType: "Category",);
       }
     });
   }
@@ -266,9 +270,17 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allProducts!=null &&
           productModel.allProducts.length>0){
-        return _productsByCategoryBuilder(productModel.allProducts);
+        return Container(
+          child: _productsByCategoryBuilder(productModel.allProducts),
+        );
+      }else{if(productModel.loader){
+        return ShimmerList(listType: "List",);
       }else{
-        return progressBar(context, orange);
+        return Padding(
+          padding: const EdgeInsets.only(top:40.0),
+          child: somethingWentWrong(),
+        );
+      }
       }
     });
   }
@@ -302,8 +314,14 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
       if(productModel.allProductsByFeature!=null &&
           productModel.allProductsByFeature.length>0){
         return _productByFeaturedBuilder(productModel.allProductsByFeature);
+      }else{if(productModel.loader){
+        return ShimmerList(listType: "List",);
       }else{
-        return progressBar(context, orange);
+        return Padding(
+          padding: const EdgeInsets.only(top:40.0),
+          child: somethingWentWrong(),
+        );
+      }
       }
     });
   }

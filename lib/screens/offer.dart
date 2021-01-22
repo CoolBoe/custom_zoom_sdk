@@ -6,27 +6,32 @@ import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
+import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/coupons.dart';
 import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/providers/cart.dart';
+import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/screens/basePage.dart';
 import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/utils/form_helper.dart';
 import 'package:wooapp/utils/widget_helper.dart';
+import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/item_coupon_trending.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 
-class OfferScreen extends BasePage{
-  OfferScreen({Key key}) : super(key: key);
+class OfferScreen extends StatefulWidget{
+  List<Coupon> list;
+  OfferScreen({Key key, this.list}) : super(key: key);
   @override
   OfferScreenState createState() => OfferScreenState();
 }
-class OfferScreenState extends BasePageState{
+class OfferScreenState extends State<OfferScreen>{
   int checkedIndex ;
   bool checked = false;
   String cartItemKey ;
+  bool inApiProcess = false;
   @override
   void initState() {
     var cart =Provider.of<CartProvider>(context, listen: false);
@@ -34,38 +39,50 @@ class OfferScreenState extends BasePageState{
     super.initState();
   }
   @override
+  Widget build(BuildContext context) {
+    return ProgressHUD(inAsyncCall: inApiProcess, child: pageUi(), opacity: 0.3,);
+  }
   Widget pageUi() {
     return Scaffold(
-      appBar:BaseAppBar(context, "My Offers", suffixIcon: Container()),
-      body: _myOffers(),
+      appBar:BaseAppBar(context, "My Offers", suffixIcon: couponRemover()),
+      body: pageBuilder(),
       bottomNavigationBar:customButton(title: "Apply Coupons", color: orange,onPressed: (){
-                 if(cartItemKey!=null){
-                   printLog("cartItemKey", cartItemKey);
-                   var loader = Provider.of<LoaderProvider>(context, listen: false);
-                   loader.setLoadingStatus(true);
-                   var cart  = Provider.of<CartProvider>(context, listen: false);
-                   cart.getApplyCoupons(coupon_code: cartItemKey, onCallBack: (value){
-                     loader.setLoadingStatus(false);
-                     changeScreen(context, CartScreen());
-                   });
-                 }else{
-                   toast("please select your coupons");
-                 }
+        if(cartItemKey!=null){
+          setState(() {
+            inApiProcess = true;
+          });
+          printLog("cartItemKey", cartItemKey);
+          var cart  = Provider.of<CartProvider>(context, listen: false);
+          cart.getApplyCoupons(coupon_code: cartItemKey, onCallBack: (value){
+            setState(() {
+              toast("Coupon Applied");
+              inApiProcess = false;
+            });
+            changeScreen(context, CartScreen());
+          });
+        }else{
+          toast("please select your coupons");
+        }
       }),
-    );
+    ) ;
   }
   Widget _myOffers(){
     return new Consumer<CartProvider>(builder: (context, couponsModel, child){
       if(couponsModel.getCoupons!=null){
-        return _myOffersBuilder(couponsModel.getCoupons);
+        return listBuilder(couponsModel.getCoupons);
+      }else if (couponsModel.loader){
+        return Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            height: 500,child: ShimmerList(listType: "Order",));
       }else{
-        return progressBar(context, orange);
+        return Container(
+            padding: EdgeInsets.symmetric(vertical: 100),
+            child: somethingWentWrong());
       }
     });
   }
-  Widget _myOffersBuilder(List<Coupons> coupons) {
+  Widget pageBuilder() {
     return Container(
-      color: white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -110,15 +127,12 @@ class OfferScreenState extends BasePageState{
             padding: const EdgeInsets.only(left:13.0),
             child: Text("Trending", style: styleProvider(fontWeight: semiBold, size: 14, color: black),),
           ),
-          listBuilder(coupons)
+          _myOffers()
         ],
       ),
     );
   }
   Widget listBuilder(List<Coupons> coupons){
-     var size = MediaQuery.of(context).size;
-     final double itemHeight = (size.height / 1.32 - kToolbarHeight - 80) / 3;
-     final double itemWidth = size.width / 2;
      return Container(
        padding: EdgeInsets.only(left: 10, right: 10, top: 10),
          child: GridView.builder(
@@ -201,4 +215,55 @@ class OfferScreenState extends BasePageState{
            ),
      ));
   }
+
+  Widget couponRemover() {
+    return GestureDetector(onTap: (){
+      if(widget.list!=null && widget.list.length>0){
+        setState(() {
+          inApiProcess = true;
+        });
+        var loader = Provider.of<LoaderProvider>(context, listen: false);
+        loader.setLoadingStatus(true);
+        var cart = Provider.of<CartProvider>(context, listen: false);
+        cart.getRemoveCoupons(coupon_code: widget.list[0].code, onCallBack: (value){
+          setState(() {
+            inApiProcess = false;
+            widget.list.removeAt(0);
+          });
+          loader.setLoadingStatus(false);
+          toast("Coupon Removed");
+        });
+      }
+    },
+    child: Stack(
+      children: <Widget>[
+        new Align(
+          child: Icon(Icons.delete_sharp, color: Colors.red[300], size: 30,),
+        ),
+        cartItem()
+      ],
+    ),);
+  }
+  Widget cartItem() {
+    return new Consumer<CartProvider>(builder:(context, cartModel, child){
+      if(widget.list!=null && widget.list.length>0){
+        return new Positioned(
+            right: 0,
+            child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child:  Container(
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    decoration: BoxDecoration(
+                      color: green_400,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(widget.list.length.toString(), style: styleProvider(fontWeight: medium, size: 8, color: white),))
+            ));
+      }else{
+        return Container();
+      }
+    });
+  }
+
+
 }

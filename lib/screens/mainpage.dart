@@ -50,6 +50,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
   ];
   @override
     void initState() {
+    BasePrefs.init();
      var cart = Provider.of<CartProvider>(context, listen: false);
      cart.getCartItemCount();
       super.initState();

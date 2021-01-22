@@ -81,7 +81,7 @@ class ShopState extends BasePageState<ShopView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      appBar: BaseAppBar(context, "Products", prefixIcon: Container()),
+      appBar: BaseAppBar(context, "Products", prefixIcon: Container(),),
       body: Container(
          child: _CustomScrollView(context)),
     );
@@ -285,46 +285,22 @@ class ShopState extends BasePageState<ShopView> {
       ),
     );
   }
-  Widget _appBar(){
-    return SliverAppBar(
-      pinned: true,
-      backgroundColor: white,
-      expandedHeight: dp50,
-      flexibleSpace: FlexibleSpaceBar(
-        title: Text("Products",
-            style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 16.0,
-                fontWeight: medium,
-                color: black)),
-        centerTitle: true,
-      ),
-      floating: true,
-      leading: GestureDetector(
-          onTap: () {
-            // Navigator.of(context).pushNamed(routes.MainPage_Route);
-          },
-          child: Icon(
-            Icons.arrow_back,
-            color: black,
-          )),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SvgPicture.asset(ic_search),
-        )
-      ],
-    );
-  }
-
   Widget _productList(){
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allProducts!=null &&
           productModel.allProducts.length>0
       ){
         return _buildProductList(productModel.allProducts);
+      }else{if(productModel.loader){
+        return ShimmerList(listType: "Grid",);
       }else{
-        return progressBar(context, orange);
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top:40.0),
+            child: somethingWentWrong(),
+          ),
+        );
+      }
       }
     });
   }

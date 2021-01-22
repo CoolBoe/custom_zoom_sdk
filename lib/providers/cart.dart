@@ -12,24 +12,32 @@ import 'package:wooapp/widgets/loading.dart';
 
 class CartProvider with ChangeNotifier {
   WebResponseModel _webResponseModel;
+
   CartModel _cartModel;
   List<Coupons> _coupons;
+  bool _response = false;
   int _cartItemCount;
+  bool loader= false;
   ReviewOrder _reviewOrder;
   OrderModel _orderModel;
-  List<OrderModel> _orderList;
-  List<OrderModel> get orderList=>_orderList;
+  OrderHistory _orderSummary;
+  OrderHistory get orderSummary=> _orderSummary;
+
   OrderModel get getOrderModel => _orderModel;
   CartModel get getCart => _cartModel;
   int get totalCartItem=>_cartItemCount;
   ReviewOrder get reviewOrder => _reviewOrder;
   List<Coupons> get getCoupons => _coupons;
   WebApiServices _webApiServices= new WebApiServices();
-  CartProvider() {
+
+
+  CartProvider.initialize() {
+    _webApiServices= new WebApiServices();
+    getCartData();
     getCartItemCount();
-    resetStreams();
   }
   void resetStreams(){
+    _cartItemCount= 0;
     _webApiServices = WebApiServices();
    _cartModel = new CartModel();
     _webResponseModel = new WebResponseModel();
@@ -57,7 +65,7 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
   getClearToCart()async{
-    _webResponseModel=await _webApiServices.getClearToCart();
+    return await _webApiServices.getClearToCart();
     notifyListeners();
   }
   getCartItemCount()async{
@@ -65,15 +73,21 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
   getCartData() async{
+    loader= true;
       _cartModel = await _webApiServices.getCart();
+    loader= false;
       notifyListeners();
   }
   getOfferData() async{
+    loader= true;
     _coupons = await _webApiServices.getCoupons();
+    loader= false;
     notifyListeners();
   }
-  getOrderList() async{
-    _orderList = await _webApiServices.getOrders();
+  getOrderList({String id}) async{
+    loader= true;
+    _orderSummary= await _webApiServices.getOrders(id: id, offset: 5, limit: 5);
+    loader= false;
     notifyListeners();
   }
   Future getApplyCoupons({String coupon_code, Function onCallBack})async{
@@ -86,11 +100,26 @@ class CartProvider with ChangeNotifier {
     _orderModel = await _webApiServices.getNewOrder(userId: userId, paymentMethod: paymentMethod);
     return _orderModel;
   }
+  Future getRemoveCoupons({String coupon_code, Function onCallBack})async{
+    _cartModel = await _webApiServices.getRemoveCoupons(coupon_code: coupon_code);
+    onCallBack(_cartModel);
+    notifyListeners();
+  }
   Future getReviewOrder()async{
     _reviewOrder = await _webApiServices.getReviewOrder();
     notifyListeners();
   }
   Future getUpdateOrder({String order_id, String status, String transaction_id})async{
-    return  await _webApiServices.getUpdateOrder(order_id: order_id, status: status, transaction_id: transaction_id);
+
+   await _webApiServices.getUpdateOrder(order_id: order_id, status: status, transaction_id: transaction_id).then((value) {
+      if(value){
+       _webApiServices.getClearToCart().then((value){
+         printLog("cartClear",value);
+         _response = value;
+       });
+      }
+    });
+   printLog("datdatdtd", _response);
+   return _response;
   }
 }

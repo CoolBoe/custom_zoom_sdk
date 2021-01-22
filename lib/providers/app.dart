@@ -17,7 +17,8 @@ class AppProvider with ChangeNotifier {
   PriceRangeModel _priceRangeModel = new PriceRangeModel();
   List<CityModel> get getCityList => _citylist;
   PriceRangeModel get priceRange => _priceRangeModel;
-  AppProvider(){
+  AppProvider.initialize(){
+    fetchPriceRange();
     resetStream();
   }
   void resetStream(){

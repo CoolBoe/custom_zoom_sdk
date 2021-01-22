@@ -25,12 +25,12 @@ void main() {
   runApp(MultiProvider(
       providers: [
       ChangeNotifierProvider.value(value: ThemeProvider()),
-      ChangeNotifierProvider.value(value: AppProvider(), child: ShopView(),),
-      ChangeNotifierProvider.value(value: UserProvider()),
+      ChangeNotifierProvider.value(value: AppProvider.initialize(), child: ShopView(),),
+      ChangeNotifierProvider.value(value: UserProvider.initialize()),
       ChangeNotifierProvider.value(value: LoaderProvider(), child: CartScreen(),),
-      ChangeNotifierProvider.value(value: ProductsProvider(), child: HomeView(),),
-      ChangeNotifierProvider.value(value: CartProvider(), child: CartScreen(),),
-      ChangeNotifierProvider.value(value: CategoriesProvider(), child: HomeView(),)
+      ChangeNotifierProvider.value(value: ProductsProvider.initialize(), child: HomeView(),),
+      ChangeNotifierProvider.value(value: CartProvider.initialize(), child: CartScreen(),),
+      ChangeNotifierProvider.value(value: CategoriesProvider.initialize(), child: HomeView(),)
   ],
     child: Consumer<ThemeProvider>(
       builder: (context, theme, _) => MaterialApp(
@@ -50,10 +50,12 @@ class ScreensController extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Provider.of<UserProvider>(context);
       switch (auth.status) {
-        case Status.Authorized:
+        case Status.Guest:
+          // return SpleshScreen();
           return MainPageScreen(currentTab: 0,);
-        case Status.Unauthorized:
-          return SpleshScreen();
+        case Status.Authorized:
+          // return SpleshScreen();
+          return MainPageScreen(currentTab: 0,);
         default:
           return progressBar(context, orange);
       }
