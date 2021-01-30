@@ -224,7 +224,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14)),
-                            order.shippingMethod!=null ? ShippingCart(shippingMethod: order.shippingMethod, choosenMethod: order.chosenShippingMethod) : Container(),
+                            order.shippingMethod!=null ? widgetShippingCart(shippingMethod: order.shippingMethod, choosenMethod: order.chosenShippingMethod) : Container(),
                           ],
                         ),
                       ),

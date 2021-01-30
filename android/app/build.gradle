@@ -13,12 +13,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = '235'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '2.3.5'
 }
 
 apply plugin: 'com.android.application'
@@ -30,27 +30,28 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-//    splits {
-//
-//        // Configures multiple APKs based on ABI.
-//        abi {
-//
-//            // Enables building multiple APKs per ABI.
-//            enable true
-//
-//            // By default all ABIs are included, so use reset() and include to specify that we only
-//            // want APKs for x86 and x86_64.
-//
-//            // Resets the list of ABIs that Gradle should create APKs for to none.
-//            reset()
-//
-//            // Specifies a list of ABIs that Gradle should create APKs for.
-//            include "x86", "x86_64", "armeabi", "armeabi-v7a", "arm64-v8a"
-//
-//            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
-//            universalApk true
-//        }
-//    }
+    splits {
+ //to get in splite by terminal
+        //                flutter build apk --split-per-abi
+        // Configures multiple APKs based on ABI.
+        abi {
+
+            // Enables building multiple APKs per ABI.
+            enable true
+
+            // By default all ABIs are included, so use reset() and include to specify that we only
+            // want APKs for x86 and x86_64.
+
+            // Resets the list of ABIs that Gradle should create APKs for to none.
+            reset()
+
+            // Specifies a list of ABIs that Gradle should create APKs for.
+            include "x86", "x86_64", "armeabi", "armeabi-v7a", "arm64-v8a"
+
+            // Specifies that we do not want to also generate a universal APK that includes all ABIs.
+            universalApk true
+        }
+    }
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -62,6 +63,7 @@ android {
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -79,4 +81,8 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.firebase:firebase-analytics:18.0.1'
+    implementation 'com.android.support:multidex:1.0.3'
 }
+apply plugin: 'com.google.gms.google-services'
+

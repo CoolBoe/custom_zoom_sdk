@@ -5,15 +5,15 @@ import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/order.dart';
 import 'package:wooapp/widgets/loading.dart';
 
-class WidgetLineItem extends StatefulWidget{
+class widgetLineItem extends StatefulWidget{
 
   LineItems lineItems;
-  WidgetLineItem({this.lineItems});
+  widgetLineItem({this.lineItems});
   @override
-  WidgetLineItemState createState()=>WidgetLineItemState();
+  widgetLineItemState createState()=>widgetLineItemState();
 
 }
-class WidgetLineItemState extends State<WidgetLineItem>{
+class widgetLineItemState extends State<widgetLineItem>{
 
   @override
   void initState() {

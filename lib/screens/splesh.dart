@@ -1,26 +1,20 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/helper/social_login.dart' as social_login;
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/providers/LoadProvider.dart';
-import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/basePage.dart';
 import 'package:wooapp/screens/login.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/registration.dart';
-import 'package:wooapp/validator/validate.dart';
-import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/loading.dart';
-import 'package:wooapp/widgets/progress_bar.dart';
 
 class SpleshScreen extends BasePage {
 
@@ -79,133 +73,124 @@ class SpleshScreenState extends BasePageState<SpleshScreen> {
                               fontWeight: regular,
                               color: white),
                         ),
-                        Padding(
+                        Container(
                           padding: EdgeInsets.only(
                             top: 16.0,
                           ),
-                          child: Container(
-                            height: 0.3,
-                            color: white_70,
-                          ),
+                          height: 0.3,
+                          color: white_70,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: dp40),
-                          child: GestureDetector(
-                            onTap: () async {
-                              changeScreen(context, RegisterScreen());
-                            },
+                        GestureDetector(
+                          onTap: () async {
+                            changeScreen(context, RegisterScreen());
+                          },
+                          child: Container(
+                            height: 50.0,
+                            color: transparent,
                             child: Container(
-                              height: 50.0,
-                              color: transparent,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: white,
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0))),
-                                child: new Center(
-                                  child: new Text(
-                                    "SIGN UP WITH EMAIL",
-                                    style: TextStyle(
-                                        color: black,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
-                                    textAlign: TextAlign.center,
-                                  ),
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0))),
+                              child: new Center(
+                                child: new Text(
+                                  "SIGN UP WITH EMAIL",
+                                  style: TextStyle(
+                                      color: black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        Padding(
+                        Container(
                           padding: const EdgeInsets.only(top: dp10),
+                          height: dp50,
+                          color: transparent,
                           child: Container(
-                            height: dp50,
-                            color: transparent,
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: transparent,
-                                    border: Border.all(color: white, width: 2.0),
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(dp5))),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    var loader = Provider.of<LoaderProvider>(context, listen: false);
-                                    user.social_login(context: context).then((value) {
-                                      loader.setLoadingStatus(false);
-                                      if(value!=null){
-                                        toast(LOGIN_STATUS_TRUE);
-                                        BasePrefs.setString(USER_MODEL, jsonEncode(value));
-                                        printLog("responsesara", value.toJson().toString());
-                                        user.clearController();
-                                        changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
-                                      }else{
-                                        toast(LOGIN_STATUS_FALSE);
-                                      }
-                                    });
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      SvgPicture.asset(
-                                        ic_facebook,
-                                        color: white,
-                                      ),
-                                      SizedBox(width: 10),
-                                      new Text("CONTINUE WITH FACEBOOK",
-                                          style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontSize: 12.0,
-                                              fontWeight: medium,
-                                              color: white))
-                                    ],
-                                  ),
-                                )),
-                          ),
+                              decoration: BoxDecoration(
+                                  color: transparent,
+                                  border: Border.all(color: white, width: 2.0),
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(dp5))),
+                              child: GestureDetector(
+                                onTap: () {
+                                  var loader = Provider.of<LoaderProvider>(context, listen: false);
+                                  user.social_login(context: context).then((value) {
+                                    loader.setLoadingStatus(false);
+                                    if(value!=null){
+                                      toast(LOGIN_STATUS_TRUE);
+                                      BasePrefs.setString(USER_MODEL, jsonEncode(value));
+                                      printLog("responsesara", value.toJson().toString());
+                                      user.clearController();
+                                      changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
+                                    }else{
+                                      toast(LOGIN_STATUS_FALSE);
+                                    }
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      ic_facebook,
+                                      color: white,
+                                    ),
+                                    SizedBox(width: 10),
+                                    new Text("CONTINUE WITH FACEBOOK",
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 12.0,
+                                            fontWeight: medium,
+                                            color: white))
+                                  ],
+                                ),
+                              )),
                         ),
-                        Padding(
+                        Container(
                           padding: const EdgeInsets.only(top: dp10),
+                          height: dp50,
+                          color: transparent,
                           child: Container(
-                            height: dp50,
-                            color: transparent,
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: transparent,
-                                    border: Border.all(color: white, width: 2.0),
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(dp5))),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    var loader = Provider.of<LoaderProvider>(context, listen: false);
-                                    loader.setLoadingStatus(true);
-                                    user.google_login(context: context).then((value) {
-                                      if(value!=null){
-                                        toast(LOGIN_STATUS_TRUE);
-                                        BasePrefs.setString(USER_MODEL, jsonEncode(value));
-                                        printLog("responsesara", value.toJson().toString());
-                                        user.clearController();
-                                        changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
-                                      }else{
-                                        toast(LOGIN_STATUS_FALSE);
-                                      }
-                                    });
-                                    },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        height: 20,
-                                        width: 20,child:  Image.asset(ic_google_png),),
-                                      SizedBox(width: 10),
-                                      new Text("CONTINUE WITH GOOGLE",
-                                          style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontSize: 12.0,
-                                              fontWeight: medium,
-                                              color: white))
-                                    ],
-                                  ),
-                                )),
-                          ),
+                              decoration: BoxDecoration(
+                                  color: transparent,
+                                  border: Border.all(color: white, width: 2.0),
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(dp5))),
+                              child: GestureDetector(
+                                onTap: () {
+                                  var loader = Provider.of<LoaderProvider>(context, listen: false);
+                                  loader.setLoadingStatus(true);
+                                  user.google_login(context: context).then((value) {
+                                    if(value!=null){
+                                      toast(LOGIN_STATUS_TRUE);
+                                      BasePrefs.setString(USER_MODEL, jsonEncode(value));
+                                      printLog("responsesara", value.toJson().toString());
+                                      user.clearController();
+                                      changeScreenReplacement(context,MainPageScreen(currentTab: 0,));
+                                    }else{
+                                      toast(LOGIN_STATUS_FALSE);
+                                    }
+                                  });
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      height: 20,
+                                      width: 20,child:  Image.asset(ic_google_png),),
+                                    SizedBox(width: 10),
+                                    new Text("CONTINUE WITH GOOGLE",
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 12.0,
+                                            fontWeight: medium,
+                                            color: white))
+                                  ],
+                                ),
+                              )),
                         ),
                       ],
                     )),

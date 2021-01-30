@@ -6,6 +6,7 @@ import 'package:wooapp/models/mockdata/item_categories.dart';
 import 'package:wooapp/screens/chatsupport.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/category.dart';
+import 'package:wooapp/screens/productBuilder.dart';
 import 'package:wooapp/screens/termOfUse.dart';
 
 class ItemDrawerBuilder extends StatefulWidget {
@@ -47,10 +48,10 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                       _selectItem = index;
                       switch (_selectItem) {
                         case 0:
-                          changeScreen(context, MainPageScreen(currentTab: 1));
+                          changeScreen(context, MainPageScreen(currentTab: 0));
                           break;
                         case 1:
-                          changeScreen(context, MainPageScreen(currentTab: 1,));
+                          changeScreen(context, ShopView());
                           break;
                         case 2:
                           changeScreen(context, CategoriesScreen());

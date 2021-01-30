@@ -19,6 +19,7 @@ class WebRequestConstants {
 //  String getDomainWebUrl= "https://app.democontentphoeniixx.com/wp-json/wc/v2/";
 
   static const String SMS_SENDER = "APP";
+  static const String LAYOUT = "layout";
   static const String MOBILE_CODE = "+91";
   static const String DEVICE_TYPE = "android";
   static const String VERIFICATION = "newreg";
@@ -30,7 +31,9 @@ class WebRequestConstants {
   static const String LOGIN = "login";
   static const String ALL_CATEGORIES = "products/all-categories";
   static const String PRODUCT = "products";
+  static const String SHOW_ALL = "show_all";
   static const String CUSTOM_PRODUCT = "custom-products";
+  static const String CUSTOM_ATTRIBUTES = "products/custom-attributes";
   static const String PRICE_RANGE = "products/price-range";
   static const String PRODUCT_BY_ID = "get-products-by-id";
   static const String SORT = "sort";
@@ -47,6 +50,8 @@ class WebRequestConstants {
   static const String ORDERS = "order-list";
   static const String ORDER_ID = "ORDER_ID";
   static const String CUST_ID_METHOD = "CUST_ID METHOD";
+  static const String GET_APP_PAGE_BY_ID = "get-app-page-by-id";
+  static const String PAGE_ID = "page_id";
 
   /*--------------------------------Cart Filters-----------------------------------------------------*/
   static const String CART = "cart";

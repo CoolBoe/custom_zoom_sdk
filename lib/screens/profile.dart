@@ -12,18 +12,14 @@ import 'package:wooapp/models/user.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/delivery.dart';
 import 'package:wooapp/screens/editAccount.dart';
-import 'package:wooapp/screens/language.dart';
-import 'package:wooapp/screens/myaddress.dart';
 import 'package:wooapp/screens/offer.dart';
 import 'package:wooapp/screens/order.dart';
 import 'package:wooapp/screens/paymet.dart';
 import 'package:wooapp/screens/privacy.dart';
 import 'package:wooapp/screens/settings.dart';
-import 'package:wooapp/screens/termOfUse.dart';
 import 'package:wooapp/utils/form_helper.dart';
 import 'package:wooapp/utils/widget_helper.dart';
 import 'package:wooapp/widgets/app_bar.dart';
-import 'package:wooapp/widgets/loading.dart';
 
 import 'notification.dart';
 
@@ -48,11 +44,10 @@ class ProfileState extends State<ProfileView> {
     Details model;
     if( BasePrefs.getString(USER_MODEL)!=null){
       var value= BasePrefs.getString(USER_MODEL);
-      printLog("datdatd",value.toString());
       model = Details.fromJson(jsonDecode(value));
     }
     String date;
-    if(model.dateCreated!=null){
+    if(model!=null && model.dateCreated!=null){
       DateTime tempDate =  DateTime.parse(model.dateCreated);
       date = DateFormat("MM/yyyy").format(tempDate);
     }
@@ -128,7 +123,7 @@ class ProfileState extends State<ProfileView> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
-                      child: SvgPicture.asset('assets/icons/ic_order.svg'),
+                      child: SvgPicture.asset(ic_order),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0, right: 20),
@@ -183,7 +178,7 @@ class ProfileState extends State<ProfileView> {
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: SvgPicture.asset(
-                        'assets/icons/ic_support.svg',
+                        ic_support,
                         height: 15,
                         width: 15,
                       ),
@@ -215,30 +210,24 @@ class ProfileState extends State<ProfileView> {
                     onTap: () {
                       switch(index){
                         case 0:
-                          printLog("buttonClicked", "Account Details");
                           changeScreen(context, EditAccountScreen());
                           break;
                         case 1:
-                          printLog("buttonClicked", "Offers");
                           changeScreen(context, OfferScreen());
                           break;
                         case 2:
-                          printLog("buttonClicked", "Notifications");
                           changeScreen(context, NotificationScreen());
                           break;
                         case 3:
-                          printLog("buttonClicked", "My Address information");
                           changeScreen(context, DeliveryScreen(total: "",));
                           break;
                         case 4:
-                          printLog("buttonClicked", "Payment Information");
                           changeScreen(context, PaymentScreen());
                           break;
                         case 5:
                           languageDialog();
                           break;
                         case 6:
-                          printLog("buttonClicked", "Privacy Settings");
                           changeScreen(context, PrivacyScreen());
                           break;
                       }

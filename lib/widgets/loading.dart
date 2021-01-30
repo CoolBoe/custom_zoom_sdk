@@ -79,10 +79,62 @@ class ShimmerList extends StatelessWidget{
       case "Category":
         return ShimmerCategoryBuilder();
         break;
+      case "Home":
+        return ShimmerHomeBuilder(context);
+        break;
 
     }
 
   }
+}
+
+Widget ShimmerHomeBuilder(BuildContext context){
+  return Shimmer.fromColors(
+      baseColor: Colors.grey[200], highlightColor: Colors.white,
+    child: SingleChildScrollView(
+      child: Container(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 150,
+              color: Colors.grey,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 100,
+              color: Colors.grey,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 200,
+              color: Colors.grey,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 40,
+              child: ShimmerCategoryBuilder(),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 250,
+              child: ShimmerGridBuilder(context),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 Widget ShimmerListBuilder(){
@@ -159,7 +211,7 @@ Widget ShimmerProductItem(){
     child: Column(
       children: [
         Container(
-          height: 180,
+          height: 170,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(topLeft:Radius.circular(10), topRight: Radius.circular(10)),
               color: Colors.grey

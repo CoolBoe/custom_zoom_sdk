@@ -2,38 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
-import 'package:wooapp/main.dart';
-import 'package:wooapp/models/mockdata/item_model.dart';
-import 'package:wooapp/models/product.dart';
 import 'package:wooapp/models/user.dart';
 import 'package:wooapp/providers/app.dart';
-import 'package:wooapp/providers/cart.dart';
-import 'package:wooapp/providers/category.dart';
-import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/providers/user.dart';
-import 'package:wooapp/rest/WebRequestConstants.dart';
-import 'package:wooapp/screens/category.dart';
-import 'package:wooapp/screens/mainpage.dart';
-import 'package:wooapp/screens/productScreen.dart';
-import 'package:carousel_pro/carousel_pro.dart';
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/screens/splesh.dart';
-import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/item_DrawerBuilder.dart';
 import 'package:wooapp/widgets/loading.dart';
-import 'package:wooapp/widgets/product.dart';
-import 'package:wooapp/widgets/Item_builder.dart';
-import 'package:wooapp/widgets/progress_bar.dart';
 import 'package:wooapp/widgets/widget_home_categories.dart';
 import 'package:wooapp/widgets/widget_home_slider.dart';
 
@@ -48,62 +29,47 @@ class HomeState extends State<HomeView> {
   @override
   void initState() {
     BasePrefs.init();
+    AppProvider.initialize();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: homeAppBar(context),
       drawer: _buildDrawer(),
       body: Container(
           decoration: BoxDecoration(color: white), child: _CustomScrollView()),
     );
   }
-
   Widget _CustomScrollView() {
-    return CustomScrollView(
-      slivers: <Widget>[
-        imageCarousel(context),
-       SliverToBoxAdapter(
-         child:  Container(
-           height: 230,
-           color: grey_200,
-           child:   Carousel(
-             boxFit: BoxFit.fill,
-             autoplay: true,
-             animationCurve: Curves.fastOutSlowIn,
-             animationDuration: Duration(milliseconds: 1000),
-             dotSize: 2.0,
-             dotIncreaseSize: 6.0,
-             dotBgColor: transparent,
-             dotColor: grey,
-             dotPosition: DotPosition.bottomCenter,
-             showIndicator: true,
-             indicatorBgPadding: 6.0,
-             images: [
-               NetworkImage(
-                   "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_7_front-600x600.jpg"),
-               NetworkImage(
-                   "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_6_front-600x600.jpg"),
-               NetworkImage(
-                   "https://app.tutiixx.com/wp-content/uploads/2019/01/hoodie_2_front-600x600.jpg"),
-               NetworkImage(
-                   "https://app.tutiixx.com/wp-content/uploads/2019/01/T_1_front-600x600.jpg")
-             ],
-           ),
-         ),
-       ),
-        WidgetCategories(),
-      ],
-    );
-    ;
+    return new Consumer<AppProvider>(builder: (context, app, child){
+      if(app.getHomeLayout!=null && app.getHomeLayout.categories !=null){
+        return SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                Container(
+                  child: app.getHomeLayout.banners!=null && app.getHomeLayout.banners.length>0 ?
+                  BannerSlider(homeLayout: app.getHomeLayout,) : Container(),
+                ),
+                app.getHomeLayout.categories!=null && app.getHomeLayout.categories.length>0?
+                WidgetCategories(homeLayout: app.getHomeLayout): Container()
+              ],
+            ),
+          ),
+        );
+      }else{
+        printLog("bhjghjghg", "");
+        return ShimmerList(listType: "Home",);
+      }
+    });
   }
   Widget _buildDrawer() {
     BasePrefs.init();
     Details model;
     if( BasePrefs.getString(USER_MODEL)!=null){
       var value= BasePrefs.getString(USER_MODEL);
-      printLog("datdatd",value.toString());
        model = Details.fromJson(jsonDecode(value));
     }
     var user= Provider.of<UserProvider>(context, listen: false);
@@ -272,7 +238,6 @@ class HomeState extends State<HomeView> {
           ),
         ));
   }
-
   void toggleButton() {
     setState(() {
       _toggel = !_toggel;

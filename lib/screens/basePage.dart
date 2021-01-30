@@ -8,7 +8,8 @@ import 'package:wooapp/widgets/loading.dart';
 
 class BasePage extends StatefulWidget{
   ProductModel productModel;
-  BasePage({Key key,this.productModel}) : super(key: key);
+  String categoryId;
+  BasePage({Key key,this.productModel, this.categoryId}) : super(key: key);
 
   get total => null;
   @override

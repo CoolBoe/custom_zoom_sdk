@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart';
 import 'package:wooapp/widgets/loading.dart';
@@ -86,7 +87,10 @@ bool validMobilePattern(String mobile) {
 }
 
 bool isValidString(String data) {
-  return data != null && !data.isEmpty;
+  return data != null && data.isNotEmpty;
+}
+bool isValidpassword(String data) {
+  return data != null && data.isNotEmpty && data.length>6;
 }
 double getValidDecimalInDouble(String value) {
   if (!isValidString(value)) {
@@ -95,6 +99,14 @@ double getValidDecimalInDouble(String value) {
   double netValue = double.parse(value.replaceAll(',', ''));
   assert(netValue is double);
   return netValue;
+}
+
+Color getColorFormat(String data){
+  if(!isValidString(data)){
+    return null;
+  }
+
+    return new Color(int.parse(data.substring(1, 7), radix: 16) + 0xFF000000);
 }
 
 String getValidDecimal(String value) {

@@ -29,6 +29,7 @@ class sortByDialogState extends State<sortByDialog> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: ClampingScrollPhysics(),
       padding: EdgeInsets.zero,
       shrinkWrap: true,
       itemBuilder: (context, index) {
@@ -68,6 +69,7 @@ class sortByDialogState extends State<sortByDialog> {
                       productList.setLoadingState(LoadMoreStatus.INITIAL);
                       productList.setSortOrder(_sortByOptions[index]);
                       productList.fetchProducts("1");
+                      Navigator.pop(context);
                     },
                   ),
                 ),

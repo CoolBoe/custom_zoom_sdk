@@ -31,14 +31,6 @@ class MainPageScreen extends StatefulWidget {
 class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
   bool _toggel = true;
 
-
-  final List<Widget> screens = [
-    HomeView(),
-    ShopView(),
-    FavouriteScreen(),
-    ProfileView(),
-  ];
-
   List<ByCatgories> sortBy = [
     ByCatgories("Home", 0, 'assets/icons/ic_home.svg'),
     ByCatgories("Shop", 1, 'assets/icons/ic_shop.svg'),

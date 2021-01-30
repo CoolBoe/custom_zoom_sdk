@@ -25,7 +25,7 @@ void main() {
   runApp(MultiProvider(
       providers: [
       ChangeNotifierProvider.value(value: ThemeProvider()),
-      ChangeNotifierProvider.value(value: AppProvider.initialize(), child: ShopView(),),
+      ChangeNotifierProvider.value(value: AppProvider.initialize()),
       ChangeNotifierProvider.value(value: UserProvider.initialize()),
       ChangeNotifierProvider.value(value: LoaderProvider(), child: CartScreen(),),
       ChangeNotifierProvider.value(value: ProductsProvider.initialize(), child: HomeView(),),
@@ -33,16 +33,21 @@ void main() {
       ChangeNotifierProvider.value(value: CategoriesProvider.initialize(), child: HomeView(),)
   ],
     child: Consumer<ThemeProvider>(
-      builder: (context, theme, _) => MaterialApp(
-      theme: theme.lightTheme,
-      title: "Woo App",
-      debugShowCheckedModeBanner: false,
-      home: ScreensController(),
-        routes: <String, WidgetBuilder>{
-        '/paypal':(BuildContext context)=>new PaypalPayment(),
-        '/MainPage':(BuildContext context)=>new MainPageScreen(currentTab: 0,),
-        },
-    )
+      builder: (context, theme, _) {
+      return  MaterialApp(
+          builder: (context, child){
+            return ScrollConfiguration(behavior: MyBehavior(), child: child);
+          },
+          theme: theme.lightTheme,
+          title: "Woo App",
+          debugShowCheckedModeBanner: false,
+          home: ScreensController(),
+          routes: <String, WidgetBuilder>{
+            '/paypal':(BuildContext context)=>new PaypalPayment(),
+            '/MainPage':(BuildContext context)=>new MainPageScreen(currentTab: 0,),
+          },
+        );
+      }
   )));
 }
 class ScreensController extends StatelessWidget {
@@ -59,5 +64,12 @@ class ScreensController extends StatelessWidget {
         default:
           return progressBar(context, orange);
       }
+  }
+}
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }

@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:wooapp/models/app.dart';
+import 'package:wooapp/models/category.dart';
 import 'package:wooapp/models/cityModel.dart';
+import 'package:wooapp/models/filter.dart';
+import 'package:wooapp/models/homeLayout.dart';
 import 'package:wooapp/models/paymentGateway.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/widgets/loading.dart';
@@ -12,13 +15,26 @@ class AppProvider with ChangeNotifier {
   List<PaymentGateway> _paymentGateway ;
   List<PaymentGateway> get getPaymentGateway => _paymentGateway;
 
-
-  List<CityModel> _citylist ;
+  List<CategoryModel> categories ;
+  List<CategoryModel> get allCategories=> categories;
   PriceRangeModel _priceRangeModel = new PriceRangeModel();
-  List<CityModel> get getCityList => _citylist;
   PriceRangeModel get priceRange => _priceRangeModel;
+  HomeLayout _homeLayout = new HomeLayout();
+  HomeLayout get getHomeLayout => _homeLayout;
+  List<Option> _sizeList;
+  List<Option> _colorList;
+  List<Option> get getSizeList =>_sizeList;
+  List<Option> get getColorList=>_colorList;
+  List<ColorSizeModel> colorSizelist;
+  List<ColorSizeModel> get getColorSizelist=> colorSizelist;
+
+  List<CityModel> get getCityList => _citylist;
+  List<CityModel> _citylist ;
   AppProvider.initialize(){
+    fetchHomeLayout();
     fetchPriceRange();
+    fetchCategories();
+    fetchColorSize();
     resetStream();
   }
   void resetStream(){
@@ -31,6 +47,28 @@ class AppProvider with ChangeNotifier {
    _priceRangeModel = await  _webApiServices.getPriceRange();
    notifyListeners();
   }
+
+  fetchCategories()async{
+    categories  = await WebApiServices().getCategories();
+    notifyListeners();
+  }
+  fetchColorSize()async{
+    colorSizelist  = await WebApiServices().getColorSizeList(id: "1");
+    if(colorSizelist!=null && colorSizelist.length>0){
+
+      for(int i =0; i<colorSizelist.length; i++){
+        if(colorSizelist[i].name=="Color"){
+          _colorList = colorSizelist[i].options;
+        }else if (colorSizelist[i].name=="Size"){
+         _sizeList = colorSizelist[i].options;
+        }
+      }
+
+    }
+
+    notifyListeners();
+  }
+
   fetchStateLIst({String states})async{
     printLog("responsee", states);
     _citylist = await _webApiServices.getStates(countryCode: states);
@@ -39,6 +77,10 @@ class AppProvider with ChangeNotifier {
   }
   fetchPaymentMethod()async{
     _paymentGateway = await _webApiServices.getPaymentGateway();
+    notifyListeners();
+  }
+  fetchHomeLayout()async{
+    _homeLayout = await _webApiServices.getHomeLayout();
     notifyListeners();
   }
 }

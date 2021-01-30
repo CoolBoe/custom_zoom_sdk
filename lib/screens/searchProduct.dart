@@ -26,15 +26,8 @@ import 'package:wooapp/screens/category.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/utils/widget_helper.dart';
-import 'package:wooapp/validator/validate.dart';
-import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
-import 'package:wooapp/widgets/progress_bar.dart';
-import 'package:wooapp/widgets/sortBy_ColorPicker.dart';
-import 'package:wooapp/widgets/sortBy_Dialog.dart';
-import 'package:wooapp/widgets/sortBy_DropMenu.dart';
-import 'package:wooapp/widgets/sortBy_SizeBuilder.dart';
 
 class SearchScreen extends BasePage {
   SearchScreen({Key key}) : super(key: key);

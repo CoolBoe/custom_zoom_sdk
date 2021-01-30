@@ -13,6 +13,7 @@ import 'package:wooapp/providers/category.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/mainpage.dart';
+import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 
@@ -48,42 +49,11 @@ class CategoriesScreenState extends State<CategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
+         appBar: BaseAppBar(context, "Category"),
         body: _categoriesList(),
-        bottomNavigationBar: Container(
-            color: Colors.transparent,
-            child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () async {
-                    var productList = Provider.of<ProductsProvider>(context, listen: false);
-                    productList.resetStreams();
-                    productList.setLoadingState(LoadMoreStatus.INITIAL);
-                    productList.fetchProducts(_page, category_id: _selectedItemID);
-                    changeScreen(
-                        context,
-                        MainPageScreen(
-                          currentTab: 1,
-                        ));
-                  },
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    child: Center(
-                      child: Text('Next',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14)),
-                    ),
-                  ),
-                ))));
+
+     );
   }
   Widget _categoriesList(){
     return new Consumer<CategoriesProvider>(builder: (context, categoryModel, child){
@@ -100,101 +70,72 @@ class CategoriesScreenState extends State<CategoriesScreen> {
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 2.2;
     final double itemWidth = size.width / 2;
-    return Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              expandedHeight: dp50,
-              backgroundColor: white,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text("Categories",
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16.0,
-                        fontWeight: medium,
-                        color: black)),
-                centerTitle: true,
-              ),
-              floating: true,
-              leading: GestureDetector(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                  )),
-              actions: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SvgPicture.asset(ic_search),
-                )
-              ],
-            ),
-            SliverPadding(
-              padding: EdgeInsets.all(8),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: (itemWidth / itemHeight),
-                ),
-                delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                      var imageUrl =
-                          'https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg';
-                      if (items[index].image != null) {
-                        imageUrl = items[index].image.src;
-                      }
-                      return GestureDetector(
-                          onTap: () async {
-                            setState(() {
-                              _selectItem = index;
-                              _selectedItemID = items[index].id.toString();
-                            });
-                          },
-                          child: Card(
-                            color: _selectItem == index
-                                ? Colors.orange
-                                : Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            elevation: 3,
-                            child: Container(
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.network(imageUrl,
-                                          alignment: Alignment.center,
-                                          height: 55,
-                                          width: 60),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(items[index].name,
-                                            style: TextStyle(
-                                                color: _selectItem == index
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400,
-                                                fontFamily: 'Poppins')),
-                                      )
-                                    ],
-                                  ),
-                                ),
+    return SingleChildScrollView(
+      child:
+      Container(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 3,
+                padding: EdgeInsets.zero,
+                childAspectRatio: (itemWidth / itemHeight),
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+                physics: ClampingScrollPhysics(),
+                children:items.map((e) {
+                  return GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          var productList = Provider.of<ProductsProvider>(context, listen: false);
+                          productList.resetStreams();
+                          productList.setLoadingState(LoadMoreStatus.INITIAL);
+                          productList.fetchProducts(_page, category_id: _selectedItemID);
+                          changeScreen(
+                              context,
+                              MainPageScreen(
+                                currentTab: 1,
+                              ));
+                        });
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 1,
+                        child: Container(
+                          child: Column(
+
+                            children: <Widget>[
+                              Container(
+                                height: 100,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(topLeft:Radius.circular(10), topRight: Radius.circular(10)),
+                                  image: DecorationImage(
+                                    image: NetworkImage(e.image!=null ? e.image.src : "https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg", ), fit: BoxFit.fill
+                                )),
                               ),
-                            ),
-                          ));
-                    }, childCount: items.length),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(e.name,
+                                    style: TextStyle(
+                                        color:Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Poppins')),
+                              )
+                            ],
+                          ),
+                        ),
+                      ));
+                }).toList(),
               ),
-            ),
+            )
           ],
-        ));
+        ),
+      ) ,
+    );
   }
 }

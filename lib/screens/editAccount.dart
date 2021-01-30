@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:provider/provider.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/user.dart';
+import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/utils/form_helper.dart';
 import 'package:wooapp/utils/widget_helper.dart';
 import 'package:wooapp/widgets/app_bar.dart';
@@ -31,8 +33,12 @@ class EditAccountScreenState extends State<EditAccountScreen>{
 
  Widget pageBuilder() {
     BasePrefs.init();
+    Details model;
  var value= BasePrefs.getString(USER_MODEL);
- Details model = Details.fromJson(jsonDecode(value));
+ if(value!=null){
+   model = Details.fromJson(jsonDecode(value));
+ }
+    var user= Provider.of<UserProvider>(context, listen: false);
     return Center(
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
@@ -40,7 +46,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
          crossAxisAlignment: CrossAxisAlignment.center,
          mainAxisAlignment: MainAxisAlignment.start,
          children: [
-         circularImageView(imageUrl: model!=null ? model.avatarUrl : "",
+         circularImageView(imageUrl: user.getProfileImage(),
            onCallback: (value){}),
            SizedBox(
              height: 30,
@@ -72,7 +78,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
 
                       ),
                     ),
-                    Text(model.billing.firstName, style: styleProvider(fontWeight: medium, size: 14, color: black),),
+                    Text(model ==null || model.billing==null? "Hi User"  : model.billing.firstName, style: styleProvider(fontWeight: medium, size: 14, color: black),),
                   ],
                 ),
 
@@ -154,7 +160,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
 
                        ),
                      ),
-                     Text(model.email, style: styleProvider(fontWeight: medium, size: 14, color: black),),
+                     Text(model ==null ? "Email here"  : model.email, style: styleProvider(fontWeight: medium, size: 14, color: black),),
                    ],
                  ),
 
@@ -195,7 +201,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
 
                        ),
                      ),
-                     Text(model.billing.phone, style: styleProvider(fontWeight: medium, size: 14, color: black),),
+                     Text(model ==null || model.billing==null? "Phone here" : model.billing.phone, style: styleProvider(fontWeight: medium, size: 14, color: black),),
                    ],
                  ),
 
@@ -236,7 +242,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
 
                        ),
                      ),
-                     Text(model.billing.address1, style: styleProvider(fontWeight: medium, size: 14, color: black),),
+                     Text(model ==null || model.billing==null? "Address here" :model.billing.address1, style: styleProvider(fontWeight: medium, size: 14, color: black),),
                    ],
                  ),
 

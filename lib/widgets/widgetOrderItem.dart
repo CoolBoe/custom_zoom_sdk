@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/order.dart';
-import 'package:wooapp/widgets/loading.dart';
 
-class WidgetOrderItem extends StatefulWidget{
+class widgetOrderItem extends StatefulWidget{
 
   OrderModel orderItem;
-  WidgetOrderItem({this.orderItem});
+  widgetOrderItem({this.orderItem});
   @override
-  WidgetOrderItemState createState()=>WidgetOrderItemState();
+  widgetOrderItemState createState()=>widgetOrderItemState();
 
 }
-class WidgetOrderItemState extends State<WidgetOrderItem>{
+class widgetOrderItemState extends State<widgetOrderItem>{
 
   @override
   void initState() {
@@ -24,7 +23,6 @@ class WidgetOrderItemState extends State<WidgetOrderItem>{
     return widgetBuilder();
   }
   Widget widgetBuilder() {
-    printLog("datadtadtf", widget.orderItem.lineItems);
     return Container(
         child: Padding(
           padding: const EdgeInsets.only(top:10.0),

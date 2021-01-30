@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:wooapp/models/filter.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/models/sort_by.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 
 enum LoadMoreStatus{INITIAL, LOADING, STABLE}
+enum ProductBy {DEFAULT, CATEGORY, FEATURED, SELLER, SALE, RATED }
 class ProductsProvider with ChangeNotifier {
   String sort = 'default';
   String page = '1';
@@ -19,12 +21,6 @@ class ProductsProvider with ChangeNotifier {
   List<ProductModel> get allProductsByFeature => _productListByFeatured;
   List<ProductModel> get allproductListByRelated =>_productListByRelated;
   double get totalRecords => _productList.length.toDouble();
-  // LoadMoreStatus _loadMoreStatus = LoadMoreStatus.STABLE;
-  // LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
-  // LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
-  // getLoadMoreStatus()=>_loadMoreStatus;
-  // getLoadMoreByFeatureStatue()=>loadMoreStatus;
-  // getLoadMoreByRelatedStatue()=>loadMoreStatus;
 
   ProductsProvider.initialize(){
     _productList = List<ProductModel>();
@@ -49,10 +45,12 @@ class ProductsProvider with ChangeNotifier {
     _sortBy = sortBy;
     notifyListeners();
   }
-  fetchProducts(pageNumber, {String sortBy, String str_search, String brand, String max_price, String min_price, String on_sale, bool featured, String category_id,}) async{
+  fetchProducts(pageNumber, {String sortBy, String str_search, String brand, String max_price, String min_price,
+    String on_sale, bool featured, String category_id, String colorList, String sizelist }) async{
     loader= true;
     printLog("fetchProducts", str_search);
-    List<ProductModel> itemModel = await _webApiServices.getProducts(sort: this._sortBy.value, category_id: category_id, page: this.page, per_page: this.per_page, str_search: str_search, brand: brand, featured: featured, on_sale: on_sale, max_price: max_price, min_price: min_price);
+    List<ProductModel> itemModel = await _webApiServices.getProducts(sort: this._sortBy.value, category_id: category_id, page: this.page, per_page: this.per_page, str_search: str_search, brand: brand,
+        featured: featured, on_sale: on_sale, max_price: max_price, min_price: min_price, sizeList: sizelist, colorList: colorList);
     if(itemModel.length>0){
       _productList.addAll(itemModel);
     }
@@ -75,12 +73,11 @@ class ProductsProvider with ChangeNotifier {
     }
   }
   fetchProductByRelated(pageNumber, {String sortBy, List<int> productIDs,}) async{
-
     List<ProductModel> itemModel = await _webApiServices.getProducts(
       sort: this._sortBy.value,
       page: this.page,
       per_page: this.per_page,
-      featured: true,
+      productIDs: productIDs
     );
     printLog("fetchProductByRelated", itemModel);
     _productListByRelated=[];
@@ -89,5 +86,10 @@ class ProductsProvider with ChangeNotifier {
     if(itemModel.length>0){
       _productListByRelated.addAll(itemModel);
     }
+  }
+
+  fetchProductByPageId({String page_id})async{
+    var data = _webApiServices.getAppPageById(page_id: page_id);
+    notifyListeners();
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:wooapp/models/cart.dart';
 
-Widget ShippingCart({List<ShippingMethod> shippingMethod, String choosenMethod}){
+Widget widgetShippingCart({List<ShippingMethod> shippingMethod, String choosenMethod}){
   int value = 0;
   String chosen_shipping_method= choosenMethod;
   return ListView.builder(

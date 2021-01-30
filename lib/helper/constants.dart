@@ -10,7 +10,9 @@ const String app_Theme = 'app_theme';
 const String dark_Mode = 'dark_mode';
 const String light_Mode = 'light_mode';
 const String USER_MODEL = 'user_model';
-const String InCompleteDataError = 'Please Complete Above Details';
+const String InCompleteDataError = 'Please Enter a Valid info';
+const String InCompletePasswordError = 'Please Enter a Valid password';
+const String InCompleteEmailError = 'Please Enter a Valid Email Id';
 const String USERINFO = 'user_info';
 const String USER_EMAIL = 'email';
 const String WISHLIST = 'wishList';
@@ -112,7 +114,9 @@ const String ic_money = "assets/images/ic_money.png";
 const String ic_nodata_png = "assets/images/ic_nodata.png";
 const String ic_promocode_png = "assets/images/ic_promocode.png";
 const String ic_more_png = "assets/images/ic_more.png";
+const String ic_thumbnail_png = "assets/images/ic_thumbnail.png";
 
+//ic_thumbnail.png
 /*-----------------SizeBuilder---------------------------*/
 const double dp5 = 5.0;
 const double dp10 = 10.0;

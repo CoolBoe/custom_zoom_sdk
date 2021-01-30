@@ -4,13 +4,23 @@ import 'package:wooapp/helper/shared_perference.dart';
 
 class ThemeProvider with ChangeNotifier{
   final darkTheme = ThemeData(
-    primarySwatch: Colors.grey,
+    hintColor: Colors.grey,
     primaryColor: Colors.black,
     brightness: Brightness.dark,
-    backgroundColor: const Color(0xFF212121),
+    backgroundColor: Colors.black,
     accentColor: Colors.white,
     accentIconTheme: IconThemeData(color: Colors.black),
     dividerColor: Colors.black12,
+    textTheme: TextTheme(
+      headline1: TextStyle(fontFamily: fontName,fontSize: 8.0, fontWeight: semiBold),
+      headline2: TextStyle(fontFamily: fontName,fontSize: 10.0, fontWeight: semiBold),
+      headline3: TextStyle(fontFamily: fontName,fontSize: 12.0, fontWeight: semiBold),
+      headline4: TextStyle(fontFamily: fontName,fontSize: 14.0, fontWeight: semiBold),
+      headline5: TextStyle(fontFamily: fontName,fontSize: 16.0, fontWeight: semiBold),
+      headline6: TextStyle(fontFamily: fontName,fontSize: 18.0, fontWeight: semiBold),
+      bodyText1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+      bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+    ),
   );
   final lightTheme = ThemeData(
     primarySwatch: Colors.grey,

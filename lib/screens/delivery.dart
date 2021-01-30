@@ -100,7 +100,10 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
   Widget stepperBuilder(){
     BasePrefs.init();
     var value= BasePrefs.getString(USER_MODEL);
-    userDetails = Details.fromJson(jsonDecode(value));
+    if(value!=null){
+      userDetails = Details.fromJson(jsonDecode(value));
+    }
+
     return SingleChildScrollView(
       child: new Form(
           key: shippingForm,
@@ -110,8 +113,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FormHelper.fieldLabel("First Name", regular, 10, color: grey, prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context, userDetails.billing.firstName, (value){
-                  printLog("firstNamgge", value);
+                FormHelper.textInput(context, userDetails==null || userDetails.billing==null ? "" :userDetails.billing.firstName, (value){
                   if(value==null){
                     userDetails.billing.firstName = userDetails.billing.firstName;
                   }else{
@@ -123,7 +125,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                   }return null;
                 }),
                 FormHelper.fieldLabel("Last Name", regular, 10, color: grey),
-                FormHelper.textInput(context, userDetails.billing.lastName, (value){
+                FormHelper.textInput(context, userDetails==null || userDetails.billing==null ? "" :userDetails.billing.lastName, (value){
                   if(value==null){
                     userDetails.billing.lastName = userDetails.billing.lastName;
                   }else{
@@ -135,7 +137,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                   }return null;
                 }),
                 FormHelper.fieldLabel("Email", regular, 10, color: grey, prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context, userDetails.billing.email, (value){
+                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" : userDetails.billing.email, (value){
                   if(value==null){
                     userDetails.billing.email = userDetails.billing.email;
                   }else{
@@ -147,7 +149,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                   }return null;
                 }),
                 FormHelper.fieldLabel("Phone Number", regular, 10, color: grey, prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context, userDetails.billing.phone, (value){
+                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" : userDetails.billing.phone, (value){
                   if(value==null){
                     userDetails.billing.phone = userDetails.billing.phone;
                   }else{
@@ -188,7 +190,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                           }
                         })),
                 FormHelper.fieldLabel("City", regular, 10, color: grey, prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context,userDetails.billing.city, (value){
+                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" :userDetails.billing.city, (value){
                   if(value==null){
                     userDetails.billing.city = userDetails.billing.city;
                   }else{
@@ -200,7 +202,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                   }return null;
                 }),
                 FormHelper.fieldLabel("Post Code", regular, 10, color: grey, prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context, userDetails.billing.postcode, (value){
+                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" : userDetails.billing.postcode, (value){
                   if(value==null){
                     userDetails.billing.postcode = userDetails.billing.postcode;
                   }else{
@@ -212,7 +214,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                   }return null;
                 }),
                 FormHelper.fieldLabel("Address Line 1", regular, 10, color: grey,prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context, userDetails.billing.address1, (value){
+                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" : userDetails.billing.address1, (value){
                   if(value==null){
                     userDetails.billing.address1 = userDetails.billing.address1;
                   }else{
@@ -224,7 +226,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                   }return null;
                 }),
                 FormHelper.fieldLabel("Address Line 2", regular, 10, color: grey),
-                FormHelper.textInput(context, userDetails.billing.address2, (value){
+                FormHelper.textInput(context, userDetails==null || userDetails.billing==null ? "" :userDetails.billing.address2, (value){
                   if(value==null){
                     userDetails.billing.address2 = userDetails.billing.address2;
                   }else{

@@ -8,7 +8,6 @@ import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
-import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/screens/productScreen.dart';

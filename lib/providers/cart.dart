@@ -22,7 +22,6 @@ class CartProvider with ChangeNotifier {
   OrderModel _orderModel;
   OrderHistory _orderSummary;
   OrderHistory get orderSummary=> _orderSummary;
-
   OrderModel get getOrderModel => _orderModel;
   CartModel get getCart => _cartModel;
   int get totalCartItem=>_cartItemCount;

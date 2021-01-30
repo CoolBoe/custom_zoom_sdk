@@ -169,10 +169,9 @@ class OrderHistoryState extends BasePageState<OrderHistory>{
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(onTap: (){
-
             changeScreen(context, OrderScreen(orderModel: orderList[index]));
           },
-          child: WidgetOrderItem(orderItem: orderList[index],));
+          child: widgetOrderItem(orderItem: orderList[index],));
         });
   }
 

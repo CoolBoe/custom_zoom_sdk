@@ -19,6 +19,7 @@ import 'package:wooapp/widgets/progress_bar.dart';
 import 'package:wooapp/widgets/sortBy_Dialog.dart';
 import 'package:wooapp/widgets/widgetLineItem.dart';
 import 'package:wooapp/widgets/widgetOrderItem.dart';
+import 'package:wooapp/widgets/widgetOrderSummary.dart';
 
 class OrderScreen extends StatefulWidget{
   OrderModel orderModel;
@@ -75,7 +76,8 @@ class OrderScreenState extends State<OrderScreen>{
             ),
             lineItemBuilder(widget.orderModel.lineItems),
             timeLineTile(),
-            orderSummary(),
+            widgetOrderSummary(context, subtotal: widget.orderModel.total.toString(), shippingCharge: widget.orderModel.shippingTotal,
+            tax: widget.orderModel.totalTax, totalDiscount: widget.orderModel.discountTotal, totalPrice:widget.orderModel.total ),
             bottomBar()
           ],
         ),
@@ -89,7 +91,7 @@ class OrderScreenState extends State<OrderScreen>{
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return WidgetLineItem(lineItems: lineItems[index]);
+          return widgetLineItem(lineItems: lineItems[index]);
         });
   }
 
@@ -289,176 +291,6 @@ class OrderScreenState extends State<OrderScreen>{
     );
   }
 
-  Widget orderSummary(){
-    return Padding(
-      padding: const EdgeInsets.only(
-          top: 0.0, left: 0, right: 0, bottom: 10),
-      child: Container(
-          child: Card(
-            elevation: 10,
-            color: Color(0xFFFEDBD0),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width / 1.2,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 30.0, top: 8, right: 30, bottom: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Order Summary',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600, fontSize: 14)),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text('Subtotal :',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: Text(widget.orderModel.total.toString(),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text('Shipping Charges :',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: Text(widget.orderModel.shippingTotal ,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text('Tax :',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: Text(widget.orderModel.totalTax,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Text('Total Discount :',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: Text(widget.orderModel.discountTotal,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                      child: Container(
-                        height: 0.9,
-                        color: Colors.orange,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 70,
-                            child: Text('Total :',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20.0),
-                            child: Text("₹ ${widget.orderModel.total}",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          )),
-    );
-  }
   Widget bottomBar(){
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -547,75 +379,73 @@ class OrderScreenState extends State<OrderScreen>{
                                       fontWeight: FontWeight.w600,
                                       color: Colors.black)),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 30),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    Navigator.pop(context);
-                                  });
-                                },
-                                child: Container(
-                                    height: 35,
-                                    margin: EdgeInsets.zero,
-                                    child: Icon(
-                                      Icons.close,
-                                      color: Colors.black,
-                                      size: 25,
-                                    )),
-                              ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  Navigator.pop(context);
+                                });
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.only(right: 30),
+                                  height: 35,
+                                  margin: EdgeInsets.zero,
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.black,
+                                    size: 25,
+                                  )),
                             ),
                           ],
                         ),
                       ),
-                      Padding(
+                      GestureDetector(onTap: (){
+
+                      },
+                        child: Container(
                           padding:
                           EdgeInsets.only(left: 20, top: 10, right: 20),
-                          child: Container(
-                              color: Colors.transparent,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: Center(
-                                    child: Text('SHARE',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14)),
-                                  ),
-                                ),
-                              ))),
-                      Padding(
+                          color: Colors.transparent,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Center(
+                                child: Text('SHARE',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14)),
+                              ),
+                            ),
+                          )),),
+                      Container(
                           padding: EdgeInsets.only(left: 20, top: 0, right: 20),
-                          child: Container(
-                              padding: EdgeInsets.zero,
-                              color: Colors.transparent,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: Center(
-                                    child: Text('MANAGE ORDER',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14)),
-                                  ),
-                                ),
-                              ))),
+                          color: Colors.transparent,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(10)),
+                              ),
+                              child: Center(
+                                child: Text('MANAGE ORDER',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14)),
+                              ),
+                            ),
+                          )),
                     ],
                   ),
                 ),

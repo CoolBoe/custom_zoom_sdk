@@ -7,6 +7,7 @@ import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/productScreen.dart';
+import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 
@@ -23,6 +24,7 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
   @override
   void initState() {
     var productList = Provider.of<ProductsProvider>(context, listen: false);
+    printLog("fyfyfyfy", widget.products);
     productList.fetchProductByRelated(_page,productIDs: widget.products );
     super.initState();
   }
@@ -48,6 +50,7 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allproductListByRelated!=null &&
           productModel.allproductListByRelated.length>0){
+        printLog("hjghghjgh",productModel.allproductListByRelated);
         return _buildproductList(productModel.allproductListByRelated);
       }else{
         return progressBar(context, orange);

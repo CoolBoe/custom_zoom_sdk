@@ -9,23 +9,30 @@ import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/category.dart';
+import 'package:wooapp/models/homeLayout.dart';
 import 'package:wooapp/models/product.dart';
+import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/category.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/screens/category.dart';
+import 'package:wooapp/screens/mainpage.dart';
+import 'package:wooapp/screens/productBuilder.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
-
+enum ProductBy { CATEGORY, FEATURED, SELLER, SALE, RATED }
 class WidgetCategories extends StatefulWidget{
+  HomeLayout homeLayout;
+  WidgetCategories({Key key, this.homeLayout}) : super(key: key);
   @override
   _WidgetCategoriesState createState()=>_WidgetCategoriesState();
 }
 class _WidgetCategoriesState extends State<WidgetCategories>{
   WebApiServices webApiServices;
   int currentTab = 0;
+  HomeLayout homeLayout;
   int _page =1;
   int categoryId= 15;
   Timer _time;
@@ -34,172 +41,30 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
   double offset = 0.0 ;
   @override
   void initState() {
-    var categoryList=Provider.of<CategoriesProvider>(context, listen: false);
-    categoryList.fetchCategories();
-    var productList = Provider.of<ProductsProvider>(context, listen: false);
-    productList.fetchProducts(_page);
-    productList.fetchProductByFeatured(_page, featured: true);
-
-    _scrollController.addListener(() {
-      setState(() {
-        //<-----------------------------
-        offset = _scrollController.offset;
-        // force a refresh so the app bar can be updated
-      });
-      if(_scrollController.position.pixels==_scrollController.position.maxScrollExtent){
-        productList.setLoadingState(LoadMoreStatus.LOADING);
-        productList.fetchProducts(++_page);
-      }
-    });
     super.initState();
-  }
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+    homeLayout = widget.homeLayout;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        color: white,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top:dp10, left: 10, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  GestureDetector(
-                      child: Text("All Categories",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 12.0,
-                              fontWeight: semiBold,
-                              color: black))),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          changeScreen(context, CategoriesScreen());
-                        },
-                        child: Text(
-                          "View All",
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 10.0,
-                              fontWeight: regular,
-                              color: black),
-                        ),
-                      ),
-                      Icon(
-                        Icons.arrow_right_alt_rounded,
-                        color: black,
-                        size: 20,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 40,
-              child:_categoriesList(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      GestureDetector(
-                          child: Text(tagName,
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14.0,
-                                  fontWeight: medium,
-                                  color: black))),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "See More",
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 10.0,
-                                fontWeight: regular,
-                                color: black),
-                          ),
-                          Icon(
-                            Icons.arrow_right_alt_rounded,
-                            color: black,
-                            size: 20,
-                          )
-                        ],
-                      )
-                    ]),
-              ),
-            ),
-            Container(
-                height: 270,
-                child: _productsByCategory()),
-            Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-                child: Container(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        GestureDetector(
-                            child: Text("Featured",
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14.0,
-                                    fontWeight: medium,
-                                    color: black))),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "See More",
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 10.0,
-                                  fontWeight: regular,
-                                  color: black),
-                            ),
-                            Icon(
-                              Icons.arrow_right_alt_rounded,
-                              color: black,
-                              size: 20,
-                            )
-                          ],
-                        )
-                      ]),
-                ),
-            ),
-            Container(
-                height: 270,
-                child: _productByFeatured(),
-            )
-          ],
-        ),
-      ),
+    return Container(
+      child: pageUi(),
     );
   }
+
   Widget _categoriesList(){
-    return new Consumer<CategoriesProvider>(builder: (context, categoryModel, child){
-      if(categoryModel.allCategories!=null &&
-      categoryModel.allCategories.length>0
+    return new Consumer<AppProvider>(builder: (context, app, child){
+      if(app.getHomeLayout.categories!=null &&
+          app.getHomeLayout.categories.length>0
       ){
-        return _buildCategoryList(categoryModel.allCategories);
+        return _buildCategoryList(app.getHomeLayout.categories);
       }else{
         return ShimmerList(listType: "Category",);
       }
     });
   }
-  Widget _buildCategoryList(List<CategoryModel> items) {
+
+  Widget _buildCategoryList(List<HomeLayoutCategory> items) {
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 10;
     final double itemWidth = size.width / 2;
@@ -220,17 +85,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
               padding: EdgeInsets.only(top:2, left: 9, right: 9),
               child: GestureDetector(
                 onTap: () {
-                  setState(() {
-                    tagName = items[index].name;
-                    currentTab = index;
-                    _page = 1;
-                    categoryId = items[index].id;
-                  });
-                  var productList = Provider.of<ProductsProvider>(context, listen: false);
-                  productList.resetStreams();
-                  productList.setLoadingState(LoadMoreStatus.INITIAL);
-                  productList.fetchProducts(_page, category_id: categoryId.toString());
-
+                  changeScreen(context, ShopView(categoryId: items[index].id,));
                 },
                 child:Card(
                     margin: EdgeInsets.zero,
@@ -243,7 +98,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Image.network(items[index].image !=null ?items[index].image.src : "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/9f5962a5-6eb6-46d4-b538-130e70618576/downshifter-10-running-shoe-CrpbbD.jpg",),
+                          Image.network(items[index].image !=null ?items[index].image : "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/9f5962a5-6eb6-46d4-b538-130e70618576/downshifter-10-running-shoe-CrpbbD.jpg",),
                           Padding(
                             padding: const EdgeInsets.only(left:2.0),
                             child: Text(
@@ -261,30 +116,27 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
               ),
             );
           },
-          itemCount: 4,
+          itemCount: items.length,
         )
     );
   }
 
-  Widget _productsByCategory(){
-    return new Consumer<ProductsProvider>(builder: (context, productModel, child){
-      if(productModel.allProducts!=null &&
-          productModel.allProducts.length>0){
+  Widget _topSaleProducts(){
+    return new Consumer<AppProvider>(builder: (context, app, child){
+      if(app.getHomeLayout.topSeller!=null &&
+          app.getHomeLayout.topSeller.length>0){
         return Container(
-          child: _productsByCategoryBuilder(productModel.allProducts),
+          child: _topSaleProductBuilder(app.getHomeLayout.topSeller),
         );
-      }else{if(productModel.loader){
-        return ShimmerList(listType: "List",);
       }else{
         return Padding(
           padding: const EdgeInsets.only(top:40.0),
           child: somethingWentWrong(),
         );
       }
-      }
-    });
+      });
   }
-  Widget _productsByCategoryBuilder(List<ProductModel> productList) {
+  Widget _topSaleProductBuilder(List<ProductModel> productList) {
     return Container(
       child: ListView.builder(
           shrinkWrap: true,
@@ -309,11 +161,11 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
     );
   }
 
-  Widget _productByFeatured(){
+  Widget _featuredProduct(){
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allProductsByFeature!=null &&
           productModel.allProductsByFeature.length>0){
-        return _productByFeaturedBuilder(productModel.allProductsByFeature);
+        return _featureProductBuilder(productModel.allProductsByFeature);
       }else{if(productModel.loader){
         return ShimmerList(listType: "List",);
       }else{
@@ -325,7 +177,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
       }
     });
   }
-  Widget _productByFeaturedBuilder(List<ProductModel> productList){
+  Widget _featureProductBuilder(List<ProductModel> productList){
     return Container(
       child: ListView.builder(
           shrinkWrap: true,
@@ -346,6 +198,289 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                   ),
                 ));
           }
+      ),
+    );
+  }
+
+  Widget _saleProduct(){
+    return new Consumer<AppProvider>(builder: (context, app, child){
+      if(app.getHomeLayout.saleProducts!=null &&
+          app.getHomeLayout.saleProducts.length>0){
+        return _saleProductBuilder(app.getHomeLayout.saleProducts);
+      }else{
+        return Padding(
+          padding: const EdgeInsets.only(top:40.0),
+          child: somethingWentWrong(),
+        );
+      }
+    });
+  }
+  Widget _saleProductBuilder(List<ProductModel> productList){
+    return Container(
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          itemCount: productList.length,
+          itemBuilder: (BuildContext context, int index){
+            return GestureDetector(
+                onTap: () {
+                  changeScreen(
+                      context, ProductScreen(productModel: productList[index]));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProductWidget(
+                    productModel: productList[index],
+                    width: 150,
+                  ),
+                ));
+          }
+      ),
+    );
+  }
+
+  Widget _topRatedProduct(){
+    return new Consumer<AppProvider>(builder: (context, app, child){
+      if(app.getHomeLayout.topRatedProducts!=null &&
+          app.getHomeLayout.topRatedProducts.length>0){
+        return __topRatedProductBuilder(app.getHomeLayout.topRatedProducts);
+      }else{
+        return Padding(
+          padding: const EdgeInsets.only(top:40.0),
+          child: somethingWentWrong(),
+        );
+      }
+    });
+  }
+  Widget __topRatedProductBuilder(List<ProductModel> productList){
+    return Container(
+      child: ListView.builder(
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          itemCount: productList.length,
+          itemBuilder: (BuildContext context, int index){
+            return GestureDetector(
+                onTap: () {
+                  changeScreen(
+                      context, ProductScreen(productModel: productList[index]));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProductWidget(
+                    productModel: productList[index],
+                    width: 150,
+                  ),
+                ));
+          }
+      ),
+    );
+  }
+
+  Widget pageUi() {
+    return Container(
+      color: white,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top:dp10, left: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                GestureDetector(
+                    child: Text("All Categories",
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12.0,
+                            fontWeight: semiBold,
+                            color: black))),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        changeScreen(context, CategoriesScreen());
+                      },
+                      child: Text(
+                        "View All",
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 10.0,
+                            fontWeight: regular,
+                            color: black),
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_right_alt_rounded,
+                      color: black,
+                      size: 20,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Visibility(visible: homeLayout.categories!=null,child: Container(
+            height: 40,
+            child: _buildCategoryList(homeLayout.categories),
+          ),),
+          Visibility(visible: homeLayout.topSeller!=null,child: Container(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  GestureDetector(
+                      child: Text("Top Sellers",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14.0,
+                              fontWeight: semiBold,
+                              color: black))),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "See More",
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 10.0,
+                            fontWeight: regular,
+                            color: black),
+                      ),
+                      Icon(
+                        Icons.arrow_right_alt_rounded,
+                        color: black,
+                        size: 20,
+                      )
+                    ],
+                  )
+                ]),
+          ),),
+          homeLayout.topSeller!=null && homeLayout.topSeller.length>0 ? Container(
+              height: 270,
+              child: _topSaleProductBuilder(homeLayout.topSeller)): Container(),
+
+          Visibility(visible: homeLayout.featuredProducts !=null,child:Container(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("Featured",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14.0,
+                          fontWeight: semiBold,
+                          color: black)),
+                  GestureDetector(
+                    onTap: (){
+                      changeScreen(context, ShopView());
+                    },
+                    child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "See More",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 10.0,
+                              fontWeight: regular,
+                              color: black),
+                        ),
+                        Icon(
+                          Icons.arrow_right_alt_rounded,
+                          color: black,
+                          size: 20,
+                        )
+                      ],
+                    ),
+                  )
+                ]),
+          ),),
+          Visibility(visible: homeLayout.featuredProducts !=null ,child: Container(
+            height: 270,
+            child: _featureProductBuilder(homeLayout.featuredProducts),
+          )),
+
+          Visibility(visible: homeLayout.saleProducts !=null,child:Container(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  GestureDetector(
+                      child: Text("Top Sales",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14.0,
+                              fontWeight: semiBold,
+                              color: black))),
+                  GestureDetector(onTap: (){
+                    changeScreen(context, ShopView());
+                  },
+                    child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "See More",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 10.0,
+                              fontWeight: regular,
+                              color: black),
+                        ),
+                        Icon(
+                          Icons.arrow_right_alt_rounded,
+                          color: black,
+                          size: 20,
+                        )
+                      ],
+                    ),)
+                ]),
+          ),),
+          Visibility(visible: homeLayout.saleProducts !=null ,child: Container(
+            height: 270,
+            child: _saleProduct(),
+          )),
+
+          Visibility(visible: homeLayout.topRatedProducts !=null,child:Container(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("Top Rated",
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14.0,
+                          fontWeight: semiBold,
+                          color: black)),
+                  GestureDetector(onTap: (){
+                    changeScreen(context, ShopView());
+                  },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "See More",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 10.0,
+                              fontWeight: regular,
+                              color: black),
+                        ),
+                        Icon(
+                          Icons.arrow_right_alt_rounded,
+                          color: black,
+                          size: 20,
+                        )
+                      ],
+                    ),)
+                ]),
+          ),),
+          Visibility(visible: homeLayout.topRatedProducts !=null ,child: Container(
+            height: 270,
+            child: __topRatedProductBuilder(homeLayout.topRatedProducts),
+          )),
+        ],
       ),
     );
   }
