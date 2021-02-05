@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/sort_by.dart';
@@ -55,10 +56,10 @@ class sortByDialogState extends State<sortByDialog> {
                 width: 20,
                 child: Theme(
                   data: Theme.of(context)
-                      .copyWith(unselectedWidgetColor: Colors.orange),
+                      .copyWith(unselectedWidgetColor: accent_color),
                   child: Radio(
                     value: index,
-                    activeColor: Colors.orange,
+                    activeColor: accent_color,
                     groupValue: value,
                     onChanged: (val) {
                       setState(() {

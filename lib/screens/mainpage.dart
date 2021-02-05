@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wooapp/firebase/event.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
@@ -68,7 +69,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
         bucket: bucket,
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
+        backgroundColor: accent_color,
         child: Stack(
           children: <Widget>[
             new Align(
@@ -109,7 +110,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_home.svg",
-                          color: widget.currentTab == 0 ? Colors.orange : Colors.grey,
+                          color: widget.currentTab == 0 ?accent_color : Colors.grey,
                         )
                       ],
                     ),
@@ -127,7 +128,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_shop.svg",
-                          color: widget.currentTab == 1 ? Colors.orange : Colors.grey,
+                          color: widget.currentTab == 1 ? accent_color : Colors.grey,
                         )
                       ],
                     ),
@@ -150,7 +151,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_heart.svg",
-                          color: widget.currentTab == 2 ? Colors.orange : Colors.grey,
+                          color: widget.currentTab == 2 ?accent_color : Colors.grey,
                         )
                       ],
                     ),
@@ -168,7 +169,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_profile.svg",
-                          color: widget.currentTab == 3 ? Colors.orange : Colors.grey,
+                          color: widget.currentTab == 3 ?accent_color : Colors.grey,
                         )
                       ],
                     ),

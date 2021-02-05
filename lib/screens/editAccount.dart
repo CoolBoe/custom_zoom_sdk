@@ -78,7 +78,11 @@ class EditAccountScreenState extends State<EditAccountScreen>{
 
                       ),
                     ),
-                    Text(model ==null || model.billing==null? "Hi User"  : model.billing.firstName, style: styleProvider(fontWeight: medium, size: 14, color: black),),
+                    Text(model==null ? "Hi User":
+                    model.firstName!=null && model.firstName!=""?
+                    model.billing.firstName!=null && model.billing.firstName!="" ?
+                    "${model.billing.firstName..toUpperCase()}" : "${model.firstName.toUpperCase()}" :
+                    "Hi User", style: styleProvider(fontWeight: medium, size: 14, color: black),),
                   ],
                 ),
 
@@ -115,7 +119,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
                              BoxShadow(color: Colors.grey[50], spreadRadius: 2),
                            ],
                          ),
-                         child:Image.asset("assets/images/ic_user.png"),
+                         child:Image.asset(ic_pass_png),
 
                        ),
                      ),
@@ -156,7 +160,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
                              BoxShadow(color: Colors.grey[50], spreadRadius: 2),
                            ],
                          ),
-                         child:Image.asset("assets/images/ic_user.png"),
+                         child:Image.asset(ic_email_png),
 
                        ),
                      ),
@@ -197,11 +201,11 @@ class EditAccountScreenState extends State<EditAccountScreen>{
                              BoxShadow(color: Colors.grey[50], spreadRadius: 2),
                            ],
                          ),
-                         child:Image.asset("assets/images/ic_user.png"),
+                         child:Image.asset(ic_phone_png),
 
                        ),
                      ),
-                     Text(model ==null || model.billing==null? "Phone here" : model.billing.phone, style: styleProvider(fontWeight: medium, size: 14, color: black),),
+                     Text(model ==null || model.billing.phone==null || model.billing.phone==""? "Phone here" : model.billing.phone, style: styleProvider(fontWeight: medium, size: 14, color: black),),
                    ],
                  ),
 
@@ -238,11 +242,11 @@ class EditAccountScreenState extends State<EditAccountScreen>{
                              BoxShadow(color: Colors.grey[50], spreadRadius: 2),
                            ],
                          ),
-                         child:Image.asset("assets/images/ic_user.png"),
+                         child:Image.asset(ic_address_png),
 
                        ),
                      ),
-                     Text(model ==null || model.billing==null? "Address here" :model.billing.address1, style: styleProvider(fontWeight: medium, size: 14, color: black),),
+                     Text(model ==null || model.billing.address1==null || model.billing.address1==""? "Address here" :model.billing.address1, style: styleProvider(fontWeight: medium, size: 14, color: black),),
                    ],
                  ),
 
@@ -279,7 +283,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
                              BoxShadow(color: Colors.grey[50], spreadRadius: 2),
                            ],
                          ),
-                         child:Image.asset("assets/images/ic_user.png"),
+                         child:Image.asset(ic_globe_png),
 
                        ),
                      ),

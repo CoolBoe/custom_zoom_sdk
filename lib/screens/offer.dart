@@ -46,7 +46,7 @@ class OfferScreenState extends State<OfferScreen>{
     return Scaffold(
       appBar:BaseAppBar(context, "My Offers", suffixIcon: couponRemover()),
       body: pageBuilder(),
-      bottomNavigationBar:customButton(title: "Apply Coupons", color: orange,onPressed: (){
+      bottomNavigationBar:customButton(title: "Apply Coupons", color: accent_color,onPressed: (){
         if(cartItemKey!=null){
           setState(() {
             inApiProcess = true;
@@ -110,7 +110,7 @@ class OfferScreenState extends State<OfferScreen>{
                       Expanded(child:Padding(
                         padding: const EdgeInsets.only(top:5.0),
                         child: TextFormField(
-                            cursorColor: orange,
+                            cursorColor: accent_color,
                             decoration: InputDecoration(
                             hintText: "Search For Offers",
                             hintStyle:styleProvider(fontWeight: regular, size: dp15, color: grey_400) ,
@@ -168,14 +168,14 @@ class OfferScreenState extends State<OfferScreen>{
                                text: TextSpan(
                                    text:"₹ "+coupons[index].amount+" Off ",
                                    style: TextStyle(
-                                       color: orange,
+                                       color: accent_color,
                                        fontSize: dp20,
                                        fontFamily: fontName,
                                        fontWeight: bold),
                                    children: <TextSpan>[
                                      TextSpan(text: '\n Check the best deals for today',
                                        style: TextStyle(
-                                         color: orange_300,
+                                         color: accent_color,
                                          fontSize: dp15,
                                          fontWeight:regular,
                                        ),

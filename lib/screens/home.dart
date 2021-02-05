@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/color.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/screens/splesh.dart';
 import 'package:wooapp/widgets/item_DrawerBuilder.dart';
 import 'package:wooapp/widgets/loading.dart';
+import 'package:wooapp/widgets/widgetHomeLayoutMoke.dart';
 import 'package:wooapp/widgets/widget_home_categories.dart';
 import 'package:wooapp/widgets/widget_home_slider.dart';
 
@@ -23,6 +25,7 @@ class HomeView extends StatefulWidget {
   @override
   HomeState createState() => HomeState();
 }
+
 
 class HomeState extends State<HomeView> {
   bool _toggel = true;
@@ -51,7 +54,9 @@ class HomeState extends State<HomeView> {
               children: [
                 Container(
                   child: app.getHomeLayout.banners!=null && app.getHomeLayout.banners.length>0 ?
-                  BannerSlider(homeLayout: app.getHomeLayout,) : Container(),
+                  BannerSlider(homeLayout: app.getHomeLayout,) : Container(
+                    child: MokeHomeLayout(),
+                  ),
                 ),
                 app.getHomeLayout.categories!=null && app.getHomeLayout.categories.length>0?
                 WidgetCategories(homeLayout: app.getHomeLayout): Container()
@@ -97,10 +102,10 @@ class HomeState extends State<HomeView> {
                               ),
                               Expanded(child: Text(
                                 model==null ? "Hi User":
-                                model.firstName!=null && model.billing.firstName!="" ?
-                              model.firstName!=null && model.firstName!=""?
-                              "Dear ${model.firstName.toUpperCase()}" : "Dear ${model.billing.firstName.toUpperCase()}" :
-                              "Hi User",
+                                model.firstName!=null && model.firstName!=""?
+                                model.billing.firstName!=null && model.billing.firstName!="" ?
+                                "Dear ${model.billing.firstName..toUpperCase()}" : "Dear ${model.firstName.toUpperCase()}" :
+                                "Hi User",
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontFamily: 'Poppins',
@@ -132,7 +137,7 @@ class HomeState extends State<HomeView> {
                                       decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(20),
-                                          color: _toggel ? white : orange),
+                                          color: _toggel ? white : accent_color),
                                       child: Stack(
                                         children: <Widget>[
                                           AnimatedPositioned(
@@ -157,7 +162,7 @@ class HomeState extends State<HomeView> {
                                                     child: _toggel
                                                         ? Icon(
                                                             Icons.circle,
-                                                            color: orange,
+                                                            color: accent_color,
                                                             size: 15,
                                                           )
                                                         : Icon(
@@ -196,14 +201,14 @@ class HomeState extends State<HomeView> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            top: 10.0, left: 30, bottom: 10),
+                            top: 10.0, left: 30, bottom: 20),
                         child: GestureDetector(
                           onTap: () {
                             BasePrefs.init();
                             BasePrefs.clearPrefs().then((value) => {
                                   setState(() {
                                     if (value) {
-                                      toast(USER_LOGOUT);
+                                     toast(USER_LOGOUT);
                                      changeToNewScreen(context,SpleshScreen(), "/SplashScreen");
                                     }
                                   })

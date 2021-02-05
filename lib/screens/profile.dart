@@ -14,12 +14,14 @@ import 'package:wooapp/screens/delivery.dart';
 import 'package:wooapp/screens/editAccount.dart';
 import 'package:wooapp/screens/offer.dart';
 import 'package:wooapp/screens/order.dart';
-import 'package:wooapp/screens/paymet.dart';
+import 'package:wooapp/screens/orderInfo.dart';
+import 'package:wooapp/screens/payment.dart';
 import 'package:wooapp/screens/privacy.dart';
 import 'package:wooapp/screens/settings.dart';
 import 'package:wooapp/utils/form_helper.dart';
 import 'package:wooapp/utils/widget_helper.dart';
 import 'package:wooapp/widgets/app_bar.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 import 'notification.dart';
 
@@ -32,13 +34,15 @@ class ProfileView extends StatefulWidget {
 class ProfileState extends State<ProfileView> {
   Widget _CustomScrollView() {
     List<ByCatgories> sortBy = [
-      ByCatgories("Account Details", 0, ic_home),
+      ByCatgories("Orders", 0, ic_order),
       ByCatgories("Offers", 1, ic_shop),
-      ByCatgories("Notifications", 2,ic_categories),
-      ByCatgories("Delivery information", 3, ic_chat),
-      ByCatgories("Payment Information", 4, ic_call),
-      ByCatgories("Language", 5, ic_support),
-      ByCatgories("Privacy Settings", 6, ic_rating),
+      ByCatgories("Shipping Address", 2, ic_chat),
+      ByCatgories("Billing Address", 3, ic_chat),
+      // ByCatgories("Account Details", 0, ic_home),
+      // ByCatgories("Notifications", 2,ic_categories),
+      // ByCatgories("Payment Information", 4, ic_call),
+      // ByCatgories("Language", 5, ic_support),
+      // ByCatgories("Privacy Settings", 6, ic_rating),
     ];
     BasePrefs.init();
     Details model;
@@ -55,13 +59,11 @@ class ProfileState extends State<ProfileView> {
     var user= Provider.of<UserProvider>(context, listen: false);
     return Column(
       children: <Widget>[
-
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             circularImageView(imageUrl: user.getProfileImage(),
             onCallback: (value){
-
             }),
             Column(
               children: <Widget>[
@@ -69,9 +71,9 @@ class ProfileState extends State<ProfileView> {
                   padding: EdgeInsets.only(),
                   child: Text(
                       model==null ? "Hi User":
-                      model.firstName!=null && model.billing.firstName!="" ?
-                  model.firstName!=null && model.firstName!=""?
-                  "Dear ${model.firstName.toUpperCase()}" : "Dear ${model.billing.firstName.toUpperCase()}" :
+                      model.firstName!=null && model.firstName!=""?
+                      model.billing.firstName!=null && model.billing.firstName!="" ?
+                  "Dear ${model.billing.firstName..toUpperCase()}" : "Dear ${model.firstName.toUpperCase()}" :
                   "Hi User",
                       style: styleProvider(fontWeight: semiBold, size: 18, color: black)),
                 ),
@@ -82,6 +84,7 @@ class ProfileState extends State<ProfileView> {
                 ),
                 GestureDetector(onTap: (){
                   changeScreen(context, EditAccountScreen());
+                  // toast("Restricted  Access");
                 },
                 child: Container(
                     width: 150,
@@ -91,7 +94,7 @@ class ProfileState extends State<ProfileView> {
                       child: Container(
                         height: 30,
                         decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color:accent_color,
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                         child: Padding(
@@ -108,96 +111,9 @@ class ProfileState extends State<ProfileView> {
             ),
           ],
         ),
+
         Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              GestureDetector(onTap: (){
-                changeScreen(context, OrderHistory());
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: SvgPicture.asset(ic_order),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 20),
-                      child: Text(
-                        'Orders',
-                        style: styleProvider(fontWeight: medium, size: 10, color: black),
-                      ),
-                    ),
-                    Container(
-                      height: 20,
-                      child: VerticalDivider(
-                        color: Colors.black,
-                        width: 2,
-                      ),
-                    )
-                  ],
-                ),
-              ),),
-              GestureDetector(onTap: (){
-                changeScreen(context, DeliveryScreen());
-              },
-              child: Row(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: <Widget>[
-                 Padding(
-                   padding: const EdgeInsets.only(left: 20.0),
-                   child: SvgPicture.asset(ic_location),
-                 ),
-                 Padding(
-                   padding: const EdgeInsets.only(left: 8.0, right: 20),
-                   child: Text(
-                       'My Address',
-                       style: styleProvider(fontWeight: medium, size: 10, color: black)),
-                 ),
-                 Container(
-                   height: 20,
-                   child: VerticalDivider(
-                     color: Colors.black,
-                     width: 2,
-                   ),
-                 )
-               ],
-             ),),
-              GestureDetector(onTap: (){
-                changeScreen(context, SettingScreen());
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: SvgPicture.asset(
-                        ic_support,
-                        height: 15,
-                        width: 15,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 20),
-                      child: Text(
-                        'Settings',
-                        style: styleProvider(fontWeight: medium, size: 10, color: black),
-                      ),
-                    ),
-                  ],
-                ),
-              ),),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 30.0, left: 30, right: 20),
+          padding: const EdgeInsets.only(top: 10.0, left: 30, right: 20),
           child: Container(
             child: ListView.builder(
                 padding: EdgeInsets.zero,
@@ -210,13 +126,13 @@ class ProfileState extends State<ProfileView> {
                     onTap: () {
                       switch(index){
                         case 0:
-                          changeScreen(context, EditAccountScreen());
+                          changeScreen(context, OrderHistory());
                           break;
                         case 1:
                           changeScreen(context, OfferScreen());
                           break;
                         case 2:
-                          changeScreen(context, NotificationScreen());
+                          changeScreen(context, DeliveryScreen());
                           break;
                         case 3:
                           changeScreen(context, DeliveryScreen(total: "",));
@@ -233,15 +149,13 @@ class ProfileState extends State<ProfileView> {
                       }
                     },
                     child: Container(
+                      padding: const EdgeInsets.only(top: 25.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25.0),
-                            child: Text(
-                              sortBy[index].name,
-                                style: styleProvider(fontWeight: semiBold, size: 16, color: black),
-                            ),
+                          Text(
+                            sortBy[index].name,
+                            style: styleProvider(fontWeight: semiBold, size: 16, color: black),
                           ),
                           Icon(
                             Icons.arrow_forward_ios_rounded,
@@ -327,7 +241,7 @@ class ProfileState extends State<ProfileView> {
                                     child: Container(
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: Colors.orange,
+                                        color:accent_color,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)),
                                       ),

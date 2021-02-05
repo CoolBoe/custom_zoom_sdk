@@ -21,7 +21,7 @@ Widget homeAppBar(BuildContext context){
   return AppBar(
     backgroundColor: grey_200,
     centerTitle: true,
-    title: Text("WooApp", style: styleProvider(fontWeight: medium, size: 12, color: black),),
+    // title: Text(appName, style: styleProvider(fontWeight: medium, size: 12, color: black),),
     iconTheme: new IconThemeData(color: black),
     actions: <Widget>[
       Padding(

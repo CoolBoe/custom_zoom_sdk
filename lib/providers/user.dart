@@ -191,12 +191,6 @@ class UserProvider with ChangeNotifier {
     return userId != null ? true : false;
   }
 
-  Future<Details> getUserInfo() async{
-    userDetails = await _webApiServices.getUserInfo();
-    printLog("_webApiServices", userModel.toJson().toString());
-    notifyListeners();
-  }
-
   String getProfileImage(){
     BasePrefs.init();
     if(BasePrefs.getString(AVTAR_URL)!=null){

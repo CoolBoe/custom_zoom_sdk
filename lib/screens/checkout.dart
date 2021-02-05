@@ -75,11 +75,8 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
     model = Details();
     cart = Provider.of<CartProvider>(context, listen: false);
      cart.getReviewOrder();
-     user = Provider.of<UserProvider>(context, listen: false);
-    user.getUserInfo();
     loader = Provider.of<LoaderProvider>(context, listen: false);
     _razorpay = new Razorpay();
-
     super.initState();
   }
 
@@ -136,12 +133,8 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                           model = Details.fromJson(jsonDecode(value));
                         }
                         WebApiServices().updateBilling(user_id:model.id.toString(),shipping: model.billing).then((value){
-                          if(value.status==1){
-                            Details details = value.details;
-                            printLog("dtdtdtdt", details.toJson());
-                            BasePrefs.setString(USER_MODEL, json.encode(details));
+                          if(value){
                             changeScreen(context, CheckOutScreen(total:widget.total));
-                            printLog("datafat", details.toJson().toString());
                           }
                           // _saveForNextUse(title, model);
                           loader.setLoadingStatus(false);
@@ -151,7 +144,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.orange,
+                          color:accent_color,
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                         child: Padding(
@@ -179,11 +172,10 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
   Widget UiBuilder() {
     return Container(
       child:  new Consumer<CartProvider>(builder: (context, cartModel, child){
-
         if(cartModel.reviewOrder!=null){
           return reviewOrder(cartModel.reviewOrder);
         }else{
-          return progressBar(context, orange);
+          return progressBar(context, accent_color);
         }
       })
     );
@@ -193,10 +185,10 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
     discount_total = getValidString(order.discountTotal);
     cart_subtotal = getValidString(order.cartSubtotal);
     taxes  =order.cartTaxTotal!=null ? getValidString(order.cartTaxTotal.s12IGST) : "";
-    total = getValidString(order.cartOrderTotal);
+    total = order.cartOrderTotalWithoutSymbol;
     shipping_Flat= order.shippingMethod!=null && order.shippingMethod.length>0 ? getValidString(order.shippingMethod[0].shippingMethodPrice) : "00.00";
     shipping_Free= order.shippingMethod!=null && order.shippingMethod.length>1 ? getValidString(order.shippingMethod[1].shippingMethodPrice) : "00.00";
-
+    printLog("ghjghjgh", order.toJson());
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -365,7 +357,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                               padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                               child: Container(
                                 height: 0.9,
-                                color: Colors.orange,
+                                color: accent_color,
                               ),
                             ),
                             Padding(
@@ -400,6 +392,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                     ),
                   )),
             ),
+
             Padding(
               padding: const EdgeInsets.only(top: 0.0, left: 30, right: 30),
               child: GestureDetector(
@@ -569,10 +562,10 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        color: orange_50,
-                        border:Border.all(color: checked ? orange : orange_50),
+                        color: accent_color,
+                        border:Border.all(color: checked ? accent_color : accent_color),
                         boxShadow: [
-                          BoxShadow(color: checked ? orange : orange_50, spreadRadius: 1)
+                          BoxShadow(color: checked ? accent_color : accent_color, spreadRadius: 1)
                         ],
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -587,38 +580,6 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                     ),
                   ),);
               }),
-          GestureDetector(
-            onTap: (){
-              setState(() {
-                checked = false;
-                checkedIndex = 10;
-                razorchecked = true;
-                paymentMethod = "razor";
-              });
-            },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: orange_50,
-                    border:Border.all(color: razorchecked ? orange : orange_50),
-                    boxShadow: [
-                      BoxShadow(color: razorchecked ? orange : orange_50, spreadRadius: 1)
-                    ],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                          width: 60,
-                          child: Image.asset(ic_money)),
-                      Text("Razor Pay", style: styleProvider(fontWeight: medium, size: 13, color: black),)
-                    ],
-                  ),
-                ),
-              ),
-          )
         ],
       ),
     );
@@ -667,7 +628,13 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
           case "paypal":
             toast(NETWORK_ERROR);
             break;
-          case "razor":
+          case "paytmpay":
+            toast(NETWORK_ERROR);
+            break;
+          case "payumbolt":
+            toast(NETWORK_ERROR);
+            break;
+          case "razorpay":
             RazorPaymentService razorPaymentService = new RazorPaymentService();
             razorPaymentService.initPaymentGatway(context, orderModel.id.toString());
             printLog("ddsakabj", orderModel.id.toString());
@@ -676,7 +643,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                 mobile: model.billing.phone,
                 orderId: orderModel.orderKey);
             break;
-          case "paytm":
+          case "paytmpay":
             toast(NETWORK_ERROR);
             break;
         }

@@ -32,14 +32,14 @@ class Item_Coupon_Trending extends StatelessWidget{
                  text: TextSpan(
                      text:"₹ "+coupon.amount+" Off ",
                      style: TextStyle(
-                         color: orange,
+                         color: accent_color,
                          fontSize: dp20,
                          fontFamily: fontName,
                          fontWeight: bold),
                      children: <TextSpan>[
                        TextSpan(text: '\n Check the best deals for today',
                          style: TextStyle(
-                           color: orange_300,
+                           color: accent_color_300,
                            fontSize: dp15,
                            fontWeight:regular,
                          ),

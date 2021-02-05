@@ -5,7 +5,6 @@ import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/product.dart';
-import 'package:wooapp/rest/WebRequestConstants.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
@@ -24,8 +23,7 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
   @override
   void initState() {
     var productList = Provider.of<ProductsProvider>(context, listen: false);
-    printLog("fyfyfyfy", widget.products);
-    productList.fetchProductByRelated(_page,productIDs: widget.products );
+    productList.fetchProductByRelated(productIDs: widget.products );
     super.initState();
   }
   @override
@@ -39,7 +37,7 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
           Text("Related Product", style: TextStyle( color: Colors.black,
           fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 15),),
           Container(
-              height: 280,
+              height: 300,
               child: _productByRelated())
         ],
       ),
@@ -52,9 +50,14 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
           productModel.allproductListByRelated.length>0){
         printLog("hjghghjgh",productModel.allproductListByRelated);
         return _buildproductList(productModel.allproductListByRelated);
-      }else{
-        return progressBar(context, orange);
-      }
+      }else{if(productModel.loader){
+        return ShimmerList(listType: "List",);
+      }else {
+        return Padding(
+          padding: const EdgeInsets.only(top: 40.0),
+          child: Container(),
+        );
+      } }
     });
   }
 

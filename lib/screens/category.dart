@@ -13,6 +13,7 @@ import 'package:wooapp/providers/category.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/mainpage.dart';
+import 'package:wooapp/screens/productBuilder.dart';
 import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
@@ -39,20 +40,17 @@ class CategoriesScreenState extends State<CategoriesScreen> {
     ByCatgories("Jeans", 8, "assets/icons/ic_trousers.svg")
   ];
 
-
   @override
   void initState() {
     var categoryList=Provider.of<CategoriesProvider>(context, listen: false);
     categoryList.fetchCategories();
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
          appBar: BaseAppBar(context, "Category"),
         body: _categoriesList(),
-
      );
   }
   Widget _categoriesList(){
@@ -62,7 +60,7 @@ class CategoriesScreenState extends State<CategoriesScreen> {
       ){
         return _categoriesListBuilder(categoryModel.allCategories);
       }else{
-        return progressBar(context, orange);
+        return progressBar(context, accent_color);
       }
     });
   }
@@ -92,12 +90,10 @@ class CategoriesScreenState extends State<CategoriesScreen> {
                           var productList = Provider.of<ProductsProvider>(context, listen: false);
                           productList.resetStreams();
                           productList.setLoadingState(LoadMoreStatus.INITIAL);
-                          productList.fetchProducts(_page, category_id: _selectedItemID);
+                          // productList.fetchProducts(_page, category_id: e.id.toString());
                           changeScreen(
                               context,
-                              MainPageScreen(
-                                currentTab: 1,
-                              ));
+                             ShopView(categoryId: e.id.toString(),));
                         });
                       },
                       child: Card(
@@ -107,19 +103,19 @@ class CategoriesScreenState extends State<CategoriesScreen> {
                         elevation: 1,
                         child: Container(
                           child: Column(
-
                             children: <Widget>[
                               Container(
                                 height: 100,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.only(topLeft:Radius.circular(10), topRight: Radius.circular(10)),
                                   image: DecorationImage(
-                                    image: NetworkImage(e.image!=null ? e.image.src : "https://app.democontentphoeniixx.com/wp-content/uploads/2020/01/w1.jpeg", ), fit: BoxFit.fill
+                                    image: NetworkImage(e.image!=null ? e.image.src : CategoryThumbnailUrl, ), fit: BoxFit.fill
                                 )),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(e.name,
+                                    maxLines: 1,
                                     style: TextStyle(
                                         color:Colors.black,
                                         fontSize: 12,

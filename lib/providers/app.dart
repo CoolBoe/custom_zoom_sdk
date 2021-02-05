@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:package_info/package_info.dart';
 import 'package:wooapp/models/app.dart';
+import 'package:wooapp/models/app_setting.dart';
 import 'package:wooapp/models/category.dart';
 import 'package:wooapp/models/cityModel.dart';
 import 'package:wooapp/models/filter.dart';
@@ -14,13 +16,16 @@ class AppProvider with ChangeNotifier {
   WebApiServices _webApiServices = new WebApiServices();
   List<PaymentGateway> _paymentGateway ;
   List<PaymentGateway> get getPaymentGateway => _paymentGateway;
-
   List<CategoryModel> categories ;
   List<CategoryModel> get allCategories=> categories;
   PriceRangeModel _priceRangeModel = new PriceRangeModel();
   PriceRangeModel get priceRange => _priceRangeModel;
   HomeLayout _homeLayout = new HomeLayout();
   HomeLayout get getHomeLayout => _homeLayout;
+  AppSetting _appSetting;
+  String _appStatus;
+  String get appStatus=>_appStatus;
+  AppSetting get getAppSetting  => _appSetting;
   List<Option> _sizeList;
   List<Option> _colorList;
   List<Option> get getSizeList =>_sizeList;
@@ -31,16 +36,22 @@ class AppProvider with ChangeNotifier {
   List<CityModel> get getCityList => _citylist;
   List<CityModel> _citylist ;
   AppProvider.initialize(){
+    fetchAppSetting();
     fetchHomeLayout();
     fetchPriceRange();
     fetchCategories();
     fetchColorSize();
     resetStream();
   }
+
   void resetStream(){
     _webApiServices = new WebApiServices();
     _priceRangeModel = new PriceRangeModel();
-    _citylist = new List<CityModel>();
+  }
+
+  fetchAppSetting() async{
+    _appSetting = await _webApiServices.getAppSetting();
+    notifyListeners();
   }
 
   fetchPriceRange() async{
@@ -63,9 +74,7 @@ class AppProvider with ChangeNotifier {
          _sizeList = colorSizelist[i].options;
         }
       }
-
     }
-
     notifyListeners();
   }
 

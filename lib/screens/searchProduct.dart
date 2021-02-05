@@ -127,7 +127,7 @@ class SearchScreenState extends BasePageState<SearchScreen> {
       shrinkWrap: true,
       crossAxisCount: 2,
       padding: EdgeInsets.zero,
-      childAspectRatio: (itemWidth / itemHeight),
+      childAspectRatio: (itemWidth / 300),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       physics: ClampingScrollPhysics(),
@@ -181,7 +181,7 @@ class SearchScreenState extends BasePageState<SearchScreen> {
                               width: 5,
                               child: CircularProgressIndicator(
                                 strokeWidth: 5,
-                                backgroundColor: Colors.orange,),
+                                backgroundColor: accent_color,),
                             ),)),),
                       SizedBox(width: 10,),
                       SvgPicture.asset('assets/icons/ic_search.svg',
@@ -192,10 +192,10 @@ class SearchScreenState extends BasePageState<SearchScreen> {
                 borderSide: BorderSide(color: grey),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: orange),
+                borderSide: BorderSide(color: accent_color),
               ),
               border: UnderlineInputBorder(
-                borderSide: BorderSide(color: orange),
+                borderSide: BorderSide(color: accent_color),
               ),
               hintText: "search here",
               hintStyle: styleProvider(

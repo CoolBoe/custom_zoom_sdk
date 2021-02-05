@@ -327,6 +327,11 @@ class Attribute {
     "options": List<dynamic>.from(options.map((x) => x)),
   };
 }
+enum Backorders { NO }
+
+final backordersValues = EnumValues({
+  "no": Backorders.NO
+});
 
 enum Name { COLOR, LOGO, SIZE }
 
@@ -402,11 +407,6 @@ final slugValues = EnumValues({
   "pa_size": Slug.PA_SIZE
 });
 
-enum Backorders { NO }
-
-final backordersValues = EnumValues({
-  "no": Backorders.NO
-});
 
 enum ButtonText { EMPTY, BUY_ON_THE_WORD_PRESS_SWAG_STORE }
 

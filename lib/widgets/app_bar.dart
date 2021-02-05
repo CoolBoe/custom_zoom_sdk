@@ -6,9 +6,9 @@ import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/screens/searchProduct.dart';
 
-  Widget BaseAppBar (BuildContext context, String pageName,{Widget prefixIcon, Widget suffixIcon}) {
+  Widget BaseAppBar (BuildContext context, String pageName,{Widget prefixIcon, Widget suffixIcon, Color backgroundColor}) {
     return AppBar(
-      backgroundColor: transparent,
+      backgroundColor: backgroundColor!=null ? backgroundColor: transparent ,
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
         title: Text(pageName,

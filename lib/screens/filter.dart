@@ -54,7 +54,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
   Widget pageUi(){
     return Scaffold(
-      appBar: BaseAppBar(context, "Filter", suffixIcon: GestureDetector(onTap: (){
+      appBar: BaseAppBar(context, "Filter", backgroundColor: grey_100,suffixIcon: GestureDetector(onTap: (){
         resetFilter();
       },
       child: Icon(Icons.refresh_sharp),)),
@@ -217,7 +217,7 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
         );
       }else{
-        return progressBar(context, Colors.orange);
+        return progressBar(context, accent_color);
       }
     });
   }
@@ -246,7 +246,7 @@ class _FilterScreenState extends State<FilterScreen> {
             )
           ));
         }else{
-          return Expanded(child: progressBar(context, Colors.orange));
+          return Expanded(child: progressBar(context, accent_color));
         }
     },
       ));

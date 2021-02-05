@@ -99,7 +99,7 @@ class PaypalPaymentState extends State<PaypalPayment>{
       );
 
     }else{
-      return Scaffold(key: scaffoldKey, appBar: BaseAppBar(context, "PayPal Payment"), body: Container(child: progressBar(context, orange),),);
+      return Scaffold(key: scaffoldKey, appBar: BaseAppBar(context, "PayPal Payment"), body: Container(child: progressBar(context, accent_color),),);
     }
       }
 }

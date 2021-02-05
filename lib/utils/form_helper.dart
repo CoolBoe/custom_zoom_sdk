@@ -28,10 +28,10 @@ class FormHelper {
               borderSide: BorderSide(color: borderColor!=null ? borderColor: grey),
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: focusColor!=null ? focusColor: orange),
+              borderSide: BorderSide(color: focusColor!=null ? focusColor: accent_color),
             ),
             border: UnderlineInputBorder(
-              borderSide: BorderSide(color: orange),
+              borderSide: BorderSide(color: accent_color),
             ),
           suffix: suffixIcon,
           hintText: initialValue,
@@ -269,7 +269,7 @@ class customButton extends StatelessWidget{
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    color: color!=null ? color: orange,
+                    color: color!=null ? color: accent_color,
                     borderRadius:
                     BorderRadius.all(Radius.circular(10)),
                   ),

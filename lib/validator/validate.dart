@@ -108,6 +108,9 @@ Color getColorFormat(String data){
 
     return new Color(int.parse(data.substring(1, 7), radix: 16) + 0xFF000000);
 }
+Color hexToColor(String hexString, {String alphaChannel = 'FF'}) {
+  return Color(int.parse(hexString.replaceFirst('#', '0x$alphaChannel')));
+}
 
 String getValidDecimal(String value) {
   if (!isValidString(value)) {

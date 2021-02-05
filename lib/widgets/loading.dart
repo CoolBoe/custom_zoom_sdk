@@ -138,17 +138,20 @@ Widget ShimmerHomeBuilder(BuildContext context){
 }
 
 Widget ShimmerListBuilder(){
-  return ListView.builder(
-      itemCount:3,
-      physics: ClampingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (BuildContext context, int index){
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: Shimmer.fromColors(
-              child: ShimmerProductItem(), baseColor: Colors.grey[200], highlightColor: Colors.white),
-        );
-      });
+  return Container(
+    height: 290,
+    child: ListView.builder(
+        itemCount:3,
+        physics: ClampingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index){
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Shimmer.fromColors(
+                child: ShimmerProductItem(), baseColor: Colors.grey[200], highlightColor: Colors.white),
+          );
+        }),
+  );
 }
 Widget ShimmerOrderBuilder(){
   printLog("dadtdtd", "msg");
@@ -186,17 +189,20 @@ Widget ShimmerGridBuilder(BuildContext context){
   );
 }
 Widget ShimmerCategoryBuilder(){
-  return ListView.builder(
-      itemCount:10,
-      physics: ClampingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (BuildContext context, int index){
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-          child: Shimmer.fromColors(
-              child: ShimmerCategoryItem(), baseColor: Colors.grey[200], highlightColor: Colors.white),
-        );
-      });
+  return Container(
+    height: 80,
+    child: ListView.builder(
+        itemCount:10,
+        physics: ClampingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index){
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            child: Shimmer.fromColors(
+                child: ShimmerCategoryItem(), baseColor: Colors.grey[200], highlightColor: Colors.white),
+          );
+        }),
+  );
 }
 Widget ShimmerProductItem(){
   return Container(
@@ -204,7 +210,7 @@ Widget ShimmerProductItem(){
     decoration: BoxDecoration(
         border: Border.all(
           width: 0.1,
-          color: orange,
+          color: accent_color,
         ),
         borderRadius: BorderRadius.all(Radius.circular(20))
     ),

@@ -74,12 +74,12 @@ class LoginScreenState extends BasePageState<LoginScreen> {
               )),
             ],
           ),
-          GestureDetector(
-              onTap: () {
-                changeScreenReplacement(context, ForgotPassScreen());
-                // Navigator.of(context).pushNamed(routes.ForgotPass_Route);
-              },
-              child: Text("Forgot Password?"))
+          // GestureDetector(
+          //     onTap: () {
+          //       changeScreenReplacement(context, ForgotPassScreen());
+          //       // Navigator.of(context).pushNamed(routes.ForgotPass_Route);
+          //     },
+          //     child: Text("Forgot Password?"))
         ]);
   }
 

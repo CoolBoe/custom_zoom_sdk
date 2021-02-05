@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:wooapp/models/cityModel.dart';
 import 'package:wooapp/models/sort_by.dart';
 
-const String appName = 'WooApp';
+const String appName = 'EVNOX';
 const String fontName = 'Poppins';
 const String app_Theme = 'app_theme';
 const String dark_Mode = 'dark_mode';
@@ -75,6 +75,15 @@ const int HTTP_CODE_500 = 500;
 
 /*----------------IC_SVG_Image-------------------------*/
 const String Thumbnail_User ="https://secure.gravatar.com/avatar/0ebdca653970c966ce5e8bf84a1d0a5a?s=96&d=mm&r=g";
+/*------------------------evnox.com----------------------------*/
+// const String CategoryThumbnailUrl="https://www.evnox.com/wp-content/uploads/2018/08/evnox-logo.jpg";
+// const String BannerThumbnailUrl= "https://www.evnox.com/wp-content/uploads/2018/08/hompage-header-01.jpg";
+
+/*------------------------bizzon.com----------------------------*/
+const String CategoryThumbnailUrl="https://bizzon.in/wp-content/uploads/2021/01/lycs-architecture-U2BI3GMnSSE-unsplash-320x320.jpg?v=1610700194";
+const String BannerThumbnailUrl= "https://bizzon.in/wp-content/uploads/2020/09/BizzonSale-2-1024x858.jpg?v=1599248859";
+
+
 const String ic_facebook = "assets/icons/ic_facebook.svg";
 const String ic_backpack = "assets/icons/ic_backpack.svg";
 const String ic_bag = "assets/icons/ic_bag.svg";
@@ -115,6 +124,13 @@ const String ic_nodata_png = "assets/images/ic_nodata.png";
 const String ic_promocode_png = "assets/images/ic_promocode.png";
 const String ic_more_png = "assets/images/ic_more.png";
 const String ic_thumbnail_png = "assets/images/ic_thumbnail.png";
+
+const String ic_address_png = "assets/images/ic_address.png";
+const String ic_email_png = "assets/images/ic_email.png";
+const String ic_globe_png = "assets/images/ic_globe.png";
+const String ic_pass_png = "assets/images/ic_pass.png";
+const String ic_phone_png = "assets/images/ic_phone.png";
+
 
 //ic_thumbnail.png
 /*-----------------SizeBuilder---------------------------*/
@@ -220,3 +236,10 @@ const String paypalClientId = "AQpctZmexFjg0jjRFncorRO5ZbOTlARoFdEMWc3A3Sh2qEKXk
 const String paypalSecretKey = "EIwYvq2epkKfi6df2ZBqU8Rh2lGNGYTPY-2cMDCesEegsmAo5WXPEhzK3fElsyqSiyPMwR8_QArOxKw5";
 const String returnURL = "return.snippetcoder.com";
 const String cancelURL = "cancel.snippetcoder.com";
+
+/*-------------------------razor pay--------------------------------*/
+const String RazorPayKey ="rzp_test_2akds9ynth1XSc";
+
+/*-------------------------PayU Money--------------------------------*/
+const String PayUmerchantKey ="Z9ZieeCK";
+const String PayUmerchantID ="7In9PCvzd5";

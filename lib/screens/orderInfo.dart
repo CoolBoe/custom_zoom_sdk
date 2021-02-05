@@ -61,7 +61,7 @@ class OrderScreenState extends State<OrderScreen>{
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 10),
                       padding: EdgeInsets.all(3),
-                      decoration: BoxDecoration(color: orange,
+                      decoration: BoxDecoration(color: accent_color,
                           borderRadius:
                           BorderRadius.all(Radius.circular(5))
                       ),
@@ -255,7 +255,7 @@ class OrderScreenState extends State<OrderScreen>{
                         child: Container(
                           height: 40,
                           decoration: BoxDecoration(
-                            color: Colors.orange,
+                            color: accent_color,
                             borderRadius: BorderRadius.all(
                                 Radius.circular(10)),
                           ),
@@ -277,11 +277,11 @@ class OrderScreenState extends State<OrderScreen>{
   }
 
   Widget tick(bool isChecked){
-    return isChecked?Icon(Icons.circle,color: Colors.orange,):Icon(Icons.arrow_drop_down_circle_outlined, color: Colors.grey,);
+    return isChecked?Icon(Icons.circle,color: accent_color,):Icon(Icons.arrow_drop_down_circle_outlined, color: Colors.grey,);
   }
   Widget line(bool isChecked){
     return isChecked?Container(
-      color: Colors.orange,
+      color: accent_color,
       height: 50.0,
       width: 2.0,
     ):Container(
@@ -309,7 +309,7 @@ class OrderScreenState extends State<OrderScreen>{
                     Text("Cash", style: styleProvider(fontWeight: medium, size: 10, color: Colors.grey),)
                   ],
                 ),
-                Text("₹ ${widget.orderModel.total}", style: styleProvider(fontWeight: medium, size: 10, color: Colors.orange),)
+                Text("₹ ${widget.orderModel.total}", style: styleProvider(fontWeight: medium, size: 10, color: accent_color),)
               ],
             ),
           ),
@@ -325,7 +325,7 @@ class OrderScreenState extends State<OrderScreen>{
                 ),
                 Text(widget.orderModel.couponLines !=null && widget.orderModel.couponLines.length>0?
                   widget.orderModel.couponLines[0].code : "No Code Applied",
-                  style: styleProvider(fontWeight: medium, size: 10, color: Colors.orange),)
+                  style: styleProvider(fontWeight: medium, size: 10, color: accent_color),)
               ],
             ),
           ),
@@ -336,7 +336,7 @@ class OrderScreenState extends State<OrderScreen>{
             child: Column(
               children: [
                 Image.asset(ic_more_png,color: Colors.grey,height: 13, width: 35,),
-                Text("More", style: styleProvider(fontWeight: medium, size: 10, color: Colors.orange),)
+                Text("More", style: styleProvider(fontWeight: medium, size: 10, color: accent_color),)
               ],
             ),
           ),)
@@ -410,7 +410,7 @@ class OrderScreenState extends State<OrderScreen>{
                             child: Container(
                               height: 40,
                               decoration: BoxDecoration(
-                                color: Colors.orange,
+                                color: accent_color,
                                 borderRadius:
                                 BorderRadius.all(Radius.circular(10)),
                               ),

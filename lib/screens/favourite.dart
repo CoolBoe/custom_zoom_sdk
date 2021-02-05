@@ -114,7 +114,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
       shrinkWrap: true,
       crossAxisCount: 2,
       padding: EdgeInsets.zero,
-      childAspectRatio: (itemWidth / itemHeight),
+      childAspectRatio: (itemWidth / 300),
       crossAxisSpacing: 10,
       mainAxisSpacing: 10,
       physics: ClampingScrollPhysics(),
@@ -228,7 +228,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                                   child: Container(
                                     height: 40,
                                     decoration: BoxDecoration(
-                                      color: Colors.orange,
+                                      color: accent_color,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10)),
                                     ),

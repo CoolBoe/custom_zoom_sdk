@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:wooapp/helper/color.dart';
+import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/mockdata/item_categories.dart';
 import 'package:wooapp/screens/chatsupport.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/category.dart';
+import 'package:wooapp/screens/privacy.dart';
 import 'package:wooapp/screens/productBuilder.dart';
 import 'package:wooapp/screens/termOfUse.dart';
 
@@ -24,13 +27,12 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
   @override
   Widget build(BuildContext context) {
     List<ByCatgories> sortBy = [
-      ByCatgories("Home", 0, 'assets/icons/ic_home.svg'),
-      ByCatgories("Shop", 1, 'assets/icons/ic_shop.svg'),
-      ByCatgories("Shop by Category", 2, 'assets/icons/ic_categories.svg'),
-      ByCatgories("Chat Support", 3, 'assets/icons/ic_chat.svg'),
-      ByCatgories("Contact Us", 4, 'assets/icons/ic_call.svg'),
-      ByCatgories("Terms of Service", 5, 'assets/icons/ic_support.svg'),
-      ByCatgories("Give Feedback", 6, 'assets/icons/ic_rating.svg'),
+      ByCatgories("Home", 0, ic_home),
+      ByCatgories("Shop", 1, ic_shop),
+      ByCatgories("Shop by Category", 2, ic_categories),
+      ByCatgories("Terms of Service", 3, ic_support),
+      // ByCatgories("Privacy Settings", 4, ic_rating),
+
     ];
     return Padding(
       padding: const EdgeInsets.only(left: 0.0, right: 30),
@@ -57,10 +59,10 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                           changeScreen(context, CategoriesScreen());
                           break;
                         case 3:
-                          changeScreen(context, ChatScreen());
+                          changeScreen(context, TermsOfUseScreen());
                           break;
                         case 4:
-                          contactUsDialog();
+                          changeScreen(context, PrivacyScreen());
                           break;
                         case 5:
                           changeScreen(context, TermsOfUseScreen());
@@ -77,7 +79,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: _selectItem == index
-                            ? Colors.orange
+                            ? accent_color
                             : Colors.transparent,
                         borderRadius: BorderRadius.only(
                             topRight: Radius.circular(5),
@@ -183,7 +185,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                 child: Container(
                                   height: 40,
                                   decoration: BoxDecoration(
-                                    color: Colors.orange,
+                                    color: accent_color,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   ),
@@ -307,7 +309,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                     child: Container(
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: Colors.orange,
+                                        color: accent_color,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)),
                                       ),

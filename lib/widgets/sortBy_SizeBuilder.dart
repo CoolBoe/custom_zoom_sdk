@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
 import 'package:wooapp/models/sort_by.dart';
 
@@ -53,7 +54,7 @@ class sortBySizeBuilderState extends State<sortBySizeBuilder> {
                 child: Container(
                   decoration: BoxDecoration(
                       color:
-                          _selectItem == index ? Colors.orange : Colors.white,
+                          _selectItem == index ? accent_color : Colors.white,
                       border: Border.all(color: Colors.grey[100], width: 1.0),
                       borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   child: Center(

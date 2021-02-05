@@ -155,7 +155,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.orange,
+                              color: accent_color,
                               borderRadius: BorderRadius.all(Radius.circular(5)),
                             ),
                             child: Padding(
@@ -195,7 +195,7 @@ class CartScreenState extends BasePageState<CartScreen> {
           shipping_Free= cartData.shippingMethod!=null && cartData.shippingMethod.length>1 ? getValidString(cartData.shippingMethod[1].shippingMethodPrice) : "00.00";
          return  pageBuilder();
         } else {
-          return progressBar(context, orange);
+          return progressBar(context, accent_color);
         }
       }),
     );
@@ -344,7 +344,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                                 children: <Widget>[
                                   CircleAvatar(
                                     radius: 10.0,
-                                    backgroundColor: Colors.orange[400],
+                                    backgroundColor: accent_color,
                                     child: Icon(
                                       Icons.remove,
                                       color: Colors.red,
@@ -365,7 +365,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                                   ),
                                   CircleAvatar(
                                     radius: 10.0,
-                                    backgroundColor: Colors.orange[400],
+                                    backgroundColor: accent_color,
                                     child: Icon(
                                       Icons.add,
                                       color: Colors.red,
@@ -485,153 +485,5 @@ class CartScreenState extends BasePageState<CartScreen> {
             }),
       );
   }
-  void loginDialog() {
-    showGeneralDialog(
-        barrierLabel: "label",
-        barrierDismissible: true,
-        barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: Duration(milliseconds: 700),
-        context: context,
-        pageBuilder: (context, anim1, anim2) {
-          return Material(
-            type: MaterialType.transparency,
-            child: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Align(
-                alignment: Alignment.center,
-                child: Container(
-                  height: 150,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(3))),
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(left: 30),
-                              child: Text("LOGIN",
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text("You need to login/register first",
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                         GestureDetector(onTap: (){
-                           Navigator.pop(context);
-                         _timer=   new Timer(Duration(microseconds: 1000), (){
-                             changeScreen(context, LoginScreen());
-                           });
-                         },
-                         child: Padding(
-                             padding:
-                             EdgeInsets.only(left: 00, top: 10, right: 00),
-                             child: Container(
-                                 width: 150,
-                                 color: Colors.transparent,
-                                 child: Padding(
-                                   padding: const EdgeInsets.all(8.0),
-                                   child: Container(
-                                     height: 40,
-                                     decoration: BoxDecoration(
-                                       color: Colors.orange,
-                                       borderRadius: BorderRadius.all(
-                                           Radius.circular(10)),
-                                     ),
-                                     child: Padding(
-                                       padding: const EdgeInsets.only(
-                                           left: 35.0,
-                                           right: 35,
-                                           top: 5,
-                                           bottom: 5),
-                                       child: Center(
-                                         child: Text('Login',
-                                             style: TextStyle(
-                                                 color: Colors.white,
-                                                 fontFamily: 'Poppins',
-                                                 fontWeight: FontWeight.w400,
-                                                 fontSize: 12)),
-                                       ),
-                                     ),
-                                   ),
-                                 ))),),
-                        GestureDetector(onTap: (){
-                          Navigator.pop(context);
-                          changeScreen(context, SpleshScreen());
-                        },
-                        child:   Padding(
-                            padding:
-                            EdgeInsets.only(left: 00, top: 10, right: 00),
-                            child: Container(
-                                width: 150,
-                                color: Colors.transparent,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10)),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20.0,
-                                          right: 20,
-                                          top: 5,
-                                          bottom: 5),
-                                      child: Center(
-                                        child: Text('Register',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'Poppins',
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 12)),
-                                      ),
-                                    ),
-                                  ),
-                                ))),),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-        transitionBuilder: (context, anim1, anim2, child) {
-          return SlideTransition(
-            position:
-            Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
-            child: child,
-          );
-        });
-  }
+
 }

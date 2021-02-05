@@ -75,7 +75,7 @@ class AppSetting {
     walletActive: json["wallet_active"],
     pincodeActive: json["pincode_active"],
     price: Price.fromJson(json["price"]),
-    enableTermCondition: json["enable_term_condition"],
+    enableTermCondition: json["enable_term_condition"] is bool ? json["enable_term_condition"] : false,
     enableFaq: json["enable_faq"],
   );
 

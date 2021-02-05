@@ -91,7 +91,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                     margin: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
-                    color: currentTab == index ? orange : white,
+                    color: currentTab == index ? accent_color : white,
                     elevation: 1,
                     child: Padding(
                       padding: EdgeInsets.all(5),
@@ -292,7 +292,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                     child: Text("All Categories",
                         style: TextStyle(
                             fontFamily: 'Poppins',
-                            fontSize: 12.0,
+                            fontSize: 14.0,
                             fontWeight: semiBold,
                             color: black))),
                 Row(
@@ -439,7 +439,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
           ),),
           Visibility(visible: homeLayout.saleProducts !=null ,child: Container(
             height: 270,
-            child: _saleProduct(),
+            child: _topSaleProductBuilder(homeLayout.saleProducts),
           )),
 
           Visibility(visible: homeLayout.topRatedProducts !=null,child:Container(

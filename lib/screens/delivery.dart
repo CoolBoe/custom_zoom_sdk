@@ -54,6 +54,12 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
   void initState() {
     _webApiServices = new WebApiServices();
     BasePrefs.init();
+    BasePrefs.init();
+    var value= BasePrefs.getString(USER_MODEL);
+    if(value!=null){
+      userDetails = Details.fromJson(jsonDecode(value));
+      printLog("userDetailsData", userDetails.toJson());
+    }
     super.initState();
   }
   @override
@@ -66,16 +72,18 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
         if(!saveShippingForm()){
         toast("please complete above details");
         }else{
+          printLog("userDetailsDtata", userDetails.toJson());
             var loader = Provider.of<LoaderProvider>(context, listen: false);
-            loader.setLoadingStatus(true);
+          loader.setLoadingStatus(true);
            _webApiServices.updateBilling(user_id:userDetails.id.toString(),shipping: userDetails.billing).then((value){
-             toast(value.msg);
-            if(value.status==1){
-              Details details = value.details;
-              printLog("dtdtdtdt", details.toJson());
-              BasePrefs.setString(USER_MODEL, json.encode(details));
+              printLog("ghjghjghjghj", value);
+             loader.setLoadingStatus(false);
+            if(value){
+              toast("Data Saved Successfully");
+              BasePrefs.setString(USER_MODEL, json.encode(userDetails));
               changeScreen(context, CheckOutScreen(total:widget.total));
-              printLog("datafat", details.toJson().toString());
+            }else{
+              toast(NETWORK_ERROR);
             }
              // _saveForNextUse(title, model);
              loader.setLoadingStatus(false);
@@ -91,19 +99,13 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
           printLog("userData", BasePrefs.getString(USER_MODEL));
           return Container();
         } else {
-          return progressBar(context, orange);
+          return progressBar(context, accent_color);
         }
       }),
     );
   }
 
   Widget stepperBuilder(){
-    BasePrefs.init();
-    var value= BasePrefs.getString(USER_MODEL);
-    if(value!=null){
-      userDetails = Details.fromJson(jsonDecode(value));
-    }
-
     return SingleChildScrollView(
       child: new Form(
           key: shippingForm,
@@ -348,7 +350,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                                       child: Container(
                                         height: 40,
                                         decoration: BoxDecoration(
-                                          color: Colors.orange,
+                                          color: accent_color,
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10)),
                                         ),

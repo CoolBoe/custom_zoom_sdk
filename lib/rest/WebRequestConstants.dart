@@ -4,12 +4,26 @@ class WebRequestConstants {
   static const String getDomainUrl = "/wp-json/wc/v2/";
 
   static const String getBaseUrl = "https://app.democontentphoeniixx.com";
-  static const String BaseAuthId =
-      "ck_182712e047bc83b22974476388360fca763c0005";
-  static const String BaseAuthPass =
-      "cs_3351fba7577bb78534600af478007e73f8babd4e";
-  static const String getWPBaseUrl = "https://wooapp.themiixx.com";
+  /*--------------------------Woo APP------------------------*/
+  // static const String getWPBaseUrl = "https://wooapp.themiixx.com";
+  // static const String BaseAuthId =
+  //     "ck_182712e047bc83b22974476388360fca763c0005";
+  // static const String BaseAuthPass =
+  //     "cs_3351fba7577bb78534600af478007e73f8babd4e";
 
+  /*-------------------https://www.evnox.com/----------------*/
+  // static const String getWPBaseUrl = "https://www.evnox.com";
+  // static const String BaseAuthId =
+  //     "ck_175583f3aa96b2360e8d75c644e82db99501b1e2";
+  // static const String BaseAuthPass =
+  //     "cs_cd8d8732bb83b0b0bce0f01df205ad3da73782fb";
+
+  /*-------------------https://bizzon.in/----------------*/
+  static const String getWPBaseUrl = "https://bizzon.in";
+  static const String BaseAuthId =
+      "ck_d2330126d213f047b974643bd44e9cd8fb34231d";
+  static const String BaseAuthPass =
+      "cs_10f54a38d84d1fca303e67579bc9da19f4d50774";
   static const String getPlaceUrl = "https://location.wlfpt.co/api/v1/";
     String BaseAuth =
       'Basic ' + base64Encode(utf8.encode('$BaseAuthId:$BaseAuthPass'));
@@ -19,6 +33,7 @@ class WebRequestConstants {
 //  String getDomainWebUrl= "https://app.democontentphoeniixx.com/wp-json/wc/v2/";
 
   static const String SMS_SENDER = "APP";
+  static const String APP_SETTING = "app-settings";
   static const String LAYOUT = "layout";
   static const String MOBILE_CODE = "+91";
   static const String DEVICE_TYPE = "android";

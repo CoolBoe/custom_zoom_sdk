@@ -46,11 +46,10 @@ class HomeLayout {
     salepnumber: json["salepnumber"],
     topRatedProducts:json["top_rated_products"] ==null || json["top_rated_products"]==false ? null:  List<ProductModel>.from(json["top_rated_products"].map((x) => ProductModel.fromJson(x))),
     topRatedPnumber: json["top_rated_pnumber"],
-    sectionBanners: List<SectionBanner>.from(json["section_banners"].map((x) => SectionBanner.fromJson(x))),
-    banners: List<HomeLayoutBanner>.from(json["banners"].map((x) => HomeLayoutBanner.fromJson(x))),
+    sectionBanners: json["section_banners"]==null ?  null : List<SectionBanner>.from(json["section_banners"].map((x) => SectionBanner.fromJson(x))),
+    banners:json["banners"]==null ?  null :  List<HomeLayoutBanner>.from(json["banners"].map((x) => HomeLayoutBanner.fromJson(x))),
     categories: List<HomeLayoutCategory>.from(json["categories"].map((x) => HomeLayoutCategory.fromJson(x))),
   );
-
   Map<String, dynamic> toJson() => {
     "top_seller": topSeller !=null ? List<dynamic>.from(topSeller.map((x) => x.toJson())): null,
     "tspnumber": tspnumber,
@@ -60,8 +59,8 @@ class HomeLayout {
     "salepnumber": salepnumber,
     "top_rated_products": List<dynamic>.from(topRatedProducts.map((x) => x.toJson())),
     "top_rated_pnumber": topRatedPnumber,
-    "section_banners": List<dynamic>.from(sectionBanners.map((x) => x.toJson())),
-    "banners": List<dynamic>.from(banners.map((x) => x.toJson())),
+    "section_banners":sectionBanners ==null || sectionBanners.length<=0 ? null:  List<dynamic>.from(sectionBanners.map((x) => x.toJson())),
+    "banners":banners ==null || banners.length<=0 ? null:  List<dynamic>.from(banners.map((x) => x.toJson())),
     "categories": List<dynamic>.from(categories.map((x) => x.toJson())),
   };
 }

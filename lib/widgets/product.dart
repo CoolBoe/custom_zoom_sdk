@@ -20,8 +20,8 @@ class ProductWidget extends StatelessWidget {
       height: 200,
       decoration: BoxDecoration(
           border: Border.all(
-            width: 0.1,
-            color: orange,
+            width: 0.15,
+            color: Colors.grey,
           ),
           borderRadius: BorderRadius.all(Radius.circular(10))
       ),
@@ -57,7 +57,7 @@ class ProductWidget extends StatelessWidget {
                           color: white,
                           fontFamily: 'Poppins',
                           fontSize: 8.0,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: bold,
                         ),
                       ),
                     ),
@@ -65,10 +65,12 @@ class ProductWidget extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
+          Container(
+            width: width,
             padding: const EdgeInsets.only(top: 8.0, left: 10),
             child: Text(
               productModel.name,
+              maxLines: 2,
               style: TextStyle(
                 color: black,
                 fontFamily: 'Poppins',
@@ -87,7 +89,7 @@ class ProductWidget extends StatelessWidget {
                       child: Text(
                   "₹ "+productModel.regularPrice,
                   style: TextStyle(
-                      color: orange,
+                      color: accent_color,
                       fontFamily: 'Poppins',
                       fontSize: 12.0,
                       fontWeight: FontWeight.w600, decoration: TextDecoration.lineThrough,decorationThickness: 2.85
@@ -123,15 +125,15 @@ class ProductWidget extends StatelessWidget {
                     ratingWidget: RatingWidget(
                         full: new Icon(
                           Icons.star,
-                          color: amber,
+                          color: accent_color_50,
                         ),
                         half: new Icon(
                           Icons.star_half,
-                          color: amber,
+                          color: accent_color_50,
                         ),
                         empty: new Icon(
                           Icons.star_border,
-                          color: amber,
+                          color: accent_color_50,
                         )),
                     onRatingUpdate: (rating) {
                       print(rating);

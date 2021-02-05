@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/app.dart';
+import 'package:wooapp/models/app_setting.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/category.dart';
 import 'package:wooapp/models/WebResponseModel.dart';
@@ -21,23 +22,19 @@ import 'package:wooapp/models/product.dart';
 import 'package:wooapp/models/revieworder.dart';
 import 'package:wooapp/models/user.dart';
 import 'package:wooapp/rest/WebRequestConstants.dart';
-import 'package:wooapp/rest/woocommerce.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/widgets/loading.dart';
 
-// part 'WebApiServices.chopper.dart';
 class WebApiServices {
   var dio = Dio();
-  String UserId ="5";
-  String UserEmail = "test@gmail.com";
   Response response;
-  String BaseAuth =
-      'Basic ' + base64Encode(utf8.encode('${WebRequestConstants.BaseAuthId}:${WebRequestConstants.BaseAuthPass}'));
+  String BaseAuth = 'Basic ' + base64Encode(utf8.encode('${WebRequestConstants.BaseAuthId}:${WebRequestConstants.BaseAuthPass}'));
   Map<String, String> cookies = {};
   Map<String, String> headers =<String, String> {
     HttpHeaders.contentTypeHeader: "application/json",
   };
+
   Future<Details> userLogin(String email, String password) async {
     try{
       Directory tempDir = await getApplicationDocumentsDirectory();
@@ -143,6 +140,7 @@ class WebApiServices {
      return false;
     }
   }
+
   Future<Details> socialLogin({String mode, String name, String email, String firstName, String lastName}) async{
     try{
     Directory tempDir = await getApplicationDocumentsDirectory();
@@ -189,23 +187,27 @@ class WebApiServices {
        String tempPath = tempDir.path;
        CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
        dio.interceptors.add(CookieManager(sj));
-       String url  = WebRequestConstants.getBaseUrl +
+       String url  = WebRequestConstants.getWPBaseUrl +
            WebRequestConstants.getDomainUrl +
            WebRequestConstants.ALL_CATEGORIES;
        var response = await dio.get(url, options: new Options(headers: {HttpHeaders.contentTypeHeader: "application/json"}));
+       printLog("getCategories", url);
        if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
          list = (response.data as List).map((i) => CategoryModel.fromJson(i)).toList();
          return list;
        } else {
+         return null;
         }
      }on DioError catch(e){
        printLog("getCategoryError=>", e.response);
+       return null;
      }
   }
 
   Future<List<ProductModel>> getProducts(
       {String sort, String page, String per_page, String category_id, String str_search, String brand, String max_price, String min_price,
-        String on_sale, bool featured, List<int> productIDs, String colorList, String sizeList }) async {
+        bool on_sale, bool featured, List<int> productIDs, String colorList, String sizeList }) async {
+    printLog("ghjghjghjgh", productIDs);
      List<ProductModel> list = [];
     try{
         String parameter = "";
@@ -260,12 +262,40 @@ class WebApiServices {
             WebRequestConstants.CUSTOM_PRODUCT+parameter;
         var response = await dio.get(url, options: new Options(headers: {HttpHeaders.contentTypeHeader: "application/json"}));
         if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+
           list = (response.data as List).map((i) => ProductModel.fromJson(i)).toList();
          return list;
         } else {
+          return null;
         }
     }on DioError catch(e){
+      return null;
+    }
+  }
 
+  Future<List<ProductModel>> getProductByRelatedIds({List<int> productIDs}) async {
+    printLog("ghjghjghjgh", productIDs);
+    try{
+      String parameter = "";
+      if(productIDs!=null){
+        parameter+="?include=${productIDs.join(",").toString()}";
+      }
+      Directory tempDir = await getApplicationDocumentsDirectory();
+      String tempPath = tempDir.path;
+      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      dio.interceptors.add(CookieManager(sj));
+      String url  = WebRequestConstants.getWPBaseUrl +
+          WebRequestConstants.getDomainUrl +
+          WebRequestConstants.PRODUCT_BY_ID+parameter;
+      var response = await dio.get(url, options: new Options(headers: {HttpHeaders.contentTypeHeader: "application/json"}));
+      if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+        List<ProductModel> list  = (response.data as List).map((i) => ProductModel.fromJson(i)).toList();
+        return list;
+      } else {
+        return null;
+      }
+    }on DioError catch(e){
+      return null;
     }
   }
 
@@ -290,7 +320,6 @@ class WebApiServices {
       return null;
     }
   }
-
 
   Future<ProductModel> getProductById(String id) async {
     try{
@@ -323,6 +352,8 @@ class WebApiServices {
     var params = { 'id': id,
           'quantity':quantity};
     String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.ADD_CART;
+    printLog("dtdtdtdt", url);
+    printLog("hgjhgjghvg", params);
     var response = await dio.post(url, options: new Options(headers: headers), data: params);
     if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
 
@@ -337,8 +368,7 @@ class WebApiServices {
   }
   }
 
-  Future<WebResponseModel> getAddToCartVariationProduct(
-  {VariableProduct variableProduct}) async {
+  Future<WebResponseModel> getAddToCartVariationProduct({VariableProduct variableProduct}) async {
     try{
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
@@ -403,10 +433,8 @@ class WebApiServices {
         CartModel model =CartModel.fromJson(response.data);
         return model;
       } else {
-
         return null;
       }} on DioError catch(e){
-
       return null;
     }
   }
@@ -416,7 +444,7 @@ class WebApiServices {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
-      dio.interceptors.add(CookieManager(sj));
+      dio.interceptors.add(CookieManager(sj));https://gist.github.com/mayur19/26417eeba02f5e5ced8138f4d9040d6a
       String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.CART_CLEAR;
       var response = await dio.get(url, options: new Options(headers: headers));
 
@@ -426,7 +454,6 @@ class WebApiServices {
           }
         return false;
       } else {
-
         return false;
       }} on DioError catch(e){
 
@@ -453,6 +480,7 @@ class WebApiServices {
       return null;
     }
   }
+
   Future<List<Coupons>> getCoupons() async {
     try{
       Directory tempDir = await getApplicationDocumentsDirectory();
@@ -464,14 +492,10 @@ class WebApiServices {
         HttpHeaders.authorizationHeader: BaseAuth
       }));
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
-
         Iterable l = response.data;
         List<Coupons> Cupons = List<Coupons>.from(l.map((model)=> Coupons.fromJson(model)));
-
         return Cupons;
-
       } else {
-
         return null;
       }} on DioError catch(e){
 
@@ -489,6 +513,7 @@ class WebApiServices {
       var response = await dio.get(url, options: new Options(headers: {
         HttpHeaders.authorizationHeader: BaseAuth
       }));
+      printLog("dtdtdtdtdt", response);
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
         ReviewOrder order = ReviewOrder.fromJson(response.data);
 
@@ -554,8 +579,6 @@ class WebApiServices {
     }
   }
 
-
-
   Future<CartModel> getCart() async {
     try{
       Directory tempDir = await getApplicationDocumentsDirectory();
@@ -564,17 +587,15 @@ class WebApiServices {
       dio.interceptors.add(CookieManager(sj));
       String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl + WebRequestConstants.CART;
       var response = await dio.get(url, options: new Options(headers: headers));
-
+      printLog("dtdtdtdt", response);
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
 
         CartModel model =CartModel.fromJson(response.data);
 
         return model;
       } else {
-
         return null;
       }} on DioError catch(e){
-
       return null;
     }
   }
@@ -626,7 +647,7 @@ class WebApiServices {
         }
         return false;
       } else {
-
+        return false;
       }} on DioError catch(e){
 
       return false;
@@ -634,7 +655,6 @@ class WebApiServices {
   }
 
   Future<OrderHistory> getOrders({String id, int offset, int limit}) async{
-
     try{
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
@@ -650,7 +670,6 @@ class WebApiServices {
       } else {
         return null;
       }} on DioError catch(e){
-
       return null;
     }
   }
@@ -718,36 +737,11 @@ class WebApiServices {
 
         return null;
       }} on DioError catch(e){
-
       return null;
     }
   }
 
-  Future<Details> getUserInfo() async{
-    try{
-      Directory tempDir = await getApplicationDocumentsDirectory();
-      String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
-      dio.interceptors.add(CookieManager(sj));
-      String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl+WebRequestConstants.CUSTOMERS+"?id=$UserId&email=$UserEmail";
-      var response = await dio.get(url, options: new Options(headers:{ HttpHeaders.authorizationHeader: BaseAuth}));
-      if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
-        var list = response.data;
-
-        var data = list[0];
-        Details model = Details.fromJson(data);
-
-        return model;
-      } else {
-
-        return null;
-      }} on DioError catch(e){
-
-      return null;
-    }
-  }
-
-  Future<UserModel> updateBilling({String user_id, Billing shipping}) async{
+  Future<bool> updateBilling({String user_id, Billing shipping}) async{
     try{
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
@@ -758,15 +752,21 @@ class WebApiServices {
         "billing_address_2":"${shipping.address2}", "billing_city":"${shipping.city}", "billing_state":"${shipping.state}", "billing_postcode":"${shipping.postcode}",
         "billing_country":"${shipping.country}", "checkbox":true};
       String url  = WebRequestConstants.getWPBaseUrl + WebRequestConstants.getDomainUrl+WebRequestConstants.UPDATE_BILLING;
-      var response = await dio.post(url, options: new Options(headers: headers), data: json.encode(params));
+      printLog("fgfghfghfgfg", url);
+      printLog("ghjghghghj", params);
+      var response = await dio.post(url, options: new Options(headers: {
+        HttpHeaders.authorizationHeader: BaseAuth
+      }), data: json.encode(params));
+      printLog("ghjghghghjhjhj", response);
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
-        UserModel model= UserModel.fromJson(response.data);
-        return model;
+        printLog("ghjghghghj", response);
+        // UserModel model= UserModel.fromJson(response.data);
+        return true;
       } else {
-
-        return null;
+        return false;
       }} on DioError catch(e){
-      return null;
+      printLog("vgfhfghfgfgf", e.message);
+      return false;
     }
   }
 
@@ -827,6 +827,7 @@ class WebApiServices {
           WebRequestConstants.LAYOUT;
       var response = await dio.get(url, options: new Options(headers: headers));
       if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+        printLog("homelayout", response.data);
         HomeLayout model =HomeLayout.fromJson(response.data);
         printLog("fhghhghghg", model.toJson());
         return model;
@@ -855,6 +856,28 @@ class WebApiServices {
       } else {
         return null;
       }} on DioError catch(e){
+      return null;
+    }
+  }
+
+  Future<AppSetting> getAppSetting()async{
+    try {
+      printLog("bhchddjdjdj", "msg");
+      Directory tempDir = await getApplicationDocumentsDirectory();
+      String tempPath = tempDir.path;
+      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      dio.interceptors.add(CookieManager(sj));
+      String url  = WebRequestConstants.getWPBaseUrl+WebRequestConstants.getDomainUrl+WebRequestConstants.APP_SETTING;
+      printLog("getAppSetting", url);
+      var response = await dio.get(url, options: new Options(headers: headers));
+      printLog("getAppSetting", url);
+      if (response.statusCode == HTTP_CODE_200||response.statusCode == HTTP_CODE_201) {
+        AppSetting appSetting = AppSetting.fromJson(response.data);
+        return appSetting;
+      } else {
+        return null;
+      }} on DioError catch(e){
+      printLog("getAppSetting", e.message);
       return null;
     }
   }

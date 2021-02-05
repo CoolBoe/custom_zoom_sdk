@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wooapp/helper/color.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippingCharge, String tax, String totalDiscount, String totalPrice}){
+  printLog("fgfhgfghfhg", totalPrice);
   return Padding(
     padding: const EdgeInsets.only(
         top: 0.0, left: 0, right: 0, bottom: 10),
@@ -135,7 +138,7 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                     padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                     child: Container(
                       height: 0.9,
-                      color: Colors.orange,
+                      color: accent_color,
                     ),
                   ),
                   Padding(
