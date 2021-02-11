@@ -192,7 +192,7 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
             crossAxisCount: 4,
             mainAxisSpacing: 2.0,
             crossAxisSpacing: 2.0,
-            childAspectRatio: (itemWidth / 150),
+            childAspectRatio: (itemWidth / 200),
           ),
           itemBuilder: (BuildContext context, int index){
             return Padding(
@@ -210,22 +210,24 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
                     child: Column(
                       children: <Widget>[
                         Container(
-                          height: 30,
+                          height:60,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.only(topLeft:Radius.circular(10), topRight: Radius.circular(10)),
                               image: DecorationImage(
-                                  image: NetworkImage(items[index].image!=null ? items[index].image.src : CategoryThumbnailUrl, ), fit: BoxFit.fill
+                                  image: NetworkImage(items[index].image!=null ? items[index].image.src : CategoryThumbnailUrl, ), fit: BoxFit.contain
                               )),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(items[index].name,
-                              maxLines: 1,
-                              style: TextStyle(
-                                  color:Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Poppins')),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Center(
+                            child: Text(items[index].name,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    color:Colors.black,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Poppins')),
+                          ),
                         )
                       ],
                     ),
@@ -356,14 +358,13 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
       ),
     );
   }
-
-
   bannerSlider(){
     return  Container(
       padding: const EdgeInsets.all(0.0),
       height: 200,
-      child: Carousel(
-          boxFit: BoxFit.fill,
+      child:  Center(
+        child: Carousel(
+          boxFit: BoxFit.contain,
           autoplay: true,
           animationCurve: Curves.fastOutSlowIn,
           animationDuration: Duration(milliseconds: 1000),
@@ -378,6 +379,7 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
             NetworkImage(
                 BannerThumbnailUrl),
           ],
+        ),
       ),
     );
   }

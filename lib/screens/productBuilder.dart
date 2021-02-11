@@ -188,9 +188,6 @@ class ShopState extends State<ShopView> {
 
 
   Widget _productList(){
-    var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height / 1.32 - kToolbarHeight ) / 3.9;
-    final double itemWidth = size.width;
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allProducts!=null &&
           productModel.allProducts.length>0

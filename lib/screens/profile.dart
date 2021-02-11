@@ -14,6 +14,7 @@ import 'package:wooapp/screens/delivery.dart';
 import 'package:wooapp/screens/editAccount.dart';
 import 'package:wooapp/screens/offer.dart';
 import 'package:wooapp/screens/order.dart';
+import 'package:wooapp/screens/splesh.dart';
 import 'package:wooapp/screens/orderInfo.dart';
 import 'package:wooapp/screens/payment.dart';
 import 'package:wooapp/screens/privacy.dart';
@@ -132,10 +133,20 @@ class ProfileState extends State<ProfileView> {
                           changeScreen(context, OfferScreen());
                           break;
                         case 2:
-                          changeScreen(context, DeliveryScreen());
+                          BasePrefs.init();
+                          if(BasePrefs.getString(USER_MODEL)!=null && BasePrefs.getString(USER_MODEL).isNotEmpty){
+                            changeScreen(context, DeliveryScreen());
+                          }else{
+                            changeScreen(context, SpleshScreen());
+                          }
                           break;
                         case 3:
-                          changeScreen(context, DeliveryScreen(total: "",));
+                          BasePrefs.init();
+                          if(BasePrefs.getString(USER_MODEL)!=null){
+                            changeScreen(context, DeliveryScreen());
+                          }else{
+                            changeScreen(context, SpleshScreen());
+                          }
                           break;
                         case 4:
                           changeScreen(context, PaymentScreen());

@@ -302,16 +302,16 @@ class Attribute {
     this.options,
   });
 
-  Name name;
-  Slug slug;
+  String name;
+  String slug;
   int position;
   bool visible;
   bool variation;
   List<dynamic> options;
 
   factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
-    name: nameValues.map[json["name"]],
-    slug: slugValues.map[json["slug"]],
+    name: json["name"],
+    slug: json["slug"],
     position: json["position"],
     visible: json["visible"],
     variation: json["variation"],

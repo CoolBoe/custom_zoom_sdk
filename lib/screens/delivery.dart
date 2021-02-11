@@ -36,9 +36,8 @@ class DeliveryScreen extends BasePage{
 class DeliveryScreenState extends BasePageState<DeliveryScreen>{
   int _currentStep = 0;
   CartModel cartData = CartModel();
-  GlobalKey<FormState> shippingForm = GlobalKey<FormState>();
-  GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
-  int value = 0;
+
+
   WebApiServices _webApiServices;
   Details userDetails;
   String msg;
@@ -49,13 +48,13 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
   String title;
   String totalAmount;
   AppProvider app;
-
+   GlobalKey<FormState> globalKey = GlobalKey<FormState>();
   @override
   void initState() {
     _webApiServices = new WebApiServices();
     BasePrefs.init();
-    BasePrefs.init();
     var value= BasePrefs.getString(USER_MODEL);
+    userDetails = new Details();
     if(value!=null){
       userDetails = Details.fromJson(jsonDecode(value));
       printLog("userDetailsData", userDetails.toJson());
@@ -65,13 +64,13 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
   @override
   Widget pageUi() {
     return Scaffold(
-      key: scaffoldState,
       appBar: BaseAppBar(context, "Delivery Information", suffixIcon: Container()),
       body:stepperBuilder(),
       bottomNavigationBar: customButton(title: "Update",onPressed: (){
         if(!saveShippingForm()){
         toast("please complete above details");
-        }else{
+        }
+        else{
           printLog("userDetailsDtata", userDetails.toJson());
             var loader = Provider.of<LoaderProvider>(context, listen: false);
           loader.setLoadingStatus(true);
@@ -81,7 +80,11 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
             if(value){
               toast("Data Saved Successfully");
               BasePrefs.setString(USER_MODEL, json.encode(userDetails));
-              changeScreen(context, CheckOutScreen(total:widget.total));
+              if(widget.total!=null){
+                changeScreen(context, CheckOutScreen(total:widget.total));
+              }else{
+                Navigator.pop(context);
+              }
             }else{
               toast(NETWORK_ERROR);
             }
@@ -92,46 +95,36 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
       },),
     );
   }
-  Widget orderBuilder() {
-    return Container(
-      child: new Consumer<UserProvider>(builder: (context, model, child) {
-        if (model.userModel != null) {
-          printLog("userData", BasePrefs.getString(USER_MODEL));
-          return Container();
-        } else {
-          return progressBar(context, accent_color);
-        }
-      }),
-    );
-  }
 
   Widget stepperBuilder(){
     return SingleChildScrollView(
       child: new Form(
-          key: shippingForm,
+          key: globalKey,
           child:  Container(
             padding: EdgeInsets.only(left: 20, right: 20, top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FormHelper.fieldLabel("First Name", regular, 10, color: grey, prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context, userDetails==null || userDetails.billing==null ? "" :userDetails.billing.firstName, (value){
-                  if(value==null){
-                    userDetails.billing.firstName = userDetails.billing.firstName;
+                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" :userDetails.billing.lastName, (onChange){
+                  if(onChange!=null){
+                    printLog("hghghadadghg", onChange);
+                    this.userDetails.billing.firstName = onChange;
                   }else{
-                    userDetails.billing.firstName = value;
+                    printLog("hghghghg", onChange);
+                    this.userDetails.billing.firstName =  userDetails.billing.firstName;
                   }
-                }, fontWeight: regular, size: 15, textColor: black, onValidate: (value){
+                }, onValidate: (value){
                   if(value.toString().isEmpty){
                     return "please enter valid name";
                   }return null;
                 }),
                 FormHelper.fieldLabel("Last Name", regular, 10, color: grey),
-                FormHelper.textInput(context, userDetails==null || userDetails.billing==null ? "" :userDetails.billing.lastName, (value){
-                  if(value==null){
+                FormHelper.textInput(context, userDetails==null || userDetails.billing==null ? "" :userDetails.billing.lastName,(onchange){
+                  if(onchange==null){
                     userDetails.billing.lastName = userDetails.billing.lastName;
                   }else{
-                    userDetails.billing.lastName = value;
+                    userDetails.billing.lastName = onchange;
                   }
                 }, fontWeight: regular, size: 15, textColor: black, onValidate: (value){
                   if(value.toString().isEmpty){
@@ -151,7 +144,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                   }return null;
                 }),
                 FormHelper.fieldLabel("Phone Number", regular, 10, color: grey, prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" : userDetails.billing.phone, (value){
+                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" : userDetails.billing.phone,(value){
                   if(value==null){
                     userDetails.billing.phone = userDetails.billing.phone;
                   }else{
@@ -192,7 +185,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
                           }
                         })),
                 FormHelper.fieldLabel("City", regular, 10, color: grey, prefixIcon: Icon(Icons.star, size: 5,color: grey, )),
-                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" :userDetails.billing.city, (value){
+                FormHelper.textInput(context,userDetails==null || userDetails.billing==null ? "" :userDetails.billing.city,(value){
                   if(value==null){
                     userDetails.billing.city = userDetails.billing.city;
                   }else{
@@ -245,7 +238,8 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
   }
 
   bool saveShippingForm(){
-    final form = shippingForm.currentState;
+    printLog("kjhjkhjkhjk", userDetails);
+    final form = globalKey.currentState;
     bool value;
     if(form.validate()){
       form.save();
@@ -253,7 +247,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
     }else{
       value = false;
     }
-    printLog("saveShippingForm", value);
+    printLog("saveShippingForm", userDetails.toJson());
     return value;
   }
   void _saveForNextUse(String title, UserModel userModel) {

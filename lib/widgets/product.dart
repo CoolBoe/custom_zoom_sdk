@@ -37,7 +37,7 @@ class ProductWidget extends StatelessWidget {
                     borderRadius: BorderRadius.only(topLeft:Radius.circular(10), topRight: Radius.circular(10)),
                     image: DecorationImage(
                         image: NetworkImage(productModel.images[0].src),
-                        fit: BoxFit.fill)),
+                        fit: BoxFit.contain)),
                 // child: Image.network(itemList[index].item_image, fit: BoxFit.fill)
               ),
               Padding(

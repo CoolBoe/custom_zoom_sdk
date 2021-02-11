@@ -68,7 +68,8 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 10;
     final double itemWidth = size.width / 2;
-    return Padding(
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 5),
         padding: EdgeInsets.all(1),
         child:GridView.builder(
           physics: BouncingScrollPhysics(),
@@ -78,45 +79,51 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
             crossAxisCount: 4,
             mainAxisSpacing: 2.0,
             crossAxisSpacing: 2.0,
-            childAspectRatio: (itemWidth / itemHeight),
+            childAspectRatio: (itemWidth / 200),
           ),
           itemBuilder: (BuildContext context, int index){
             return Padding(
-              padding: EdgeInsets.only(top:2, left: 9, right: 9),
+              padding: EdgeInsets.only(top:2, left: 1, right: 1),
               child: GestureDetector(
                 onTap: () {
-                  changeScreen(context, ShopView(categoryId: items[index].id,));
+                  changeScreen(context, ShopView(categoryId: items[index].id.toString(),));
                 },
                 child:Card(
-                    margin: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    color: currentTab == index ? accent_color : white,
-                    elevation: 1,
-                    child: Padding(
-                      padding: EdgeInsets.all(5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.network(items[index].image !=null ?items[index].image : "https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/9f5962a5-6eb6-46d4-b538-130e70618576/downshifter-10-running-shoe-CrpbbD.jpg",),
-                          Padding(
-                            padding: const EdgeInsets.only(left:2.0),
-                            child: Text(
-                              items[index].name,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color:
-                                  currentTab == index ? white : black,
-                                  fontSize: 8),
-                            ),
-                          )
-                        ],
-                      ),
-                    )),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  elevation: 1,
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          height:60,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(topLeft:Radius.circular(10), topRight: Radius.circular(10)),
+                              image: DecorationImage(
+                                  image: NetworkImage(items[index].image!=null ? items[index].image : CategoryThumbnailUrl, ), fit: BoxFit.contain
+                              )),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Center(
+                            child: Text(items[index].name,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    color:Colors.black,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Poppins')),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ),
             );
           },
-          itemCount: items.length,
+          itemCount:4,
         )
     );
   }
@@ -322,7 +329,6 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
             ),
           ),
           Visibility(visible: homeLayout.categories!=null,child: Container(
-            height: 40,
             child: _buildCategoryList(homeLayout.categories),
           ),),
           Visibility(visible: homeLayout.topSeller!=null,child: Container(

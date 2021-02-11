@@ -87,12 +87,12 @@ class HomeState extends State<HomeView> {
             child: Column(
               children: <Widget>[
                 Container(
-                  height: 250,
+                  height: 230,
                   child: DrawerHeader(
                       decoration: BoxDecoration(color: black),
                       child: Center(
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
+                          padding: const EdgeInsets.only(top: 10.0),
                           child: Column(
                             children: <Widget>[
                               CircleAvatar(
@@ -114,7 +114,7 @@ class HomeState extends State<HomeView> {
                                     color: white),
                               )),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.only(right:8.0, left:8, bottom: 8),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
@@ -186,8 +186,16 @@ class HomeState extends State<HomeView> {
                   height: 20,
                 ),
                 Container(
-                  height: 400,
-                  child: ItemDrawerBuilder(),
+                  height: MediaQuery.of(context).size.height-350,
+                  child: SingleChildScrollView(
+                    child: Container(
+                       child: Column(
+                         children: [
+                           ItemDrawerBuilder(),
+                         ],
+                       )
+                    ),
+                  ),
                 ),
                 Expanded(
                   child: Align(
@@ -201,25 +209,25 @@ class HomeState extends State<HomeView> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            top: 10.0, left: 30, bottom: 20),
+                            top: 10.0, left: 30, bottom: 10),
                         child: GestureDetector(
                           onTap: () {
                             BasePrefs.init();
                             BasePrefs.clearPrefs().then((value) => {
-                                  setState(() {
-                                    if (value) {
-                                     toast(USER_LOGOUT);
-                                     changeToNewScreen(context,SpleshScreen(), "/SplashScreen");
-                                    }
-                                  })
-                                });
+                              setState(() {
+                                if (value) {
+                                  toast(USER_LOGOUT);
+                                  changeToNewScreen(context,SpleshScreen(), "/SplashScreen");
+                                }
+                              })
+                            });
                           },
                           child: Row(
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(right: 10.0),
                                 child: SvgPicture.asset(
-                                 ic_logout,
+                                  ic_logout,
                                   width: 20,
                                   height: 20,
                                   color: white,

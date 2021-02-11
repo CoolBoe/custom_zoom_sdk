@@ -25,12 +25,17 @@ Color orange_50 = Colors.orange[100];
 Color orange_300 = Colors.orange[300];
 Color blueGrey = Colors.blueGrey;
 
+/*----------------WooApp-------------------*/
+// Color accent_color_50 = Colors.orange[50];
+// Color accent_color_300 = Colors.orange[300];
+// Color accent_color = Colors.orange;
+
 /*-------------------evnox-------------------*/
 // Color accent_color_50 = Color(0xFFFCA592);
 // Color accent_color_300 = Color(0xFFF97171);
 // Color accent_color = Color(0xFFFA785C);
 
-/*-------------------bizzon-------------------*/
+// /*-------------------bizzon-------------------*/
 Color accent_color_50 = Color(0xFF5D83F7);
 Color accent_color_300 = Color(0xFF4868CA );
 Color accent_color = Color(0xFF1e2d7d);

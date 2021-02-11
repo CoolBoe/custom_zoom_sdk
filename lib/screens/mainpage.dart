@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,13 +43,14 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
     ByCatgories("Give Feedback", 6, 'assets/icons/ic_rating.svg'),
   ];
   @override
-    void initState() {
+  void initState() {
     BasePrefs.init();
-     var cart = Provider.of<CartProvider>(context, listen: false);
-     cart.getCartItemCount();
-      super.initState();
-    }
-    final PageStorageBucket bucket = PageStorageBucket();
+    var cart = Provider.of<CartProvider>(context, listen: false);
+    cart.getCartItemCount();
+    super.initState();
+  }
+
+  final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen(int screenId) {
     switch (screenId) {
       case 0:
@@ -61,6 +63,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
         return ProfileView();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,7 +113,9 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_home.svg",
-                          color: widget.currentTab == 0 ?accent_color : Colors.grey,
+                          color: widget.currentTab == 0
+                              ? accent_color
+                              : Colors.grey,
                         )
                       ],
                     ),
@@ -128,7 +133,9 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_shop.svg",
-                          color: widget.currentTab == 1 ? accent_color : Colors.grey,
+                          color: widget.currentTab == 1
+                              ? accent_color
+                              : Colors.grey,
                         )
                       ],
                     ),
@@ -151,7 +158,9 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_heart.svg",
-                          color: widget.currentTab == 2 ?accent_color : Colors.grey,
+                          color: widget.currentTab == 2
+                              ? accent_color
+                              : Colors.grey,
                         )
                       ],
                     ),
@@ -169,7 +178,9 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
                       children: <Widget>[
                         SvgPicture.asset(
                           "assets/icons/ic_profile.svg",
-                          color: widget.currentTab == 3 ?accent_color : Colors.grey,
+                          color: widget.currentTab == 3
+                              ? accent_color
+                              : Colors.grey,
                         )
                       ],
                     ),
@@ -182,6 +193,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
       ),
     );
   }
+
   @override
   void dispose() {
     // Add code before the super
@@ -189,21 +201,24 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
   }
 
   Widget cartItem() {
-    return new Consumer<CartProvider>(builder:(context, cartModel, child){
-      if(cartModel.totalCartItem!=null && cartModel.totalCartItem>0){
+    return new Consumer<CartProvider>(builder: (context, cartModel, child) {
+      if (cartModel.totalCartItem != null && cartModel.totalCartItem > 0) {
         return new Positioned(
             right: 0,
             child: Padding(
                 padding: const EdgeInsets.all(0.0),
-                child:  Container(
+                child: Container(
                     padding: EdgeInsets.only(left: 5, right: 5),
                     decoration: BoxDecoration(
                       color: green_400,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text(cartModel.totalCartItem.toString(), style: styleProvider(fontWeight: medium, size: 14, color: white),))
-            ));
-      }else{
+                    child: Text(
+                      cartModel.totalCartItem.toString(),
+                      style: styleProvider(
+                          fontWeight: medium, size: 14, color: white),
+                    ))));
+      } else {
         return Container();
       }
     });

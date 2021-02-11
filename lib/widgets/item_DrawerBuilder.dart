@@ -31,91 +31,94 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
       ByCatgories("Shop", 1, ic_shop),
       ByCatgories("Shop by Category", 2, ic_categories),
       ByCatgories("Terms of Service", 3, ic_support),
+
       // ByCatgories("Privacy Settings", 4, ic_rating),
 
     ];
-    return Padding(
-      padding: const EdgeInsets.only(left: 0.0, right: 30),
-      child: Container(
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemCount: sortBy.length,
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectItem = index;
-                      switch (_selectItem) {
-                        case 0:
-                          changeScreen(context, MainPageScreen(currentTab: 0));
-                          break;
-                        case 1:
-                          changeScreen(context, ShopView());
-                          break;
-                        case 2:
-                          changeScreen(context, CategoriesScreen());
-                          break;
-                        case 3:
-                          changeScreen(context, TermsOfUseScreen());
-                          break;
-                        case 4:
-                          changeScreen(context, PrivacyScreen());
-                          break;
-                        case 5:
-                          changeScreen(context, TermsOfUseScreen());
-                          break;
-                        case 6:
-                          ratingDialog();
-                          break;
-                      }
-                    });
-                  },
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10.0, left: 0, right: 30),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _selectItem == index
-                            ? accent_color
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(5),
-                            bottomRight: Radius.circular(5)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 10.0, left: 30, bottom: 10),
-                        child: Row(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: SvgPicture.asset(
-                                sortBy[index].icon,
-                                width: 20,
-                                height: 20,
-                                color: _selectItem == index
-                                    ? Colors.white
-                                    : Colors.black,
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(left: 0.0, right: 30),
+          child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemCount: sortBy.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectItem = index;
+                        switch (_selectItem) {
+                          case 0:
+                            changeScreen(context, MainPageScreen(currentTab: 0));
+                            break;
+                          case 1:
+                            changeScreen(context, ShopView());
+                            break;
+                          case 2:
+                            changeScreen(context, CategoriesScreen());
+                            break;
+                          case 3:
+                            changeScreen(context, TermsOfUseScreen());
+                            break;
+                          case 4:
+                            changeScreen(context, PrivacyScreen());
+                            break;
+                          case 5:
+                            changeScreen(context, TermsOfUseScreen());
+                            break;
+                          case 6:
+                            ratingDialog();
+                            break;
+                        }
+                      });
+                    },
+                    child: Padding(
+                      padding:
+                      const EdgeInsets.only(top: 10.0, left: 0, right: 30),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _selectItem == index
+                              ? accent_color
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(5),
+                              bottomRight: Radius.circular(5)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 10.0, left: 30, bottom: 10),
+                          child: Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: SvgPicture.asset(
+                                  sortBy[index].icon,
+                                  width: 20,
+                                  height: 20,
+                                  color: _selectItem == index
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
                               ),
-                            ),
-                            Text(sortBy[index].name,
-                                style: TextStyle(
-                                    color: _selectItem == index
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14))
-                          ],
+                              Text(sortBy[index].name,
+                                  style: TextStyle(
+                                      color: _selectItem == index
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14))
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ));
-            }),
-      ),
+                    ));
+              }),
+        ),
+      ],
     );
   }
 

@@ -2,13 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
+import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/utils/widget_helper.dart';
 
 class FormHelper {
   static Widget textInput(
       BuildContext context,
       Object initialValue,
-      Function onChanged, {
+      Function onChanged,
+      {
         Color focusColor,
         Color borderColor,
         double size,
@@ -45,6 +47,7 @@ class FormHelper {
           return onChanged(value);
         },
         validator: (value) {
+          printLog("dsfsafdgdgd", value);
           return onValidate(value);
         },
       );

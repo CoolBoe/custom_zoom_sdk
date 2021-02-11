@@ -53,9 +53,8 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
       }else{if(productModel.loader){
         return ShimmerList(listType: "List",);
       }else {
-        return Padding(
-          padding: const EdgeInsets.only(top: 40.0),
-          child: Container(),
+        return Center(
+          child: dataNotFound(),
         );
       } }
     });

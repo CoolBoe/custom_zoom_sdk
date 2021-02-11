@@ -24,9 +24,11 @@ class WebRequestConstants {
       "ck_d2330126d213f047b974643bd44e9cd8fb34231d";
   static const String BaseAuthPass =
       "cs_10f54a38d84d1fca303e67579bc9da19f4d50774";
+
   static const String getPlaceUrl = "https://location.wlfpt.co/api/v1/";
-    String BaseAuth =
+  String BaseAuth =
       'Basic ' + base64Encode(utf8.encode('$BaseAuthId:$BaseAuthPass'));
+
   static const String COOKIES = "Cookie";
 
 //  String getDomainUrl ="https://app.democontentphoeniixx.com/wp-json/wc/v2/";
@@ -59,7 +61,7 @@ class WebRequestConstants {
   static const String PAYTM_CHECKSUM = "paytm-checksum";
   static const String PAYMENT = "payment";
   static const String UPDATE_ORDER = "checkout/update-order";
-  static const String NEW_ORDER ="checkout/new-order";
+  static const String NEW_ORDER = "checkout/new-order";
   static const String PAYMENT_GATEWAY = "checkout/payment-gateway";
   static const String REVIEW_ORDER = "checkout/review-order";
   static const String ORDERS = "order-list";

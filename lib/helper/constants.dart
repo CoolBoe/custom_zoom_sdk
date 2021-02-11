@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:wooapp/models/cityModel.dart';
 import 'package:wooapp/models/sort_by.dart';
 
-const String appName = 'EVNOX';
+const String appName = 'Woo App';
 const String fontName = 'Poppins';
 const String app_Theme = 'app_theme';
 const String dark_Mode = 'dark_mode';
@@ -74,15 +74,21 @@ const int HTTP_CODE_404 = 404;
 const int HTTP_CODE_500 = 500;
 
 /*----------------IC_SVG_Image-------------------------*/
-const String Thumbnail_User ="https://secure.gravatar.com/avatar/0ebdca653970c966ce5e8bf84a1d0a5a?s=96&d=mm&r=g";
-/*------------------------evnox.com----------------------------*/
+const String Thumbnail_User =
+    "https://secure.gravatar.com/avatar/0ebdca653970c966ce5e8bf84a1d0a5a?s=96&d=mm&r=g";
+
+/*--------------------Woo App---------------------------*/
 // const String CategoryThumbnailUrl="https://www.evnox.com/wp-content/uploads/2018/08/evnox-logo.jpg";
 // const String BannerThumbnailUrl= "https://www.evnox.com/wp-content/uploads/2018/08/hompage-header-01.jpg";
+/*------------------------evnox.com----------------------------*/
+// const String CategoryThumbnailUrl =
+//     "https://www.evnox.com/wp-content/uploads/2018/08/evnox-logo.jpg";
+// const String BannerThumbnailUrl =
+//     "https://www.evnox.com/wp-content/uploads/2018/08/hompage-header-01.jpg";
 
 /*------------------------bizzon.com----------------------------*/
 const String CategoryThumbnailUrl="https://bizzon.in/wp-content/uploads/2021/01/lycs-architecture-U2BI3GMnSSE-unsplash-320x320.jpg?v=1610700194";
 const String BannerThumbnailUrl= "https://bizzon.in/wp-content/uploads/2020/09/BizzonSale-2-1024x858.jpg?v=1599248859";
-
 
 const String ic_facebook = "assets/icons/ic_facebook.svg";
 const String ic_backpack = "assets/icons/ic_backpack.svg";
@@ -131,7 +137,6 @@ const String ic_globe_png = "assets/images/ic_globe.png";
 const String ic_pass_png = "assets/images/ic_pass.png";
 const String ic_phone_png = "assets/images/ic_phone.png";
 
-
 //ic_thumbnail.png
 /*-----------------SizeBuilder---------------------------*/
 const double dp5 = 5.0;
@@ -165,7 +170,6 @@ const FontWeight bold = FontWeight.w700;
 const FontWeight extraBold = FontWeight.w800;
 const FontWeight dark = FontWeight.w900;
 
-
 /*--------------------SortBy List-------------------------------*/
 
 List<SortBy> _sortByOptions = [
@@ -180,15 +184,20 @@ List<CityModel> countryList = [
   CityModel(id: "101", sortname: "IN", name: "India", phonecode: "91")
 ];
 
-List<CityModel> stateList =[
-  CityModel(id: "1", sortname: "", name: "Andaman and Nicobar Islands", phonecode: "91"),
+List<CityModel> stateList = [
+  CityModel(
+      id: "1",
+      sortname: "",
+      name: "Andaman and Nicobar Islands",
+      phonecode: "91"),
   CityModel(id: "2", sortname: "", name: "Andhra Pradesh", phonecode: "91"),
   CityModel(id: "3", sortname: "", name: "Arunachal Pradesh", phonecode: "91"),
   CityModel(id: "4", sortname: "", name: "Assam", phonecode: "91"),
   CityModel(id: "5", sortname: "", name: "Bihar", phonecode: "91"),
   CityModel(id: "5", sortname: "", name: "Chandigarh", phonecode: "91"),
   CityModel(id: "6", sortname: "", name: "Chhattisgarh", phonecode: "91"),
-  CityModel(id: "7", sortname: "", name: "Dadra and Nagar Haveli", phonecode: "91"),
+  CityModel(
+      id: "7", sortname: "", name: "Dadra and Nagar Haveli", phonecode: "91"),
   CityModel(id: "8", sortname: "", name: "Daman and Diu", phonecode: "91"),
   CityModel(id: "9", sortname: "", name: "Delhi", phonecode: "91"),
   CityModel(id: "9", sortname: "", name: "Goa", phonecode: "91"),
@@ -222,24 +231,20 @@ List<CityModel> stateList =[
   CityModel(id: "37", sortname: "", name: "Uttarakhand", phonecode: "91"),
   CityModel(id: "38", sortname: "", name: "Vaishali", phonecode: "91"),
   CityModel(id: "39", sortname: "", name: "West Bengal", phonecode: "91"),
-
-
-
-
-
-
 ];
 
 /*-------------------------payment--------------------------------*/
 const String paypalURL = "https://api.sandbox.paypal.com";
-const String paypalClientId = "AQpctZmexFjg0jjRFncorRO5ZbOTlARoFdEMWc3A3Sh2qEKXkRoLcdPaaXfAuNxnQItCVFCQl5oUTkOf";
-const String paypalSecretKey = "EIwYvq2epkKfi6df2ZBqU8Rh2lGNGYTPY-2cMDCesEegsmAo5WXPEhzK3fElsyqSiyPMwR8_QArOxKw5";
+const String paypalClientId =
+    "AQpctZmexFjg0jjRFncorRO5ZbOTlARoFdEMWc3A3Sh2qEKXkRoLcdPaaXfAuNxnQItCVFCQl5oUTkOf";
+const String paypalSecretKey =
+    "EIwYvq2epkKfi6df2ZBqU8Rh2lGNGYTPY-2cMDCesEegsmAo5WXPEhzK3fElsyqSiyPMwR8_QArOxKw5";
 const String returnURL = "return.snippetcoder.com";
 const String cancelURL = "cancel.snippetcoder.com";
 
 /*-------------------------razor pay--------------------------------*/
-const String RazorPayKey ="rzp_test_2akds9ynth1XSc";
+const String RazorPayKey = "rzp_test_2akds9ynth1XSc";
 
 /*-------------------------PayU Money--------------------------------*/
-const String PayUmerchantKey ="Z9ZieeCK";
-const String PayUmerchantID ="7In9PCvzd5";
+const String PayUmerchantKey = "Z9ZieeCK";
+const String PayUmerchantID = "7In9PCvzd5";

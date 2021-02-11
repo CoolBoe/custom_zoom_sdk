@@ -287,7 +287,7 @@ class EditAccountScreenState extends State<EditAccountScreen>{
 
                        ),
                      ),
-                     Text("Engish", style: styleProvider(fontWeight: medium, size: 14, color: black),),
+                     Text("English", style: styleProvider(fontWeight: medium, size: 14, color: black),),
                    ],
                  ),
 
