@@ -228,7 +228,7 @@ class WebApiServices {
 
   Future<List<ProductModel>> getProducts(
       {String sort,
-      String page,
+      int page,
       String per_page,
       String category_id,
       String str_search,
@@ -240,7 +240,7 @@ class WebApiServices {
       List<int> productIDs,
       String colorList,
       String sizeList}) async {
-    printLog("ghjghjghjgh", productIDs);
+    printLog("ghjghjghjgh", page);
     List<ProductModel> list = [];
     try {
       String parameter = "";

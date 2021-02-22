@@ -27,10 +27,8 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
   @override
   Widget build(BuildContext context) {
     List<ByCatgories> sortBy = [
-      ByCatgories("Home", 0, ic_home),
-      ByCatgories("Shop", 1, ic_shop),
-      ByCatgories("Shop by Category", 2, ic_categories),
-      ByCatgories("Terms of Service", 3, ic_support),
+
+
 
       // ByCatgories("Privacy Settings", 4, ic_rating),
 

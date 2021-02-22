@@ -53,7 +53,7 @@ class HomeLayout {
   Map<String, dynamic> toJson() => {
     "top_seller": topSeller !=null ? List<dynamic>.from(topSeller.map((x) => x.toJson())): null,
     "tspnumber": tspnumber,
-    "featured_products": List<dynamic>.from(featuredProducts.map((x) => x.toJson())),
+    "featured_products": featuredProducts!=null && featuredProducts.length>0 ? List<dynamic>.from(featuredProducts.map((x) => x.toJson())) : null,
     "fpnumber": fpnumber,
     "sale_products": List<dynamic>.from(saleProducts.map((x) => x.toJson())),
     "salepnumber": salepnumber,

@@ -78,12 +78,14 @@ class ShopState extends State<ShopView> {
 
      _scrollController.addListener(() {
       setState(() {
+        printLog("bhkhhjjkh", "msg");
         //<-----------------------------
         offset = _scrollController.offset;
         // force a refresh so the app bar can be updated
       });
       if(_scrollController.position.pixels==_scrollController.position.maxScrollExtent){
         productList.setLoadingState(LoadMoreStatus.LOADING);
+        printLog("pageNumber", "+++");
         productList.fetchProducts(++_page);
       }
     });
@@ -172,12 +174,11 @@ class ShopState extends State<ShopView> {
         ),
         SliverToBoxAdapter(
           child: Container(
-            margin: EdgeInsets.only(bottom: 50),
             child: Column(
               children:<Widget>[
                 Padding(
                     padding: const EdgeInsets.only(top:10, left:15.0, right: 15),
-                    child: _productList()),
+                    child: _productList())
               ],
             ),
           ),
@@ -214,6 +215,7 @@ class ShopState extends State<ShopView> {
       return GridView.count(
           shrinkWrap: true,
           crossAxisCount: 2,
+          controller: _scrollController,
           padding: EdgeInsets.zero,
           childAspectRatio: (itemWidth / 300),
           crossAxisSpacing: 10,

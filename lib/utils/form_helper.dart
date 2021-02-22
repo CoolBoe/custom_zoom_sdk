@@ -235,7 +235,6 @@ class FormHelper {
   }
 }
 
-
 Widget circularImageView ({String imageUrl, Function onCallback}){
   return Padding(
     padding: const EdgeInsets.only(left: 20.0, right: 15),

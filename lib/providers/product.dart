@@ -9,8 +9,8 @@ enum LoadMoreStatus{INITIAL, LOADING, STABLE}
 enum ProductBy {DEFAULT, CATEGORY, FEATURED, SELLER, SALE, RATED }
 class ProductsProvider with ChangeNotifier {
   String sort = 'default';
-  String page = '1';
-  String per_page = '10';
+  int page = 1;
+  String per_page = '6';
   WebApiServices _webApiServices;
   List<ProductModel> _productList ;
   List<ProductModel> get allProducts => _productList;
@@ -29,7 +29,6 @@ class ProductsProvider with ChangeNotifier {
     _productList = List<ProductModel>();
     _webApiServices= WebApiServices();
     _sortBy = SortBy("default", "Default", "asc");
-    fetchProducts(1);
 
   }
   void resetStreams() {
@@ -51,8 +50,8 @@ class ProductsProvider with ChangeNotifier {
   fetchProducts(pageNumber, {String sortBy, String str_search, String brand, String max_price, String min_price,
     bool on_sale, bool featured, String category_id, String colorList, String sizelist }) async{
     loader= true;
-    printLog("fetchProducts", str_search);
-    List<ProductModel> itemModel = await _webApiServices.getProducts(sort: this._sortBy.value, category_id: category_id, page: this.page, per_page: this.per_page, str_search: str_search, brand: brand,
+    printLog("fetchProducts", pageNumber);
+    List<ProductModel> itemModel = await _webApiServices.getProducts(sort: this._sortBy.value, category_id: category_id, page: pageNumber, per_page: this.per_page, str_search: str_search, brand: brand,
         featured: featured, on_sale: on_sale, max_price: max_price, min_price: min_price, sizeList: sizelist, colorList: colorList,);
     if(itemModel.length>0){
       _productList.addAll(itemModel);

@@ -1,15 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:html/parser.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
-import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/order.dart';
 import 'package:wooapp/models/paymentGateway.dart';
 import 'package:wooapp/models/revieworder.dart';
@@ -19,7 +16,6 @@ import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/screens/basePage.dart';
-import 'package:wooapp/screens/cart.dart';
 import 'package:wooapp/screens/delivery.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/offer.dart';
@@ -31,15 +27,7 @@ import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/progress_bar.dart';
 import 'package:wooapp/widgets/widgetShippingCart.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:html/parser.dart';
-import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:wooapp/helper/color.dart';
-import 'package:wooapp/helper/constants.dart';
-import 'package:wooapp/providers/cart.dart';
-import 'package:wooapp/validator/validate.dart';
-import 'package:wooapp/widgets/loading.dart';
 
 class CheckOutScreen extends BasePage {
   String total;
@@ -88,7 +76,6 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
       bottomNavigationBar: bottomBar(),
     );
   }
-
 
   Widget bottomBar(){
    return Padding(
