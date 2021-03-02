@@ -17,19 +17,21 @@ import 'package:wooapp/utils/widget_helper.dart';
 import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/loading.dart';
 
-Widget homeAppBar(BuildContext context){
+Widget homeAppBar(BuildContext context,  Widget icon){
   return AppBar(
-    backgroundColor: grey_200,
+    backgroundColor: Theme.of(context).backgroundColor,
     centerTitle: true,
+    elevation: 0,
     // title: Text(appName, style: styleProvider(fontWeight: medium, size: 12, color: black),),
     iconTheme: new IconThemeData(color: black),
+    leading: icon,
     actions: <Widget>[
       Padding(
         padding: const EdgeInsets.only(right: 15),
         child: GestureDetector(onTap: (){
-          changeScreen(context, SearchScreen());
+          changeScreen(context, SearchScreen(), );
         },
-        child: SvgPicture.asset('assets/icons/ic_search.svg'),)
+        child: SvgPicture.asset('assets/icons/ic_search.svg', color: Theme.of(context).accentColor,),)
       )
     ],
   );

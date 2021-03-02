@@ -260,11 +260,12 @@ class customButton extends StatelessWidget{
   customButton({@required this.onPressed, this.title, this.color});
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-        child:  Padding(
-          padding:
-          EdgeInsets.only(left: 20, top: 10, right: 20),
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: RawMaterialButton(
           child: Container(
+              padding:
+              EdgeInsets.only(left: 20, top: 10, right: 20),
               color: Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -281,13 +282,12 @@ class customButton extends StatelessWidget{
                   ),
                 ),
               )),
-
-        ),
-        onPressed: onPressed);
+          onPressed: onPressed),
+    );
   }
 }
 
-class EditHelper{
+  class EditHelper{
 
 }
 

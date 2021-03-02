@@ -7,7 +7,7 @@ Widget popupBuilder(String image, String title) {
   return Container(
     child: Column(
       children: [
-        Text(title, style: styleProvider(fontWeight: semiBold, size: 14, color: black),)
+        Text(title, style: styleProvider(fontWeight: semiBold, size: 14),)
       ],
     ),
   );

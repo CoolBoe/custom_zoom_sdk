@@ -37,6 +37,7 @@ class _WidgetCartItemState extends State<WidgetCartItem>{
   }
   Widget _buildproductList(CartDatum cartItem) {
     return Container(
+      color: Theme.of(context).backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(3.0),
         child: Container(
@@ -75,7 +76,6 @@ class _WidgetCartItemState extends State<WidgetCartItem>{
                                 cartItem.name,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    color: Colors.black,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Poppins'),
@@ -93,7 +93,6 @@ class _WidgetCartItemState extends State<WidgetCartItem>{
                                 backgroundColor: Colors.red[200],
                                 child: Icon(
                                   Icons.close,
-                                  color: Colors.white,
                                   size: 10,
                                 ),
                               ),),
@@ -112,7 +111,6 @@ class _WidgetCartItemState extends State<WidgetCartItem>{
                                     .documentElement
                                     .text,
                                 style: TextStyle(
-                                    color: Colors.black,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: 'Poppins'),

@@ -21,7 +21,7 @@ class ProductWidget extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(
             width: 0.15,
-            color: Colors.grey,
+            color: Theme.of(context).dividerColor,
           ),
           borderRadius: BorderRadius.all(Radius.circular(10))
       ),
@@ -72,7 +72,7 @@ class ProductWidget extends StatelessWidget {
               productModel.name,
               maxLines: 2,
               style: TextStyle(
-                color: black,
+                color: Theme.of(context).accentColor,
                 fontFamily: 'Poppins',
                 fontSize: 12.0,
                 fontWeight: FontWeight.w600,
@@ -99,7 +99,7 @@ class ProductWidget extends StatelessWidget {
                 Text(
                   "₹ "+productModel.price,
                   style: TextStyle(
-                    color: black,
+                    color: Theme.of(context).accentColor,
                     fontFamily: 'Poppins',
                     fontSize: 12.0,
                     fontWeight: FontWeight.w600,
@@ -141,7 +141,7 @@ class ProductWidget extends StatelessWidget {
                 Text(
                   " {" + productModel.ratingCount.toString() + "}",
                   style: TextStyle(
-                    color: black,
+                    color: Theme.of(context).accentColor,
                     fontFamily: 'Poppins',
                     fontSize: 12.0,
                     fontWeight: FontWeight.w600,

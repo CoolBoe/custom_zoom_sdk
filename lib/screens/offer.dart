@@ -45,7 +45,11 @@ class OfferScreenState extends State<OfferScreen>{
   Widget pageUi() {
     return Scaffold(
       appBar:BaseAppBar(context, "My Offers", suffixIcon: couponRemover()),
-      body: pageBuilder(),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        color: Theme.of(context).backgroundColor,
+        child: pageBuilder(),
+      ),
       bottomNavigationBar:customButton(title: "Apply Coupons", color: accent_color,onPressed: (){
         if(cartItemKey!=null){
           setState(() {
@@ -125,7 +129,7 @@ class OfferScreenState extends State<OfferScreen>{
               )),
           Padding(
             padding: const EdgeInsets.only(left:13.0),
-            child: Text("Trending", style: styleProvider(fontWeight: semiBold, size: 14, color: black),),
+            child: Text("Trending", style: styleProvider(fontWeight: semiBold, size: 14),),
           ),
           _myOffers()
         ],

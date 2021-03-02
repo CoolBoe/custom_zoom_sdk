@@ -50,7 +50,11 @@ class CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
          appBar: BaseAppBar(context, "Category"),
-        body: _categoriesList(),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          color: Theme.of(context).backgroundColor,
+          child: _categoriesList(),
+        ),
      );
   }
   Widget _categoriesList(){
@@ -89,7 +93,7 @@ class CategoriesScreenState extends State<CategoriesScreen> {
                         setState(() {
                           var productList = Provider.of<ProductsProvider>(context, listen: false);
                           productList.resetStreams();
-                          productList.setLoadingState(LoadMoreStatus.INITIAL);
+                          productList.setLoadingStatus(LoadMoreStatus.INITIAL);
                           // productList.fetchProducts(_page, category_id: e.id.toString());
                           changeScreen(
                               context,
@@ -97,11 +101,13 @@ class CategoriesScreenState extends State<CategoriesScreen> {
                         });
                       },
                       child: Card(
+                        color:Theme.of(context).bottomAppBarColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         elevation: 1,
                         child: Container(
+
                           child: Column(
                             children: <Widget>[
                               Container(
@@ -117,7 +123,7 @@ class CategoriesScreenState extends State<CategoriesScreen> {
                                 child: Text(e.name,
                                     maxLines: 1,
                                     style: TextStyle(
-                                        color:Colors.black,
+                                        color:Theme.of(context).accentColor,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: 'Poppins')),

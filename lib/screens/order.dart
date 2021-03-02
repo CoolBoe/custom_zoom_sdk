@@ -45,13 +45,18 @@ class OrderHistoryState extends BasePageState<OrderHistory>{
     // TODO: implement pageUi
     return Scaffold(
         appBar: BaseAppBar(context, "My Order", suffixIcon: Container()),
-        body:pageBuilder()
+        body:Container(
+          color: Theme.of(context).backgroundColor,
+          height: MediaQuery.of(context).size.height,
+          child: pageBuilder(),
+        )
     );
   }
 
   Widget pageBuilder(){
     return SingleChildScrollView(
       child: Container(
+
         padding: EdgeInsets.only(left: 20, right: 20),
         child: Column(
           children: [

@@ -1,43 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 
 class ThemeProvider with ChangeNotifier{
   final darkTheme = ThemeData(
+    highlightColor: Color(0xFF313639),
     hintColor: Colors.grey,
-    primaryColor: Colors.black,
     brightness: Brightness.dark,
+    primaryColor: accent_color,
+    cardColor:Color(0xFF313639),
     backgroundColor: Colors.black,
+    canvasColor: Color(0xFF38464c),
     accentColor: Colors.white,
-    accentIconTheme: IconThemeData(color: Colors.black),
-    dividerColor: Colors.black12,
-    textTheme: TextTheme(
-      headline1: TextStyle(fontFamily: fontName,fontSize: 8.0, fontWeight: semiBold),
-      headline2: TextStyle(fontFamily: fontName,fontSize: 10.0, fontWeight: semiBold),
-      headline3: TextStyle(fontFamily: fontName,fontSize: 12.0, fontWeight: semiBold),
-      headline4: TextStyle(fontFamily: fontName,fontSize: 14.0, fontWeight: semiBold),
-      headline5: TextStyle(fontFamily: fontName,fontSize: 16.0, fontWeight: semiBold),
-      headline6: TextStyle(fontFamily: fontName,fontSize: 18.0, fontWeight: semiBold),
-      bodyText1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-      bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-    ),
+    unselectedWidgetColor: Colors.white,
+      disabledColor: Colors.blue,
+    bottomAppBarColor: Color(0xFF313639),
+    dividerColor: Colors.white70,
   );
   final lightTheme = ThemeData(
-    primarySwatch: Colors.grey,
-    primaryColor: Colors.white,
+    hintColor: Colors.white54,
+    cardColor:Colors.grey[200],
+    canvasColor: Color(0xFFFEDBD0),
+    primaryColor: accent_color,
     brightness: Brightness.light,
-    backgroundColor: const Color(0xFFE5E5E5),
+    unselectedWidgetColor: Colors.black,
+    disabledColor: Colors.blue,
+    bottomAppBarColor: Colors.white,
+    highlightColor: Color(0xFF000000),
+    backgroundColor: Colors.white60,
     accentColor: Colors.black,
-    accentIconTheme: IconThemeData(color: Colors.white),
-    dividerColor: Colors.white54,
+    dividerColor: Colors.black12,
   );
   ThemeData _themeData;
-  ThemeData getTheme() => _themeData;
 
   ThemeNotifier() {
-    BasePrefs.readData('themeMode').then((value) {
+    BasePrefs.readData(app_Theme).then((value) {
       print('value read from storage: ' + value.toString());
-      var themeMode = value ?? 'light';
+      var themeMode = value ?? dark_Mode;
       if (themeMode == lightTheme) {
         _themeData = lightTheme;
       } else {
@@ -58,5 +58,14 @@ class ThemeProvider with ChangeNotifier{
     _themeData = lightTheme;
     BasePrefs.saveData(app_Theme, light_Mode);
     notifyListeners();
+  }
+
+  ThemeData getTheme(){
+    BasePrefs.init();
+    if(BasePrefs.getString(app_Theme)!=null && BasePrefs.getString(app_Theme)== dark_Mode){
+      return darkTheme;
+    }else{
+      return lightTheme;
+    }
   }
 }

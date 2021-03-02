@@ -301,7 +301,7 @@ Widget somethingWentWrong(){
       children: [
         Image.asset(ic_oops_png),
         SizedBox(height: 10,),
-        Text(NETWORK_ERROR, style: styleProvider(fontWeight: medium,size: 14, color: black),)
+        Text(NETWORK_ERROR, style: styleProvider(fontWeight: medium,size: 14),)
       ],
     ),
       );
@@ -313,7 +313,7 @@ Widget dataNotFound(){
       children: [
         Image.asset(ic_nodata_png),
         SizedBox(height: 10,),
-        Text(DATA_NOT_FOUND, style: styleProvider(fontWeight: medium,size: 14, color: black),)
+        Text(DATA_NOT_FOUND, style: styleProvider(fontWeight: medium,size: 14),)
       ],
     ),
   );

@@ -19,11 +19,17 @@ class WebRequestConstants {
   //     "cs_cd8d8732bb83b0b0bce0f01df205ad3da73782fb";
 
   /*-------------------https://bizzon.in/----------------*/
-  static const String getWPBaseUrl = "https://bizzon.in";
+  // static const String getWPBaseUrl = "https://bizzon.in";
+  // static const String BaseAuthId =
+  //     "ck_d2330126d213f047b974643bd44e9cd8fb34231d";
+  // static const String BaseAuthPass =
+  //     "cs_10f54a38d84d1fca303e67579bc9da19f4d50774";
+  /*-------------------https://SchoolMegaMart.in/----------------*/
+  static const String getWPBaseUrl = "https://schoolmegamart.com";
   static const String BaseAuthId =
-      "ck_d2330126d213f047b974643bd44e9cd8fb34231d";
+      "ck_9edfb28ae033d8124559ed8ae17669b53da4edb0";
   static const String BaseAuthPass =
-      "cs_10f54a38d84d1fca303e67579bc9da19f4d50774";
+      "cs_b751f529a8b22a97c3d3cf1b9402b9f5e6ac6236";
 
   static const String getPlaceUrl = "https://location.wlfpt.co/api/v1/";
   String BaseAuth =

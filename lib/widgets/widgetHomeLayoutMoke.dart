@@ -35,7 +35,6 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
     var categoryList=Provider.of<CategoriesProvider>(context, listen: false);
     categoryList.fetchCategories();
     var productList = Provider.of<ProductsProvider>(context, listen: false);
-    productList.fetchProducts(_page);
     productList.fetchProductByFeatured(_page, featured: true);
     productList.fetchProductBySale(_page, sale: true);
 
@@ -58,7 +57,7 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
                               fontFamily: 'Poppins',
                               fontSize: 14.0,
                               fontWeight: semiBold,
-                              color: black))),
+                              color: Theme.of(context).accentColor))),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -72,12 +71,12 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
                               fontFamily: 'Poppins',
                               fontSize: 10.0,
                               fontWeight: regular,
-                              color: black),
+                              color: Theme.of(context).accentColor),
                         ),
                       ),
                       Icon(
                         Icons.arrow_right_alt_rounded,
-                        color: black,
+                        color: Theme.of(context).accentColor,
                         size: 20,
                       )
                     ],
@@ -96,7 +95,7 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
                             fontFamily: 'Poppins',
                             fontSize: 14.0,
                             fontWeight: semiBold,
-                            color: black)),
+                            color: Theme.of(context).accentColor)),
                     GestureDetector(
                       onTap: (){
                         changeScreen(context, ShopView());
@@ -110,11 +109,11 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
                                 fontFamily: 'Poppins',
                                 fontSize: 10.0,
                                 fontWeight: regular,
-                                color: black),
+                                color: Theme.of(context).accentColor),
                           ),
                           Icon(
                             Icons.arrow_right_alt_rounded,
-                            color: black,
+                            color: Theme.of(context).accentColor,
                             size: 20,
                           )
                         ],
@@ -133,7 +132,7 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
                             fontFamily: 'Poppins',
                             fontSize: 14.0,
                             fontWeight: semiBold,
-                            color: black)),
+                            color: Theme.of(context).accentColor)),
                     GestureDetector(
                       onTap: (){
                         changeScreen(context, ShopView());
@@ -147,11 +146,11 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
                                 fontFamily: 'Poppins',
                                 fontSize: 10.0,
                                 fontWeight: regular,
-                                color: black),
+                                color: Theme.of(context).accentColor),
                           ),
                           Icon(
                             Icons.arrow_right_alt_rounded,
-                            color: black,
+                            color: Theme.of(context).accentColor,
                             size: 20,
                           )
                         ],
@@ -207,23 +206,26 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
                   ),
                   elevation: 1,
                   child: Container(
+                    color: Theme.of(context).backgroundColor,
                     child: Column(
                       children: <Widget>[
                         Container(
                           height:60,
                           decoration: BoxDecoration(
+                              color: Theme.of(context).backgroundColor,
                               borderRadius: BorderRadius.only(topLeft:Radius.circular(10), topRight: Radius.circular(10)),
                               image: DecorationImage(
                                   image: NetworkImage(items[index].image!=null ? items[index].image.src : CategoryThumbnailUrl, ), fit: BoxFit.contain
                               )),
                         ),
                         Container(
+                          color: Theme.of(context).backgroundColor,
                           padding: EdgeInsets.symmetric(vertical: 5),
                           child: Center(
                             child: Text(items[index].name,
                                 maxLines: 1,
                                 style: TextStyle(
-                                    color:Colors.black,
+                                    color:Theme.of(context).accentColor,
                                     fontSize: 10,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: 'Poppins')),

@@ -104,7 +104,7 @@ class ProductScreenState extends State<ProductScreen> {
         SliverAppBar(
           pinned: true,
           expandedHeight: 50,
-          backgroundColor: white,
+          backgroundColor: Theme.of(context).bottomAppBarColor,
           floating: true,
           leading: GestureDetector(
               onTap: () {
@@ -112,7 +112,7 @@ class ProductScreenState extends State<ProductScreen> {
               },
               child: Icon(
                 Icons.arrow_back,
-                color: Colors.black,
+                color: Theme.of(context).accentColor,
               )),
           actions: <Widget>[
             Padding(
@@ -156,7 +156,7 @@ class ProductScreenState extends State<ProductScreen> {
                   },
                   child: Icon(
                     isAdded ? Icons.favorite : Icons.favorite_border,
-                    color: accent_color,
+                    color: Theme.of(context).accentColor,
                     size: 20,
                   ),
                 ),
@@ -218,7 +218,7 @@ class ProductScreenState extends State<ProductScreen> {
                                     fontFamily: 'Poppins',
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.black)),
+                                    color: Theme.of(context).accentColor)),
                           ),
                           Container(
                             padding: EdgeInsets.only(right: 10),
@@ -228,7 +228,7 @@ class ProductScreenState extends State<ProductScreen> {
                               children: <Widget>[
                                 Icon(
                                   Icons.star,
-                                  color: accent_color,
+                                  color: Theme.of(context).accentColor,
                                   size: 15,
                                 ),
                                 Text(
@@ -240,7 +240,7 @@ class ProductScreenState extends State<ProductScreen> {
                                         fontFamily: 'Poppins',
                                         fontSize: 10.0,
                                         fontWeight: FontWeight.w400,
-                                        color: Colors.black)),
+                                        color: Theme.of(context).accentColor)),
                               ],
                             ),
                           ),
@@ -259,7 +259,7 @@ class ProductScreenState extends State<ProductScreen> {
                                   fontFamily: 'Poppins',
                                   fontSize: dp10,
                                   fontWeight: medium,
-                                  color: black,
+                                  color: Theme.of(context).accentColor,
                                 ))
                             : SizedBox(
                                 height: 0,
@@ -288,7 +288,7 @@ class ProductScreenState extends State<ProductScreen> {
           sliver: SliverToBoxAdapter(
               child: Card(
             elevation: 10,
-            color: Color(0xFFFEDBD0),
+            color: Theme.of(context).canvasColor,
             child: SizedBox(
               width: MediaQuery.of(context).size.width / 1.2,
               child: Padding(
@@ -303,7 +303,7 @@ class ProductScreenState extends State<ProductScreen> {
                         Container(
                           child: Text('Specification',
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Theme.of(context).accentColor,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w600,
                                   fontSize: 12)),
@@ -322,7 +322,7 @@ class ProductScreenState extends State<ProductScreen> {
                             width: 70,
                             child: Text('Category :',
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: Theme.of(context).accentColor,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 10)),
@@ -333,7 +333,7 @@ class ProductScreenState extends State<ProductScreen> {
                               width: 170,
                               child: Text(catergory,
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                       fontSize: 10)),
@@ -355,7 +355,7 @@ class ProductScreenState extends State<ProductScreen> {
                               width: 70,
                               child: Text('Total Sales :',
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                       fontSize: 10)),
@@ -365,7 +365,7 @@ class ProductScreenState extends State<ProductScreen> {
                               child: Text(
                                   widget.productModel.totalSales.toString(),
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                       fontSize: 10)),
@@ -385,7 +385,7 @@ class ProductScreenState extends State<ProductScreen> {
                               width: 70,
                               child: Text('SKU :',
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                       fontSize: 10)),
@@ -394,7 +394,7 @@ class ProductScreenState extends State<ProductScreen> {
                               padding: const EdgeInsets.only(right: 20.0),
                               child: Text(widget.productModel.sku,
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w500,
                                       fontSize: 10)),
@@ -445,7 +445,7 @@ class ProductScreenState extends State<ProductScreen> {
                 fontFamily: 'Poppins',
                 fontSize: 12.0,
                 fontWeight: FontWeight.w500,
-                color: Colors.black)),
+                color: Theme.of(context).accentColor)),
         attribute.options != null &&
                 attribute.options.length > 0 &&
                 attribute.options[0] is String
@@ -482,7 +482,7 @@ class ProductScreenState extends State<ProductScreen> {
                               style: TextStyle(
                                   color: itemIndex == index
                                       ? Colors.white
-                                      : Colors.black,
+                                      : Theme.of(context).accentColor,
                                   fontWeight: medium,
                                   fontSize: 12),
                               textAlign: TextAlign.center,
@@ -532,7 +532,7 @@ class ProductScreenState extends State<ProductScreen> {
                               style: TextStyle(
                                   color: itemIndex == index
                                       ? Colors.white
-                                      : Colors.black,
+                                      : Theme.of(context).accentColor,
                                   fontWeight: medium,
                                   fontSize: 12),
                               textAlign: TextAlign.center,
@@ -569,13 +569,13 @@ class ProductScreenState extends State<ProductScreen> {
         inAsyncCall: isApiCallProcess,
         opacity: 0.3,
         child: Container(
-          decoration: BoxDecoration(color: Colors.white),
+          decoration: BoxDecoration(color: Theme.of(context).backgroundColor),
           child: Center(child: _CustomScrollView()),
         ),
       ),
       bottomNavigationBar: Container(
         height: 50,
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        decoration: BoxDecoration(color: Theme.of(context).bottomAppBarColor, boxShadow: [
           BoxShadow(
               color: Colors.grey, offset: Offset(0.0, 1.0), blurRadius: 6.0)
         ]),
@@ -596,7 +596,7 @@ class ProductScreenState extends State<ProductScreen> {
                               child: Text(
                                 "₹ " + widget.productModel.regularPrice,
                                 style: TextStyle(
-                                    color: accent_color,
+                                    color: Theme.of(context).accentColor,
                                     fontFamily: 'Poppins',
                                     fontSize: 20.0,
                                     fontWeight: semiBold,
@@ -607,7 +607,7 @@ class ProductScreenState extends State<ProductScreen> {
                         Text(
                           "₹ " + widget.productModel.price,
                           style: TextStyle(
-                            color: black,
+                            color: Theme.of(context).accentColor,
                             fontFamily: 'Poppins',
                             fontSize: 20.0,
                             fontWeight: semiBold,
@@ -767,7 +767,7 @@ class ProductScreenState extends State<ProductScreen> {
     showGeneralDialog(
         barrierLabel: "label",
         barrierDismissible: true,
-        barrierColor: Colors.black.withOpacity(0.5),
+        barrierColor: Theme.of(context).backgroundColor.withOpacity(0.5),
         transitionDuration: Duration(milliseconds: 700),
         context: context,
         pageBuilder: (context, anim1, anim2) {
@@ -780,7 +780,7 @@ class ProductScreenState extends State<ProductScreen> {
                 child: Container(
                   height: 400,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).backgroundColor,
                     boxShadow: [
                       BoxShadow(
                           color: Colors.grey,
@@ -809,7 +809,7 @@ class ProductScreenState extends State<ProductScreen> {
                                     margin: EdgeInsets.zero,
                                     child: Icon(
                                       Icons.close,
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       size: 15,
                                     )),
                               ),
@@ -827,7 +827,7 @@ class ProductScreenState extends State<ProductScreen> {
                                 height: 150,
                                 width: 150,
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: Theme.of(context).highlightColor,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(100)),
                                     boxShadow: [
@@ -842,7 +842,7 @@ class ProductScreenState extends State<ProductScreen> {
                                     height: 130,
                                     width: 130,
                                     decoration: BoxDecoration(
-                                        color: Colors.black,
+                                        color: Theme.of(context).highlightColor,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(100)),
                                         boxShadow: [
@@ -855,7 +855,7 @@ class ProductScreenState extends State<ProductScreen> {
                                       padding: const EdgeInsets.all(40.0),
                                       child: SvgPicture.asset(
                                         ic_shoppingcart,
-                                        color: Colors.white,
+                                        color: Theme.of(context).backgroundColor,
                                       ),
                                     ),
                                   ),
@@ -885,7 +885,7 @@ class ProductScreenState extends State<ProductScreen> {
                         child: Text(
                           'Success!',
                           style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).accentColor,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
                               fontSize: 20),
@@ -897,7 +897,7 @@ class ProductScreenState extends State<ProductScreen> {
                         child: Text(
                           msg,
                           style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).accentColor,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w500,
                               fontSize: 12),

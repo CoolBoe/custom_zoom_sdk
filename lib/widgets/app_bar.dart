@@ -8,7 +8,7 @@ import 'package:wooapp/screens/searchProduct.dart';
 
   Widget BaseAppBar (BuildContext context, String pageName,{Widget prefixIcon, Widget suffixIcon, Color backgroundColor}) {
     return AppBar(
-      backgroundColor: backgroundColor!=null ? backgroundColor: transparent ,
+      backgroundColor: Theme.of(context).backgroundColor,
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
         title: Text(pageName,
@@ -16,24 +16,26 @@ import 'package:wooapp/screens/searchProduct.dart';
                 fontFamily: 'Poppins',
                 fontSize: 16.0,
                 fontWeight: FontWeight.w600,
-                color: Colors.black)),
+                color: Theme.of(context).accentColor)),
         centerTitle: true,
       ),
-      leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: prefixIcon!=null ? prefixIcon : Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          )),
+      leading:MaterialButton(
+        padding: EdgeInsets.zero,
+        onPressed: (){
+          Navigator.pop(context);
+        },
+        child:  prefixIcon!=null ? prefixIcon : Icon(
+          Icons.arrow_back,
+          color: Theme.of(context).accentColor,
+        ),
+      ),
       actions: <Widget>[
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: suffixIcon!=null ? suffixIcon : GestureDetector(onTap: (){
           changeScreen(context, SearchScreen());
           },
-          child: SvgPicture.asset(ic_search),
+          child: SvgPicture.asset(ic_search, color: Theme.of(context).accentColor ,),
           )
         )
       ],

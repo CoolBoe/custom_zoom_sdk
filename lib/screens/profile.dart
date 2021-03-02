@@ -76,12 +76,12 @@ class ProfileState extends State<ProfileView> {
                       model.billing.firstName!=null && model.billing.firstName!="" ?
                   "Dear ${model.billing.firstName..toUpperCase()}" : "Dear ${model.firstName.toUpperCase()}" :
                   "Hi User",
-                      style: styleProvider(fontWeight: semiBold, size: 18, color: black)),
+                      style: styleProvider(fontWeight: semiBold, size: 18,)),
                 ),
                 Padding(
                   padding: EdgeInsets.only(),
                   child: Text(model!=null ? "Member Since: $date" : "",
-                      style: styleProvider(fontWeight: regular, size: 10, color: black)),
+                      style: styleProvider(fontWeight: regular, size: 10)),
                 ),
                 GestureDetector(onTap: (){
                   changeScreen(context, EditAccountScreen());
@@ -166,11 +166,10 @@ class ProfileState extends State<ProfileView> {
                         children: <Widget>[
                           Text(
                             sortBy[index].name,
-                            style: styleProvider(fontWeight: semiBold, size: 16, color: black),
+                            style: styleProvider(fontWeight: semiBold, size: 16,),
                           ),
                           Icon(
                             Icons.arrow_forward_ios_rounded,
-                            color: Colors.black,
                           ),
                         ],
                       ),
@@ -214,8 +213,7 @@ class ProfileState extends State<ProfileView> {
                                   style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 14.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black)),
+                                      fontWeight: FontWeight.w600)),
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: 30),
@@ -230,7 +228,6 @@ class ProfileState extends State<ProfileView> {
                                     margin: EdgeInsets.zero,
                                     child: Icon(
                                       Icons.close,
-                                      color: Colors.black,
                                       size: 25,
                                     )),
                               ),
@@ -252,7 +249,6 @@ class ProfileState extends State<ProfileView> {
                                     child: Container(
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color:accent_color,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)),
                                       ),
@@ -265,7 +261,6 @@ class ProfileState extends State<ProfileView> {
                                         child: Center(
                                           child: Text('Hindi',
                                               style: TextStyle(
-                                                  color: Colors.white,
                                                   fontFamily: 'Poppins',
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 12)),
@@ -297,7 +292,6 @@ class ProfileState extends State<ProfileView> {
                                         child: Center(
                                           child: Text('English',
                                               style: TextStyle(
-                                                  color: Colors.white,
                                                   fontFamily: 'Poppins',
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 12)),
@@ -327,6 +321,7 @@ class ProfileState extends State<ProfileView> {
     return Scaffold(
       appBar: BaseAppBar(context, "Account",suffixIcon: Container(), prefixIcon: Container()),
       body: Container(
+        color: Theme.of(context).backgroundColor,
         child: _CustomScrollView(),
       ),
     );

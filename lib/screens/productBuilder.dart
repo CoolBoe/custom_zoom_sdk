@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,6 +31,7 @@ import 'package:wooapp/validator/validate.dart';
 import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/product.dart';
+import 'package:wooapp/widgets/progress_bar.dart';
 import 'package:wooapp/widgets/sortBy_Dialog.dart';
 import 'package:wooapp/widgets/sortBy_DropMenu.dart';
 import 'package:wooapp/widgets/sortBy_SizeBuilder.dart';
@@ -52,7 +54,7 @@ class ShopState extends State<ShopView> {
   AppProvider app;
   int categoryId= 15;
   Map<String, dynamic> priceRange;
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController;
   int sortByIndex = 0;
   int _page =1;
   var minValue, maxValue, selectedItemId;
@@ -67,36 +69,42 @@ class ShopState extends State<ShopView> {
      app.fetchPriceRange();
      productList = Provider.of<ProductsProvider>(context, listen: false);
       if(widget.categoryId!=null){
-        printLog("categoryyy", widget.categoryId);
         productList.resetStreams();
+        printLog("categoryyy", widget.categoryId);
         productList.fetchProducts(_page, category_id: widget.categoryId);
       }else if(widget.productIds!=null){
-        productList.resetStreams();
       }else{
-        productList.fetchProducts(_page);
+        productList.allProducts.length>0 && productList.allProducts.length!=null ?
+       // ignore: unnecessary_statements
+       null: productList.fetchProducts(_page);
       }
-
-     _scrollController.addListener(() {
-      setState(() {
-        printLog("bhkhhjjkh", "msg");
-        //<-----------------------------
-        offset = _scrollController.offset;
-        // force a refresh so the app bar can be updated
-      });
-      if(_scrollController.position.pixels==_scrollController.position.maxScrollExtent){
-        productList.setLoadingState(LoadMoreStatus.LOADING);
-        printLog("pageNumber", "+++");
-        productList.fetchProducts(++_page);
-      }
-    });
     super.initState();
+     _scrollController = new ScrollController();
+     _scrollController.addListener(() {
+       printLog("bhkhhjjkh", "msg");
+       setState(() {
+
+         //<-----------------------------
+         offset = _scrollController.offset;
+         // force a refresh so the app bar can be updated
+       });
+       if(_scrollController.position.pixels==_scrollController.position.maxScrollExtent){
+         productList.setLoadingStatus(LoadMoreStatus.LOADING);
+         printLog("pageNumber", "+++");
+         productList.fetchProducts(++_page);
+       }
+     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      body: _CustomScrollView(context),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        color: Theme.of(context).backgroundColor,
+        child: _CustomScrollView(context),
+      ),
     );
   }
 
@@ -134,7 +142,7 @@ class ShopState extends State<ShopView> {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          backgroundColor: grey_50,
+          backgroundColor: Theme.of(context).backgroundColor,
             elevation: 0,
             leading: GestureDetector(
                 onTap: () {
@@ -142,7 +150,7 @@ class ShopState extends State<ShopView> {
                 },
                 child: Icon(
                   Icons.arrow_back,
-                  color: Colors.black,
+                  color: Theme.of(context).accentColor,
                 )),
             flexibleSpace: FlexibleSpaceBar(
               title: Text("Products",
@@ -150,7 +158,7 @@ class ShopState extends State<ShopView> {
                       fontFamily: 'Poppins',
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black)),
+                      color: Theme.of(context).accentColor)),
               centerTitle: true,
             ),
             snap: true,
@@ -162,7 +170,7 @@ class ShopState extends State<ShopView> {
                   child: GestureDetector(onTap: (){
                     changeScreen(context, SearchScreen());
                   },
-                    child: SvgPicture.asset(ic_search),
+                    child: SvgPicture.asset(ic_search, color: Theme.of(context).accentColor,),
                   )
               )
             ]
@@ -174,11 +182,12 @@ class ShopState extends State<ShopView> {
         ),
         SliverToBoxAdapter(
           child: Container(
+            color: Theme.of(context).backgroundColor,
             child: Column(
               children:<Widget>[
                 Padding(
-                    padding: const EdgeInsets.only(top:10, left:15.0, right: 15),
-                    child: _productList())
+                    padding: const EdgeInsets.only(left:15.0, right: 15),
+                    child: _productList()),
               ],
             ),
           ),
@@ -193,7 +202,7 @@ class ShopState extends State<ShopView> {
       if(productModel.allProducts!=null &&
           productModel.allProducts.length>0
       ){
-        return _buildProductList(productModel.allProducts);
+        return _buildProductList(productModel.allProducts, productModel.getLoadMoreStatus == LoadMoreStatus.LOADING);
       }else{if(productModel.loader){
         return ShimmerList(listType: "Grid",);
       }else{
@@ -208,30 +217,57 @@ class ShopState extends State<ShopView> {
     });
   }
 
-  Widget _buildProductList(List<ProductModel> productList) {
+  Widget _buildProductList(List<ProductModel> productList, bool isLoadMore) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height / 1.32 - kToolbarHeight - 15) / 2;
     final double itemWidth = size.width / 2;
-      return GridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 2,
-          controller: _scrollController,
-          padding: EdgeInsets.zero,
-          childAspectRatio: (itemWidth / 300),
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          physics: ClampingScrollPhysics(),
-          children:productList.map((ProductModel model){
-            return GestureDetector(
-                onTap: () {
-                  changeScreen(
-                      context, ProductScreen(productModel: model));
-                },
-                child: ProductWidget(
-                  productModel: model,
+      return Container(
+        height: MediaQuery.of(context).size.height-220,
+        child:  Stack(
+          children: [
+            Container(
+                child: GridView.count(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              crossAxisCount: 2,
+              padding: EdgeInsets.zero,
+              physics: ClampingScrollPhysics(),
+              controller: _scrollController,
+              childAspectRatio: (itemWidth / 300),
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              children:productList.map((ProductModel model){
+                return GestureDetector(
+                    onTap: () {
+                      changeScreen(
+                          context, ProductScreen(productModel: model));
+                    },
+                    child: ProductWidget(
+                      productModel: model,
 
-                ));
-      }).toList(),
+                    ));
+              }).toList(),
+            )),
+           new Align(
+              alignment: Alignment.center,
+               child: Visibility(
+               visible: isLoadMore,
+               child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 30),
+                  padding: EdgeInsets.all(10),
+                  height: 35,
+                  width: 35,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(20.0)),
+                      color: Colors.grey[200]
+                  ),
+                  child:CircularProgressIndicator(
+                  strokeWidth: 2,
+                  ),
+
+               )))
+          ],
+        ),
       );
   }
 
@@ -271,6 +307,7 @@ class MySliverAppBar  extends SliverPersistentHeaderDelegate {
 
   Widget filterOptions(){
     return Container(
+      color: Theme.of(context).backgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -288,14 +325,14 @@ class MySliverAppBar  extends SliverPersistentHeaderDelegate {
                   children: <Widget>[
                     SvgPicture.asset(
                       ic_categories,
-                      color:Colors.black,
+                      color:Theme.of(context).accentColor,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 5),
                       child: Text(
                         "Categories",
                         style: TextStyle(
-                            color:Colors.black,
+                            color:Theme.of(context).accentColor,
                             fontSize: 14),
                       ),
                     ),
@@ -318,14 +355,14 @@ class MySliverAppBar  extends SliverPersistentHeaderDelegate {
                   children: <Widget>[
                     SvgPicture.asset(
                       ic_sortby,
-                      color:Colors.black,
+                      color:Theme.of(context).accentColor,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 5),
                       child: Text(
                         "Sort By",
                         style: TextStyle(
-                            color:Colors.black,
+                            color:Theme.of(context).accentColor,
                             fontSize: 14),
                       ),
                     )
@@ -348,14 +385,14 @@ class MySliverAppBar  extends SliverPersistentHeaderDelegate {
                   children: <Widget>[
                     SvgPicture.asset(
                       ic_filter,
-                      color:Colors.black,
+                      color:Theme.of(context).accentColor,
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 5),
                       child: Text(
                         "Filter",
                         style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).accentColor,
                             fontSize: 14),
                       ),
                     )
@@ -401,7 +438,7 @@ class MySliverAppBar  extends SliverPersistentHeaderDelegate {
               child: Container(
                 height: 300,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).backgroundColor,
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(30),
                         topLeft: Radius.circular(30))),
@@ -423,7 +460,7 @@ class MySliverAppBar  extends SliverPersistentHeaderDelegate {
                                   margin: EdgeInsets.zero,
                                   child: Icon(
                                     Icons.close,
-                                    color: Colors.black,
+                                    color: Theme.of(context).accentColor,
                                     size: 25,
                                   )),
                             ),
@@ -439,7 +476,7 @@ class MySliverAppBar  extends SliverPersistentHeaderDelegate {
                                       fontFamily: 'Poppins',
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.black)),
+                                      color: Theme.of(context).accentColor)),
                             ),
                           ),
                           Padding(
@@ -452,7 +489,7 @@ class MySliverAppBar  extends SliverPersistentHeaderDelegate {
                                   margin: EdgeInsets.zero,
                                   child: Icon(
                                     Icons.refresh,
-                                    color: Colors.black,
+                                    color:Theme.of(context).accentColor,
                                     size: 25,
                                   )),
                             ),

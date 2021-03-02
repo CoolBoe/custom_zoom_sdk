@@ -44,7 +44,7 @@ class sortByDialogState extends State<sortByDialog> {
                 child: Text(
                   _sortByOptions[index].text,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).accentColor,
                     fontFamily: 'Poppins',
                     fontSize: 16.0,
                     fontWeight: FontWeight.w400,
@@ -67,9 +67,9 @@ class sortByDialogState extends State<sortByDialog> {
                       });
                       var productList = Provider.of<ProductsProvider>(context, listen: false);
                       productList.resetStreams();
-                      productList.setLoadingState(LoadMoreStatus.INITIAL);
+                      productList.setLoadingStatus(LoadMoreStatus.INITIAL);
                       productList.setSortOrder(_sortByOptions[index]);
-                      productList.fetchProducts("1");
+                      productList.fetchProducts(1);
                       Navigator.pop(context);
                     },
                   ),

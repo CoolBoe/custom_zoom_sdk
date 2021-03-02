@@ -985,6 +985,31 @@ class WebApiServices {
     }
   }
 
+  Future<String> getResponse() async {
+    try {
+      Directory tempDir = await getApplicationDocumentsDirectory();
+      String tempPath = tempDir.path;
+      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      dio.interceptors.add(CookieManager(sj));
+      String url =
+          "https://schoolmegamart.com/wp-json/wc/v2/testserver";
+      var response = await dio.get(url, options: new Options(headers: headers));
+      printLog("getAppPageById", response.data);
+      if (response.statusCode == HTTP_CODE_200 ||
+          response.statusCode == HTTP_CODE_201) {
+        if (response.data['status'] == "1") {
+          printLog("getAppPageById", response.data['product_id']);
+        }
+        return null;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+
+      return null;
+    }
+  }
+
   Future<AppSetting> getAppSetting() async {
     try {
       printLog("bhchddjdjdj", "msg");

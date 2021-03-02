@@ -61,56 +61,59 @@ class CartScreenState extends BasePageState<CartScreen> {
 
     return Scaffold(
       appBar:BaseAppBar(context, "Cart"),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-
-            cartData.cartData!=null && cartData.cartData.length>0 ? cartList(cartData.cartData) : Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Container(
-                  padding: EdgeInsets.all(0),
-                  child: popupBuilder(ic_oops_png, "Cart is Empty")),
-            ),
-            _promocode(),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 0.0, left: 30, right: 28, bottom: 10),
-              child: Container(
-                  child: Card(
-                    elevation: 5,
-                    color: Colors.white,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30.0, top: 8, right: 30, bottom: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Shipping Methods',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14)),
-                            cartData.shippingMethod!=null ? widgetShippingCart(shippingMethod: cartData.shippingMethod, choosenMethod: cartData.chosenShippingMethod) : Container(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )),
-            ),
-            Container(
+      body: Container(
+        color: Theme.of(context).backgroundColor,
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              cartData.cartData!=null && cartData.cartData.length>0 ? cartList(cartData.cartData) : Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Container(
+                    padding: EdgeInsets.all(0),
+                    child: popupBuilder(ic_oops_png, "Cart is Empty")),
+              ),
+              _promocode(),
+              Padding(
                 padding: const EdgeInsets.only(
                     top: 0.0, left: 30, right: 28, bottom: 10),
-                child: widgetOrderSummary(context, subtotal:cart_subtotal!=null ? cart_subtotal.toString() : "0.00",
-                  shippingCharge: getShippingPrice()!=null ? getShippingPrice():"0.00",
-                  tax: taxes.toString()!=null ? taxes.toString():"0.00",
-                  totalDiscount: discount_total.toString()!=null?discount_total.toString():"0.00",
-                  totalPrice: total!=null ? total: "₹ 0.00"
-                )),
-          ],
+                child: Container(
+                    child: Card(
+                      elevation: 5,
+                      color: Colors.white,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30.0, top: 8, right: 30, bottom: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Shipping Methods',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14)),
+                              cartData.shippingMethod!=null ? widgetShippingCart(shippingMethod: cartData.shippingMethod, choosenMethod: cartData.chosenShippingMethod) : Container(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+              ),
+              Container(
+                  padding: const EdgeInsets.only(
+                      top: 0.0, left: 30, right: 28, bottom: 10),
+                  child: widgetOrderSummary(context, subtotal:cart_subtotal!=null ? cart_subtotal.toString() : "0.00",
+                      shippingCharge: getShippingPrice()!=null ? getShippingPrice():"0.00",
+                      tax: taxes.toString()!=null ? taxes.toString():"0.00",
+                      totalDiscount: discount_total.toString()!=null?discount_total.toString():"0.00",
+                      totalPrice: total!=null ? total: "₹ 0.00"
+                  )),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Padding(

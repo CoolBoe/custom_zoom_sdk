@@ -28,7 +28,6 @@ class UserProvider with ChangeNotifier {
   UserModel userModel;
   Details userDetails;
   final fbLogin = FacebookLogin();
-
   Details get getuserDetails=>userDetails;
   UserModel get userInfo=>userModel;
   String userId;
@@ -119,10 +118,8 @@ class UserProvider with ChangeNotifier {
       notifyListeners();
       return userDetails;
     }else{
-
       return null;
     }
-
 }
 
   Future<SocialLogin> signInFB() async {

@@ -10,7 +10,7 @@ enum ProductBy {DEFAULT, CATEGORY, FEATURED, SELLER, SALE, RATED }
 class ProductsProvider with ChangeNotifier {
   String sort = 'default';
   int page = 1;
-  String per_page = '6';
+  String per_page = '10';
   WebApiServices _webApiServices;
   List<ProductModel> _productList ;
   List<ProductModel> get allProducts => _productList;
@@ -18,8 +18,8 @@ class ProductsProvider with ChangeNotifier {
   List<ProductModel> get allproductListByRelated =>_productListByRelated;
   SortBy _sortBy;
   bool loader= false;
-
-
+  LoadMoreStatus _loadMoreStatus;
+  LoadMoreStatus get getLoadMoreStatus => _loadMoreStatus;
   List<ProductModel> _productListByFeatured ;
   List<ProductModel> get allProductsByFeature => _productListByFeatured;
   List<ProductModel> _productListBySale ;
@@ -35,14 +35,11 @@ class ProductsProvider with ChangeNotifier {
     _webApiServices = WebApiServices();
     _productList = List<ProductModel>();
   }
-  setLoadingState(LoadMoreStatus loadMoreStatus){
-    // _loadMoreStatus = loadMoreStatus;
+  setLoadingStatus(LoadMoreStatus loadMoreStatus){
+    _loadMoreStatus = loadMoreStatus;
     notifyListeners();
   }
-  setLoadingStateByFeature(LoadMoreStatus loadMoreStatus){
-    // _loadMoreStatus = loadMoreStatus;
-    notifyListeners();
-  }
+
   setSortOrder(SortBy sortBy){
     _sortBy = sortBy;
     notifyListeners();
@@ -50,6 +47,7 @@ class ProductsProvider with ChangeNotifier {
   fetchProducts(pageNumber, {String sortBy, String str_search, String brand, String max_price, String min_price,
     bool on_sale, bool featured, String category_id, String colorList, String sizelist }) async{
     loader= true;
+    setLoadingStatus(LoadMoreStatus.LOADING);
     printLog("fetchProducts", pageNumber);
     List<ProductModel> itemModel = await _webApiServices.getProducts(sort: this._sortBy.value, category_id: category_id, page: pageNumber, per_page: this.per_page, str_search: str_search, brand: brand,
         featured: featured, on_sale: on_sale, max_price: max_price, min_price: min_price, sizeList: sizelist, colorList: colorList,);
@@ -57,6 +55,7 @@ class ProductsProvider with ChangeNotifier {
       _productList.addAll(itemModel);
     }
     loader= false;
+    setLoadingStatus(LoadMoreStatus.STABLE);
     notifyListeners();
   }
 

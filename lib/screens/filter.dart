@@ -57,17 +57,17 @@ class _FilterScreenState extends State<FilterScreen> {
       appBar: BaseAppBar(context, "Filter", backgroundColor: grey_100,suffixIcon: GestureDetector(onTap: (){
         resetFilter();
       },
-      child: Icon(Icons.refresh_sharp),)),
+      child: Icon(Icons.refresh_sharp, color: Theme.of(context).accentColor,),)),
       body: filterUi(),
       bottomNavigationBar: customButton(title: "Apply Filter",onPressed: (){
         var productList = Provider.of<ProductsProvider>(context, listen: false);
         if(!isReset){
           productList.resetStreams();
-          productList.setLoadingState(LoadMoreStatus.INITIAL);
+          productList.setLoadingStatus(LoadMoreStatus.INITIAL);
           productList.fetchProducts(_page, category_id:selectedId.toString(),min_price: minValue, max_price: maxValue , colorList:jsonEncode(_selectedColors), sizelist: jsonEncode(_selectedSizes));
         }else{
           productList.resetStreams();
-          productList.setLoadingState(LoadMoreStatus.INITIAL);
+          productList.setLoadingStatus(LoadMoreStatus.INITIAL);
           productList.fetchProducts(_page);
         }
         Navigator.pop(context);
@@ -78,7 +78,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
   Widget filterUi() {
     return  Container(
-      color: Colors.white70,
+      color: Theme.of(context).backgroundColor,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -86,7 +86,7 @@ class _FilterScreenState extends State<FilterScreen> {
             height: MediaQuery.of(context).size.height,
             padding: EdgeInsets.only(top: 20),
             width: 150,
-            color: Colors.grey[100],
+            color:Theme.of(context).cardColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -98,8 +98,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   },
                   child: Container(
                       height: 50,
-                      color: currentTab==0?Colors.white:Colors.grey[100],
-                      child: Center(child: Text("Price", style: styleProvider(size: 15, fontWeight: medium, ),))),
+                      color: currentTab==0? Theme.of(context).backgroundColor:Theme.of(context).cardColor,
+                      child: Center(child: Text("Price", style: styleProvider(size: 15, fontWeight: medium,color: Theme.of(context).accentColor ),))),
                 ),
                 GestureDetector(
                   onTap: (){
@@ -109,8 +109,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   },
                   child: Container(
                       height: 50,
-                      color:  currentTab==1?Colors.white:Colors.grey[100],
-                      child: Center(child: Text("Category", style: styleProvider(size: 15, fontWeight: medium, ),))),
+                      color:  currentTab==1?Theme.of(context).backgroundColor: Theme.of(context).cardColor,
+                      child: Center(child: Text("Category", style: styleProvider(size: 15, fontWeight: medium, color: Theme.of(context).accentColor),))),
                 ),
                 GestureDetector(
                   onTap: (){
@@ -120,8 +120,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   },
                   child: Container(
                       height: 50,
-                      color:  currentTab==2?Colors.white:Colors.grey[100],
-                      child: Center(child: Text(_selectedColors.length>0 ? "Color (${_selectedColors.length})" : "Color", style: styleProvider(size: 15, fontWeight: medium, ),))),
+                      color:  currentTab==2?Theme.of(context).backgroundColor: Theme.of(context).cardColor,
+                      child: Center(child: Text(_selectedColors.length>0 ? "Color (${_selectedColors.length})" : "Color", style: styleProvider(size: 15, fontWeight: medium,color: Theme.of(context).accentColor ),))),
                 ),
                 GestureDetector(
                   onTap: (){
@@ -131,8 +131,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   },
                   child: Container(
                       height: 50,
-                      color: currentTab==3?Colors.white:Colors.grey[100],
-                      child: Center(child: Text(_selectedSizes.length>0 ? "Size (${_selectedSizes.length})" : "Size", style: styleProvider(size: 15, fontWeight: medium, ),))),
+                      color: currentTab==3?Theme.of(context).backgroundColor: Theme.of(context).cardColor,
+                      child: Center(child: Text(_selectedSizes.length>0 ? "Size (${_selectedSizes.length})" : "Size", style: styleProvider(size: 15, fontWeight: medium,color: Theme.of(context).accentColor ),))),
                 ),
               ],
             ),
@@ -174,7 +174,7 @@ class _FilterScreenState extends State<FilterScreen> {
                          keyboardType: TextInputType.numberWithOptions(decimal: true),
                           decoration: InputDecoration.collapsed(
                             hintText: app.priceRange.min.toString(),
-                            hintStyle: styleProvider(size: 14, color: Colors.grey, fontWeight: medium)
+                            hintStyle: styleProvider(size: 14, color: Theme.of(context).accentColor, fontWeight: medium)
                           )
                           ..applyDefaults(Theme.of(context).inputDecorationTheme),
                           onChanged: (value){
@@ -199,7 +199,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           keyboardType: TextInputType.numberWithOptions(decimal: true),
                           decoration: InputDecoration.collapsed(
                               hintText: app.priceRange.max.toString(),
-                              hintStyle: styleProvider(size: 14, color: Colors.grey, fontWeight: medium)
+                              hintStyle: styleProvider(size: 14, color:  Theme.of(context).accentColor, fontWeight: medium)
                           )
                             ..applyDefaults(Theme.of(context).inputDecorationTheme),
                           onChanged: (value){
@@ -232,6 +232,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 return RadioListTile(
                   value: app.allCategories[index].id,
                   dense: false,
+                  activeColor: Theme.of(context).primaryColor,
                   groupValue: selectedId,
                   onChanged: (ind){
                     setState(() {
@@ -239,7 +240,9 @@ class _FilterScreenState extends State<FilterScreen> {
                     });
                     printLog("valueSelected",selectedId);
                     },
-                  title: Text(app.allCategories[index].name),
+                  title: Text(app.allCategories[index].name,style: TextStyle(
+                    color: Theme.of(context).accentColor
+                  ),),
                 );
               },
               itemCount:app.allCategories.length,

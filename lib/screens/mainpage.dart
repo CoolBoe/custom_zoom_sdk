@@ -72,6 +72,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
         bucket: bucket,
       ),
       floatingActionButton: FloatingActionButton(
+
         backgroundColor: accent_color,
         child: Stack(
           children: <Widget>[
@@ -89,105 +90,109 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 5,
-        child: Container(
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  MaterialButton(
-                    minWidth: 80,
-                    onPressed: () {
-                      setState(() {
-                        widget.currentTab = 0;
-                        currentScreen(widget.currentTab);
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          "assets/icons/ic_home.svg",
-                          color: widget.currentTab == 0
-                              ? accent_color
-                              : Colors.grey,
-                        )
-                      ],
+      bottomNavigationBar:Container(
+        color: Theme.of(context).backgroundColor,
+        child:  BottomAppBar(
+          color: Theme.of(context).bottomAppBarColor,
+          shape: CircularNotchedRectangle(),
+          notchMargin: 5,
+          child: Container(
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    MaterialButton(
+                      minWidth: 80,
+                      onPressed: () {
+                        setState(() {
+                          widget.currentTab = 0;
+                          currentScreen(widget.currentTab);
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            "assets/icons/ic_home.svg",
+                            color: widget.currentTab == 0
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).accentColor,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  MaterialButton(
-                    minWidth: 80,
-                    onPressed: () {
-                      setState(() {
-                        widget.currentTab = 1;
-                        currentScreen(widget.currentTab);
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          "assets/icons/ic_shop.svg",
-                          color: widget.currentTab == 1
-                              ? accent_color
-                              : Colors.grey,
-                        )
-                      ],
+                    MaterialButton(
+                      minWidth: 80,
+                      onPressed: () {
+                        setState(() {
+                          widget.currentTab = 1;
+                          currentScreen(widget.currentTab);
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            "assets/icons/ic_shop.svg",
+                            color: widget.currentTab == 1
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).accentColor,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  MaterialButton(
-                    minWidth: 80,
-                    onPressed: () {
-                      setState(() {
-                        widget.currentTab = 2;
-                        currentScreen(widget.currentTab);
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          "assets/icons/ic_heart.svg",
-                          color: widget.currentTab == 2
-                              ? accent_color
-                              : Colors.grey,
-                        )
-                      ],
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    MaterialButton(
+                      minWidth: 80,
+                      onPressed: () {
+                        setState(() {
+                          widget.currentTab = 2;
+                          currentScreen(widget.currentTab);
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            "assets/icons/ic_heart.svg",
+                            color: widget.currentTab == 2
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).accentColor,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  MaterialButton(
-                    minWidth: 80,
-                    onPressed: () {
-                      setState(() {
-                        widget.currentTab = 3;
-                        currentScreen(widget.currentTab);
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          "assets/icons/ic_profile.svg",
-                          color: widget.currentTab == 3
-                              ? accent_color
-                              : Colors.grey,
-                        )
-                      ],
+                    MaterialButton(
+                      minWidth: 80,
+                      onPressed: () {
+                        setState(() {
+                          widget.currentTab = 3;
+                          currentScreen(widget.currentTab);
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            "assets/icons/ic_profile.svg",
+                            color: widget.currentTab == 3
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).accentColor,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

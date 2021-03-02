@@ -110,7 +110,6 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                             child: Text(items[index].name,
                                 maxLines: 1,
                                 style: TextStyle(
-                                    color:Colors.black,
                                     fontSize: 10,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: 'Poppins')),
@@ -287,7 +286,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
 
   Widget pageUi() {
     return Container(
-      color: white,
+      color: Theme.of(context).backgroundColor,
       child: Column(
         children: [
           Padding(
@@ -300,8 +299,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 14.0,
-                            fontWeight: semiBold,
-                            color: black))),
+                            fontWeight: semiBold))),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -314,13 +312,11 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 10.0,
-                            fontWeight: regular,
-                            color: black),
+                            fontWeight: regular),
                       ),
                     ),
                     Icon(
                       Icons.arrow_right_alt_rounded,
-                      color: black,
                       size: 20,
                     )
                   ],
@@ -341,8 +337,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14.0,
-                              fontWeight: semiBold,
-                              color: black))),
+                              fontWeight: semiBold))),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -351,12 +346,10 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 10.0,
-                            fontWeight: regular,
-                            color: black),
+                            fontWeight: regular),
                       ),
                       Icon(
                         Icons.arrow_right_alt_rounded,
-                        color: black,
                         size: 20,
                       )
                     ],
@@ -364,7 +357,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                 ]),
           ),),
           homeLayout.topSeller!=null && homeLayout.topSeller.length>0 ? Container(
-              height: 270,
+              height: 280,
               child: _topSaleProductBuilder(homeLayout.topSeller)): Container(),
 
           Visibility(visible: homeLayout.featuredProducts !=null,child:Container(
@@ -376,8 +369,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14.0,
-                          fontWeight: semiBold,
-                          color: black)),
+                          fontWeight: semiBold)),
                   GestureDetector(
                     onTap: (){
                       changeScreen(context, ShopView());
@@ -390,12 +382,10 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 10.0,
-                              fontWeight: regular,
-                              color: black),
+                              fontWeight: regular),
                         ),
                         Icon(
                           Icons.arrow_right_alt_rounded,
-                          color: black,
                           size: 20,
                         )
                       ],
@@ -404,7 +394,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                 ]),
           ),),
           Visibility(visible: homeLayout.featuredProducts !=null ,child: Container(
-            height: 270,
+            height: 280,
             child: _featureProductBuilder(homeLayout.featuredProducts),
           )),
 
@@ -418,8 +408,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14.0,
-                              fontWeight: semiBold,
-                              color: black))),
+                              fontWeight: semiBold))),
                   GestureDetector(onTap: (){
                     changeScreen(context, ShopView());
                   },
@@ -431,12 +420,10 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 10.0,
-                              fontWeight: regular,
-                              color: black),
+                              fontWeight: regular),
                         ),
                         Icon(
                           Icons.arrow_right_alt_rounded,
-                          color: black,
                           size: 20,
                         )
                       ],
@@ -444,7 +431,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                 ]),
           ),),
           Visibility(visible: homeLayout.saleProducts !=null ,child: Container(
-            height: 270,
+            height: 280,
             child: _topSaleProductBuilder(homeLayout.saleProducts),
           )),
 
@@ -457,8 +444,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                       style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14.0,
-                          fontWeight: semiBold,
-                          color: black)),
+                          fontWeight: semiBold)),
                   GestureDetector(onTap: (){
                     changeScreen(context, ShopView());
                   },
@@ -470,12 +456,10 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                           style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 10.0,
-                              fontWeight: regular,
-                              color: black),
+                              fontWeight: regular),
                         ),
                         Icon(
                           Icons.arrow_right_alt_rounded,
-                          color: black,
                           size: 20,
                         )
                       ],
@@ -483,7 +467,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
                 ]),
           ),),
           Visibility(visible: homeLayout.topRatedProducts !=null ,child: Container(
-            height: 270,
+            height: 280,
             child: __topRatedProductBuilder(homeLayout.topRatedProducts),
           )),
         ],

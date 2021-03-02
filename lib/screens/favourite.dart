@@ -53,6 +53,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
     return Scaffold(
       appBar: BaseAppBar(context, "Wishlist", prefixIcon: Container(), suffixIcon: Container()),
       body: Container(
+        color: Theme.of(context).backgroundColor,
           child:  _CustomScrollView()),
     );
   }
@@ -75,7 +76,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                       child: Text(
                         wishList!=null && wishList.length>0 ? '${wishList.length} items available' : "",
                         style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).accentColor,
                             fontFamily: 'Poppins',
                             fontSize: 12.0,
                             fontWeight: FontWeight.w600),

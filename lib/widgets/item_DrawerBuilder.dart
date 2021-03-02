@@ -27,11 +27,13 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
   @override
   Widget build(BuildContext context) {
     List<ByCatgories> sortBy = [
-
-
-
-      // ByCatgories("Privacy Settings", 4, ic_rating),
-
+      ByCatgories("Home", 0, 'assets/icons/ic_home.svg'),
+      ByCatgories("Shop", 1, 'assets/icons/ic_shop.svg'),
+      ByCatgories("Shop by Category", 2, 'assets/icons/ic_categories.svg'),
+      ByCatgories("Chat Support", 3, 'assets/icons/ic_chat.svg'),
+      ByCatgories("Contact Us", 4, 'assets/icons/ic_call.svg'),
+      ByCatgories("Terms of Service", 5, 'assets/icons/ic_support.svg'),
+      ByCatgories("Give Feedback", 6, 'assets/icons/ic_rating.svg'),
     ];
     return Column(
       children: [
@@ -98,14 +100,14 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                   height: 20,
                                   color: _selectItem == index
                                       ? Colors.white
-                                      : Colors.black,
+                                      : Theme.of(context).accentColor,
                                 ),
                               ),
                               Text(sortBy[index].name,
                                   style: TextStyle(
                                       color: _selectItem == index
-                                          ? Colors.white
-                                          : Colors.black,
+                                          ?  Colors.white
+                                          : Theme.of(context).accentColor,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14))

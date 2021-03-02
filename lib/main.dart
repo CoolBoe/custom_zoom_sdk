@@ -30,6 +30,7 @@ void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  BasePrefs.init();
   runApp(MultiProvider(
       providers: [
       ChangeNotifierProvider.value(value: ThemeProvider()),
@@ -48,7 +49,7 @@ void main()async{
           builder: (context, child){
             return ScrollConfiguration(behavior: MyBehavior(), child: child);
           },
-          theme: theme.lightTheme,
+          theme: theme.getTheme() !=null ? theme.getTheme() : theme.lightTheme ,
           title: "Woo App",
           debugShowCheckedModeBanner: false,
           home: ScreensController(),
