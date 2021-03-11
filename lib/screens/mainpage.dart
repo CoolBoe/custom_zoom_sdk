@@ -86,7 +86,7 @@ class MainPageScreenState extends State<MainPageScreen> with ChangeNotifier {
           ],
         ),
         onPressed: () {
-          changeScreen(context, CartScreen());
+         changeScreen(context, CartScreen());
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -38,102 +38,97 @@ class _WidgetCartItemState extends State<WidgetCartItem>{
   Widget _buildproductList(CartDatum cartItem) {
     return Container(
       color: Theme.of(context).backgroundColor,
+      padding: const EdgeInsets.all(3.0),
+      alignment: Alignment.topLeft,
+      height: 100,
       child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: Container(
-          alignment: Alignment.topLeft,
-          decoration: BoxDecoration(color: grey_50),
-          height: 100,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 0.0, left: 10, right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  width: 90,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 0.0, bottom: 0),
-                    child: Image.network(cartItem.image),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Container(
-                    width: 180,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 10, left: 8, right: 10),
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(child: Text(
-                                cartItem.name,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Poppins'),
-                              )),
-                              GestureDetector(onTap: (){
-                                printLog("onClick", "");
-                                loader.setLoadingStatus(true);
-
-                                cart.getRemoveToCart(cartItemKey: cartItem.cartItemKey, onCallBack: (value){
-                                  loader.setLoadingStatus(false);
-                                });
-                              },
-                              child:  CircleAvatar(
-                                radius: 10.0,
-                                backgroundColor: Colors.red[200],
-                                child: Icon(
-                                  Icons.close,
-                                  size: 10,
-                                ),
-                              ),),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 5.0, left: 8, right: 10),
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                parse(cartItem.price)
-                                    .documentElement
-                                    .text,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Poppins'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        CustomStepper(stepValue: 1, iconSize: 14, value: int.parse(widget.cartItem.quantity), onchanged: (value){
-                          var loader = Provider.of<LoaderProvider>(context, listen: false);
-                          loader.setLoadingStatus(true);
-                          cart.getUpdateToCart(cartItem.cartItemKey, value, (val){
-                            loader.setLoadingStatus(false);
-                          });
-                        }),
-                      ],
-                    ),
-                  ),
-                )
-              ],
+        padding: const EdgeInsets.only(top: 0.0, left: 10, right: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              width: 90,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 0.0, bottom: 0),
+                child: Image.network(cartItem.image),
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Container(
+                width: 180,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 10, left: 8, right: 10),
+                      child: Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(child: Text(
+                            cartItem.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins'),
+                          )),
+                          GestureDetector(onTap: (){
+                            printLog("onClick", "");
+                            loader.setLoadingStatus(true);
+
+                            cart.getRemoveToCart(cartItemKey: cartItem.cartItemKey, onCallBack: (value){
+                              loader.setLoadingStatus(false);
+                            });
+                          },
+                            child:  CircleAvatar(
+                              radius: 10.0,
+                              backgroundColor: Colors.red[200],
+                              child: Icon(
+                                Icons.close,
+                                size: 10,
+                              ),
+                            ),),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          top: 5.0, left: 8, right: 10),
+                      child: Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            parse(cartItem.price)
+                                .documentElement
+                                .text,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    CustomStepper(stepValue: 1, iconSize: 14, value: int.parse(widget.cartItem.quantity), onchanged: (value){
+                      var loader = Provider.of<LoaderProvider>(context, listen: false);
+                      loader.setLoadingStatus(true);
+                      cart.getUpdateToCart(cartItem.cartItemKey, value, (val){
+                        loader.setLoadingStatus(false);
+                      });
+                    }),
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
-      )
+      ),
     );
   }
 }

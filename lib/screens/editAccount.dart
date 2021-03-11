@@ -67,370 +67,372 @@ class EditAccountScreenState extends BasePageState<EditAccountScreen>{
    model = Details.fromJson(jsonDecode(value));
  }
     var user= Provider.of<UserProvider>(context, listen: false);
-    return SingleChildScrollView(
-      child: Center(
-        child: Container(
-          padding: EdgeInsets.only(left: 20, right: 20),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              circularImageView(imageUrl: user.getProfileImage(),
-                  onCallback: (value){}),
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
-                decoration: BoxDecoration(
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(5.0)),
-                    color: Colors.grey[200]
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      height:MediaQuery.of(context).size.height,
+      child: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                circularImageView(imageUrl: user.getProfileImage(),
+                    onCallback: (value){}),
+                SizedBox(
+                  height: 30,
                 ),
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
-                            decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(color: Colors.grey[50], spreadRadius: 2),
-                              ],
+                Container(
+                  padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
+                  decoration: BoxDecoration(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(5.0)),
+                      color: Theme.of(context).focusColor
+                  ),
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
+                              decoration: BoxDecoration(
+                                color:  Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(color: Theme.of(context).bottomAppBarColor, spreadRadius: 2),
+                                ],
+                              ),
+                              child:Image.asset("assets/images/ic_user.png", color: Theme.of(context).accentColor,),
                             ),
-                            child:Image.asset("assets/images/ic_user.png"),
-
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none
-                            ),
-                            initialValue:model==null ? "Hi User":
-                            model.firstName!=null && model.firstName!=""?
-                            model.billing.firstName!=null && model.billing.firstName!="" ?
-                            "${model.billing.firstName..toUpperCase()}" : "${model.firstName.toUpperCase()}" :
-                            "Hi User",
-                            style: styleProvider(fontWeight: medium, size: 14, color: black),
-                            onChanged: (value){
-                              if(value!=null){
-                                printLog("hghghadadghg", value);
-                                this.model.billing.firstName = value;
-                              }else{
-                                printLog("hghghghg", value);
-                                this.model.billing.firstName =  model.billing.firstName;
-                              }
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Icon(Icons.edit, size: 15,),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
-                decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(5.0)),
-                    color: Colors.grey[200]
-                ),
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
-                            decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(color: Colors.grey[50], spreadRadius: 2),
-                              ],
-                            ),
-                            child:Image.asset(ic_pass_png),
-
-                          ),
-                        ),
-                        Text("Password", style: styleProvider(fontWeight: medium, size: 14, color: black),),
-                      ],
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Icon(Icons.arrow_forward_ios, size: 15,),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
-                decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(5.0)),
-                    color: Colors.grey[200]
-                ),
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
-                            decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(color: Colors.grey[50], spreadRadius: 2),
-                              ],
-                            ),
-                            child:Image.asset(ic_email_png),
-
-                          ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none
-                            ),
-                            initialValue:model==null ? "Email here":
-                            model.email!=null && model.email!=""?
-                            model.billing.email!=null && model.billing.email!="" ?
-                            "${model.billing.email..toUpperCase()}" : "${model.email.toUpperCase()}" :
-                            "Hi User",
-                            style: styleProvider(fontWeight: medium, size: 14, color: black),
-                            onChanged: (value){
-                              if(value!=null){
-                                printLog("hghghadadghg", value);
-                                this.model.billing.email = value;
-                              }else{
-                                printLog("hghghghg", value);
-                                this.model.billing.email =  model.billing.email;
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Icon(Icons.arrow_forward_ios, size: 15,),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
-                decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(5.0)),
-                    color: Colors.grey[200]
-                ),
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
-                            decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(color: Colors.grey[50], spreadRadius: 2),
-                              ],
-                            ),
-                            child:Image.asset(ic_phone_png),
-
-                          ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none
-                            ),
-                            initialValue:model==null ? "Mobile here":
-                            model.billing.phone!=null && model.billing.phone!="" ? model.billing.phone:
-                            "Mobile here",
-                            style: styleProvider(fontWeight: medium, size: 14, color: black),
+                          Container(
+                            height: 50,
+                            width: 200,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none
+                              ),
+                              initialValue:model==null ? "Hi User":
+                              model.firstName!=null && model.firstName!=""?
+                              model.billing.firstName!=null && model.billing.firstName!="" ?
+                              "${model.billing.firstName..toUpperCase()}" : "${model.firstName.toUpperCase()}" :
+                              "Hi User",
+                              style: styleProvider(fontWeight: medium, size: 14, ),
                               onChanged: (value){
                                 if(value!=null){
                                   printLog("hghghadadghg", value);
-                                  this.model.billing.phone = value;
+                                  this.model.billing.firstName = value;
                                 }else{
                                   printLog("hghghghg", value);
-                                  this.model.billing.phone =  model.billing.phone;
-                                }}
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Icon(Icons.arrow_forward_ios, size: 15,),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
-                decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(5.0)),
-                    color: Colors.grey[200]
-                ),
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
-                            decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(color: Colors.grey[50], spreadRadius: 2),
-                              ],
+                                  this.model.billing.firstName =  model.billing.firstName;
+                                }
+                              },
                             ),
-                            child:Image.asset(ic_address_png),
+                          )
+                        ],
+                      ),
 
-                          ),
-                        ),
-                        Container(
-                          height: 50,
-                          width: 200,
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(Icons.edit, size: 15, color: Theme.of(context).accentColor,),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
+                  decoration: BoxDecoration(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(5.0)),
+                      color: Theme.of(context).focusColor
+                  ),
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(color: Theme.of(context).bottomAppBarColor, spreadRadius: 2),
+                                ],
+                              ),
+                              child:Image.asset(ic_pass_png, color: Theme.of(context).accentColor,),
+
                             ),
-                            initialValue:model==null ? "Address here":
-                            model.billing.address1!=null && model.billing.address1!="" ? model.billing.address1:
-                            "Address here",
-                            style: styleProvider(fontWeight: medium, size: 14, color: black),
+                          ),
+                          Text("Password", style: styleProvider(fontWeight: medium, size: 14,),),
+                        ],
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(Icons.arrow_forward_ios, size: 15,color: Theme.of(context).accentColor,),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
+                  decoration: BoxDecoration(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(5.0)),
+                      color: Theme.of(context).focusColor
+                  ),
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(color: Theme.of(context).bottomAppBarColor, spreadRadius: 2),
+                                ],
+                              ),
+                              child:Image.asset(ic_email_png, color:Theme.of(context).accentColor,),
+
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: 200,
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                  focusedBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none
+                              ),
+                              initialValue:model==null ? "Email here":
+                              model.email!=null && model.email!=""?
+                              model.billing.email!=null && model.billing.email!="" ?
+                              "${model.billing.email..toUpperCase()}" : "${model.email.toUpperCase()}" :
+                              "Hi User",
+                              style: styleProvider(fontWeight: medium, size: 14, ),
                               onChanged: (value){
                                 if(value!=null){
                                   printLog("hghghadadghg", value);
-                                  this.model.billing.address1 = value;
+                                  this.model.billing.email = value;
                                 }else{
                                   printLog("hghghghg", value);
-                                  this.model.billing.address1 =  model.billing.address1;
-                                }}
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Icon(Icons.arrow_forward_ios, size: 15,),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10
-                ),
-                decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(5.0)),
-                    color: Colors.grey[200]
-                ),
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
-                            decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(color: Colors.grey[50], spreadRadius: 2),
-                              ],
+                                  this.model.billing.email =  model.billing.email;
+                                }
+                              },
                             ),
-                            child:Image.asset(ic_globe_png),
-
                           ),
-                        ),
-                        Text("English", style: styleProvider(fontWeight: medium, size: 14, color: black),),
-                      ],
-                    ),
+                        ],
+                      ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Icon(Icons.arrow_forward_ios, size: 15,),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(Icons.arrow_forward_ios, size: 15,color: Theme.of(context).accentColor,),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-            ],
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
+                  decoration: BoxDecoration(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(5.0)),
+                      color: Theme.of(context).focusColor
+                  ),
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(color: Theme.of(context).bottomAppBarColor, spreadRadius: 2),
+                                ],
+                              ),
+                              child:Image.asset(ic_phone_png,color: Theme.of(context).accentColor,),
+
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: 200,
+                            child: TextFormField(
+                                decoration: InputDecoration(
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none
+                                ),
+                                initialValue:model==null ? "Mobile here":
+                                model.billing.phone!=null && model.billing.phone!="" ? model.billing.phone:
+                                "Mobile here",
+                                style: styleProvider(fontWeight: medium, size: 14),
+                                onChanged: (value){
+                                  if(value!=null){
+                                    printLog("hghghadadghg", value);
+                                    this.model.billing.phone = value;
+                                  }else{
+                                    printLog("hghghghg", value);
+                                    this.model.billing.phone =  model.billing.phone;
+                                  }}
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(Icons.arrow_forward_ios, size: 15,color: Theme.of(context).accentColor,),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10),
+                  decoration: BoxDecoration(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(5.0)),
+                      color: Theme.of(context).focusColor
+                  ),
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(color:Theme.of(context).bottomAppBarColor,spreadRadius: 2),
+                                ],
+                              ),
+                              child:Image.asset(ic_address_png,color: Theme.of(context).accentColor,),
+
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: 200,
+                            child: TextFormField(
+                                decoration: InputDecoration(
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none
+                                ),
+                                initialValue:model==null ? "Address here":
+                                model.billing.address1!=null && model.billing.address1!="" ? model.billing.address1:
+                                "Address here",
+                                style: styleProvider(fontWeight: medium, size: 14),
+                                onChanged: (value){
+                                  if(value!=null){
+                                    printLog("hghghadadghg", value);
+                                    this.model.billing.address1 = value;
+                                  }else{
+                                    printLog("hghghghg", value);
+                                    this.model.billing.address1 =  model.billing.address1;
+                                  }}
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(Icons.arrow_forward_ios, size: 15,color: Theme.of(context).accentColor,),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: const EdgeInsets.only( top: 6, bottom: 6, right: 20, left: 10
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(5.0)),
+                      color:Theme.of(context).focusColor
+                  ),
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left:6.0, top: 6, bottom: 6, right: 20),
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              padding: EdgeInsets.only(left: 5, right: 5, top: 2, bottom: 2),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).bottomAppBarColor,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(color: Theme.of(context).bottomAppBarColor, spreadRadius: 2),
+                                ],
+                              ),
+                              child:Image.asset(ic_globe_png, color: Theme.of(context).accentColor,),
+
+                            ),
+                          ),
+                          Text("English", style: styleProvider(fontWeight: medium, size: 14),),
+                        ],
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Icon(Icons.arrow_forward_ios, size: 15,color: Theme.of(context).accentColor,),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
           ),
         ),
       ),

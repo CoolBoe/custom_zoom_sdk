@@ -12,14 +12,17 @@ class ThemeProvider with ChangeNotifier{
     cardColor:Color(0xFF313639),
     backgroundColor: Colors.black,
     canvasColor: Color(0xFF38464c),
+    shadowColor: Color(0xFF313639) ,
     accentColor: Colors.white,
     unselectedWidgetColor: Colors.white,
-      disabledColor: Colors.blue,
+    disabledColor: Colors.blue,
+    focusColor:  Color(0xFF5A5E61),
     bottomAppBarColor: Color(0xFF313639),
     dividerColor: Colors.white70,
   );
   final lightTheme = ThemeData(
     hintColor: Colors.white54,
+    focusColor: Colors.grey[200],
     cardColor:Colors.grey[200],
     canvasColor: Color(0xFFFEDBD0),
     primaryColor: accent_color,
@@ -28,11 +31,15 @@ class ThemeProvider with ChangeNotifier{
     disabledColor: Colors.blue,
     bottomAppBarColor: Colors.white,
     highlightColor: Color(0xFF000000),
-    backgroundColor: Colors.white60,
+    backgroundColor:Color(0xFFFEFDFD),
     accentColor: Colors.black,
     dividerColor: Colors.black12,
   );
+
   ThemeData _themeData;
+  ThemeProvider.initialize(){
+    BasePrefs.init();
+  }
 
   ThemeNotifier() {
     BasePrefs.readData(app_Theme).then((value) {
@@ -61,8 +68,8 @@ class ThemeProvider with ChangeNotifier{
   }
 
   ThemeData getTheme(){
-    BasePrefs.init();
-    if(BasePrefs.getString(app_Theme)!=null && BasePrefs.getString(app_Theme)== dark_Mode){
+
+    if(BasePrefs!=null && BasePrefs.getString(app_Theme)!=null && BasePrefs.getString(app_Theme)== dark_Mode){
       return darkTheme;
     }else{
       return lightTheme;

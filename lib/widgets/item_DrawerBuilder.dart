@@ -64,7 +64,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                             changeScreen(context, TermsOfUseScreen());
                             break;
                           case 4:
-                            changeScreen(context, PrivacyScreen());
+                            contactUsDialog();
                             break;
                           case 5:
                             changeScreen(context, TermsOfUseScreen());
@@ -139,7 +139,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                 child: Container(
                   height: 200,
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).bottomAppBarColor,
                       borderRadius: BorderRadius.all(Radius.circular(3))),
                   child: Column(
                     children: <Widget>[
@@ -155,7 +155,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                       fontFamily: 'Poppins',
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.black)),
+                                     )),
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: 30),
@@ -170,7 +170,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                     margin: EdgeInsets.zero,
                                     child: Icon(
                                       Icons.close,
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       size: 25,
                                     )),
                               ),
@@ -212,14 +212,14 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                 child: Container(
                                   height: 40,
                                   decoration: BoxDecoration(
-                                    color: Colors.black,
+                                    color: Theme.of(context).accentColor,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   ),
                                   child: Center(
                                     child: Text('CALL',
                                         style: TextStyle(
-                                            color: Colors.white,
+                                            color: Theme.of(context).backgroundColor,
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w400,
                                             fontSize: 14)),
@@ -259,7 +259,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                 child: Container(
                   height: 150,
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).bottomAppBarColor,
                       borderRadius: BorderRadius.all(Radius.circular(3))),
                   child: Column(
                     children: <Widget>[
@@ -275,7 +275,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                       fontFamily: 'Poppins',
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.black)),
+                                     )),
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: 30),
@@ -290,7 +290,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                     margin: EdgeInsets.zero,
                                     child: Icon(
                                       Icons.close,
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       size: 25,
                                     )),
                               ),
@@ -344,7 +344,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                     child: Container(
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: Colors.black,
+                                        color: Theme.of(context).accentColor,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)),
                                       ),
@@ -357,7 +357,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                                         child: Center(
                                           child: Text('Not Really',
                                               style: TextStyle(
-                                                  color: Colors.white,
+                                                  color: Theme.of(context).backgroundColor,
                                                   fontFamily: 'Poppins',
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 12)),

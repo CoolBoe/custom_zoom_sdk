@@ -118,10 +118,9 @@ class RegisterScreenState extends BasePageState<RegisterScreen> {
     var loader = Provider.of<LoaderProvider>(context, listen: false);
     // TODO: implement pageUi
     return new Scaffold(
-        resizeToAvoidBottomInset: false,
         key: _key,
         backgroundColor: Colors.transparent,
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: false,
         body: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,

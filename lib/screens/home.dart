@@ -134,8 +134,7 @@ class HomeState extends State<HomeView> {
                                       Padding(
                                         padding:
                                         const EdgeInsets.only(right: 5.0),
-                                        child: Text(
-                                          'Day Mode',
+                                        child: Text(isLight ? "Day Mode" : "Dark Mode",
                                           style: TextStyle(
                                               color: white,
                                               fontSize: 10,

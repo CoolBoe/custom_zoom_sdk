@@ -11,7 +11,7 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
     child: Container(
         child: Card(
           elevation: 10,
-          color: Color(0xFFFEDBD0),
+          color: Theme.of(context).canvasColor,
           child: SizedBox(
             width: MediaQuery.of(context).size.width / 1.2,
             child: Padding(
@@ -28,7 +28,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                       children: [
                         Text('Order Summary',
                             style: TextStyle(
-                                color: Colors.black,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600, fontSize: 14)),
                       ],
@@ -42,7 +41,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                         Container(
                           child: Text('Subtotal :',
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12)),
@@ -51,7 +49,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                           padding: const EdgeInsets.only(right: 20.0),
                           child: Text(subtotal,
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12)),
@@ -67,7 +64,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                         Container(
                           child: Text('Shipping Charges :',
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12)),
@@ -76,7 +72,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                           padding: const EdgeInsets.only(right: 20.0),
                           child: Text(shippingCharge ,
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12)),
@@ -92,7 +87,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                         Container(
                           child: Text('Tax :',
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12)),
@@ -101,7 +95,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                           padding: const EdgeInsets.only(right: 20.0),
                           child: Text(tax,
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12)),
@@ -117,7 +110,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                         Container(
                           child: Text('Total Discount :',
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12)),
@@ -126,7 +118,6 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                           padding: const EdgeInsets.only(right: 20.0),
                           child: Text(totalDiscount,
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 12)),
@@ -138,7 +129,7 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                     padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                     child: Container(
                       height: 0.9,
-                      color: accent_color,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Padding(
@@ -150,16 +141,14 @@ Widget widgetOrderSummary(BuildContext context, {String subtotal, String shippin
                           width: 70,
                           child: Text('Total :',
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w600,
                                   fontSize: 12)),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(right: 20.0),
-                          child: Text("₹ ${totalPrice}",
+                          child: Text("${totalPrice}",
                               style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w600,
                                   fontSize: 12)),

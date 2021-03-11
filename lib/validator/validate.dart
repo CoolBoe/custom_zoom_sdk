@@ -164,7 +164,9 @@ String getValidDecimalFormat(double value) {
 }
 String getValidString(String amount){
   if(isValidString(amount) && amount!= ""){
-    amount = parse(amount).documentElement.text.substring(1).trim();
+    printLog("hgjhghgj", amount);
+    amount = parse(amount).documentElement.text.substring(0).trim();
+    printLog("hgjhghgj", amount);
     return amount;
   }return null;
 }

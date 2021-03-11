@@ -80,7 +80,7 @@ class CartScreenState extends BasePageState<CartScreen> {
                 child: Container(
                     child: Card(
                       elevation: 5,
-                      color: Colors.white,
+                      color: Theme.of(context).backgroundColor,
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width / 1.2,
                         child: Padding(
@@ -92,7 +92,6 @@ class CartScreenState extends BasePageState<CartScreen> {
                             children: [
                               Text('Shipping Methods',
                                   style: TextStyle(
-                                      color: Colors.black,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14)),
@@ -116,12 +115,12 @@ class CartScreenState extends BasePageState<CartScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(0),
+      bottomNavigationBar:  Container(
+        color: Theme.of(context).backgroundColor,
         child: Container(
           height: 50,
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).bottomAppBarColor,
               borderRadius: BorderRadius.only(
                   topRight: Radius.circular(20), topLeft: Radius.circular(20)),
               boxShadow: [
@@ -136,9 +135,8 @@ class CartScreenState extends BasePageState<CartScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(total!=null ? "₹ $total": "₹ 0.00",
+                Text(total!=null ? "$total": "₹ 0.00",
                     style: TextStyle(
-                        color: Colors.black,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w600,
                         fontSize: 24)),
@@ -194,6 +192,7 @@ class CartScreenState extends BasePageState<CartScreen> {
           cart_subtotal = getValidString(cartData.cartSubtotal);
           taxes  = getValidString(cartData.taxes);
           total = getValidString(cartData.total);
+          printLog("jhkjhjkhkj", total);
           shipping_Flat= cartData.shippingMethod!=null && cartData.shippingMethod.length>0 ? getValidString(cartData.shippingMethod[0].shippingMethodPrice) : "00.00";
           shipping_Free= cartData.shippingMethod!=null && cartData.shippingMethod.length>1 ? getValidString(cartData.shippingMethod[1].shippingMethodPrice) : "00.00";
          return  pageBuilder();

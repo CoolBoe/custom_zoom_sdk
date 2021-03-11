@@ -43,6 +43,7 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
+        color: Theme.of(context).backgroundColor,
         child: Column(
           children: [
             bannerSlider(),

@@ -16,410 +16,340 @@ class PrivacyScreenState extends BasePageState<PrivacyScreen>{
     super.initState();
   }
   Widget _CustomScrollView() {
-    return Column(
-      children: <Widget>[
-        Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Card(
-              child: Container(
-                decoration: BoxDecoration(color: Color(0xFFFBDEC3)),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'Collection of your information',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'use if demographic / profile data / your information',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'Cookies',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'Sharing of personal information',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 2, right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'links to other sites',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 2,right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'security precautions',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only( top: 2,right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'Choice / opt-Out',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only( top: 2,right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'advertisements on platform',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only( top: 2,right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'Children information',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 2,right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'data retention',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 2,right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'your contest',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 2,right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'changes to this privacy policy',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 2,right: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'grievance officer',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 2,right: 10, bottom: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 8),
-                            child: Icon(Icons.circle,
-                                size: 10, color: Colors.black),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Text(
-                                'Queries',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-
-
-                  ],
-                ),
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      decoration: BoxDecoration(color: Theme.of(context).canvasColor,
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                  size: 10, color: Theme.of(context).accentColor,),
               ),
-            ))
-      ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'Collection of your information',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),
+          SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'use if demographic / profile data / your information',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'Cookies',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'Sharing of personal information',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10,color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'links to other sites',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'security precautions',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'Choice / opt-Out',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'advertisements on platform',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10,color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'Children information',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'data retention',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'your contest',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10,color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'changes to this privacy policy',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                    size: 10, color: Theme.of(context).accentColor),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'grievance officer',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 4, left: 8),
+                child: Icon(Icons.circle,
+                  size: 10,),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: Text(
+                    'Queries',
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          ),
+
+
+        ],
+      ),
     );
   }
   @override
@@ -427,8 +357,12 @@ class PrivacyScreenState extends BasePageState<PrivacyScreen>{
     // TODO: implement pageUi
     return Scaffold(
       appBar: BaseAppBar(context, "Privacy", suffixIcon: Container()),
-      body: SingleChildScrollView(
-        child: _CustomScrollView(),
+      body:Container(
+        color: Theme.of(context).backgroundColor,
+        height: MediaQuery.of(context).size.height,
+        child:  SingleChildScrollView(
+          child: _CustomScrollView(),
+        ),
       ),
     );
   }

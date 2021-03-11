@@ -101,6 +101,7 @@ class DeliveryScreenState extends BasePageState<DeliveryScreen>{
       child: new Form(
           key: globalKey,
           child:  Container(
+            color: Theme.of(context).backgroundColor,
             padding: EdgeInsets.only(left: 20, right: 20, top: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

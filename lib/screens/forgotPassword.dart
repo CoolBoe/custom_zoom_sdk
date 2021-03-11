@@ -35,7 +35,7 @@ class ForgotPassScreenState extends State<ForgotPassScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: <Widget>[
           MyAppBar(),

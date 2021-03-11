@@ -156,7 +156,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                 child: Container(
                   height: 150,
                   decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).bottomAppBarColor,
                       borderRadius: BorderRadius.all(Radius.circular(3))),
                   child: Column(
                     children: <Widget>[
@@ -172,7 +172,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                                       fontFamily: 'Poppins',
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.black)),
+                                  )),
                             ),
                             Padding(
                               padding: EdgeInsets.only(right: 30),
@@ -187,7 +187,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                                     margin: EdgeInsets.zero,
                                     child: Icon(
                                       Icons.close,
-                                      color: Colors.black,
+                                      color: Theme.of(context).accentColor,
                                       size: 25,
                                     )),
                               ),
@@ -261,7 +261,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                                     child: Container(
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: Colors.black,
+                                        color: Theme.of(context).accentColor,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(10)),
                                       ),
@@ -274,7 +274,7 @@ class FavouriteScreenState extends State<FavouriteScreen> {
                                         child: Center(
                                           child: Text('Not Really',
                                               style: TextStyle(
-                                                  color: Colors.white,
+                                                  color: Theme.of(context).backgroundColor,
                                                   fontFamily: 'Poppins',
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 12)),

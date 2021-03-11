@@ -33,7 +33,7 @@ void main()async{
   BasePrefs.init();
   runApp(MultiProvider(
       providers: [
-      ChangeNotifierProvider.value(value: ThemeProvider()),
+      ChangeNotifierProvider.value(value: ThemeProvider.initialize()),
       ChangeNotifierProvider.value(value: AppProvider.initialize()),
       ChangeNotifierProvider.value(value: UserProvider.initialize()),
       ChangeNotifierProvider.value(value: LoaderProvider(), child: CartScreen(),),
@@ -43,13 +43,12 @@ void main()async{
   ],
     child: Consumer<ThemeProvider>(
       builder: (context, theme, _) {
-        final app  = Provider.of<AppProvider>(context, listen: false);
-
+        var data = theme;
       return  MaterialApp(
           builder: (context, child){
             return ScrollConfiguration(behavior: MyBehavior(), child: child);
           },
-          theme: theme.getTheme() !=null ? theme.getTheme() : theme.lightTheme ,
+          theme: data.getTheme() !=null ? data.getTheme() : data.lightTheme ,
           title: "Woo App",
           debugShowCheckedModeBanner: false,
           home: ScreensController(),

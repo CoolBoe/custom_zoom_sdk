@@ -5,11 +5,11 @@ class WebRequestConstants {
 
   static const String getBaseUrl = "https://app.democontentphoeniixx.com";
   /*--------------------------Woo APP------------------------*/
-  // static const String getWPBaseUrl = "https://wooapp.themiixx.com";
-  // static const String BaseAuthId =
-  //     "ck_182712e047bc83b22974476388360fca763c0005";
-  // static const String BaseAuthPass =
-  //     "cs_3351fba7577bb78534600af478007e73f8babd4e";
+  static const String getWPBaseUrl = "https://wooapp.themiixx.com";
+  static const String BaseAuthId =
+      "ck_182712e047bc83b22974476388360fca763c0005";
+  static const String BaseAuthPass =
+      "cs_3351fba7577bb78534600af478007e73f8babd4e";
 
   /*-------------------https://www.evnox.com/----------------*/
   // static const String getWPBaseUrl = "https://www.evnox.com";
@@ -25,11 +25,11 @@ class WebRequestConstants {
   // static const String BaseAuthPass =
   //     "cs_10f54a38d84d1fca303e67579bc9da19f4d50774";
   /*-------------------https://SchoolMegaMart.in/----------------*/
-  static const String getWPBaseUrl = "https://schoolmegamart.com";
-  static const String BaseAuthId =
-      "ck_9edfb28ae033d8124559ed8ae17669b53da4edb0";
-  static const String BaseAuthPass =
-      "cs_b751f529a8b22a97c3d3cf1b9402b9f5e6ac6236";
+  // static const String getWPBaseUrl = "https://schoolmegamart.com";
+  // static const String BaseAuthId =
+  //     "ck_9edfb28ae033d8124559ed8ae17669b53da4edb0";
+  // static const String BaseAuthPass =
+  //     "cs_b751f529a8b22a97c3d3cf1b9402b9f5e6ac6236";
 
   static const String getPlaceUrl = "https://location.wlfpt.co/api/v1/";
   String BaseAuth =

@@ -11,7 +11,6 @@ Widget widgetShippingCart({List<ShippingMethod> shippingMethod, String choosenMe
       physics: BouncingScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) {
-
         return Padding(
           padding: const EdgeInsets.only(top: 5.0),
           child: Row(
@@ -21,7 +20,6 @@ Widget widgetShippingCart({List<ShippingMethod> shippingMethod, String choosenMe
                 width: 70,
                 child: Text(shippingMethod[index].shippingMethodName,
                     style: TextStyle(
-                        color: Colors.black,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
                         fontSize: 10)),
@@ -37,7 +35,6 @@ Widget widgetShippingCart({List<ShippingMethod> shippingMethod, String choosenMe
                               .documentElement
                               .text,
                           style: TextStyle(
-                              color: Colors.black,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w500,
                               fontSize: 10)),
@@ -49,7 +46,7 @@ Widget widgetShippingCart({List<ShippingMethod> shippingMethod, String choosenMe
                         materialTapTargetSize:
                         MaterialTapTargetSize.shrinkWrap,
                         value: index,
-                        activeColor: Colors.black,
+                        activeColor: Theme.of(context).primaryColor,
                         groupValue: value,
                         onChanged: (val) {
                           // printLog("onChanged", val);

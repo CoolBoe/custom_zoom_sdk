@@ -17,7 +17,7 @@ class UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: <Widget>[
           MyAppBar(),

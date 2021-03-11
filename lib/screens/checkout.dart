@@ -78,12 +78,12 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
   }
 
   Widget bottomBar(){
-   return Padding(
-      padding: EdgeInsets.all(0),
+   return Container(
+      color: Theme.of(context).backgroundColor,
       child: Container(
         height: 50,
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).bottomAppBarColor,
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20), topLeft: Radius.circular(20)),
             boxShadow: [
@@ -98,9 +98,8 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text("₹ ${widget.total}",
+              Text("${widget.total}",
                   style: TextStyle(
-                      color: Colors.black,
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 24)),
@@ -178,6 +177,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
     printLog("ghjghjgh", order.toJson());
     return SingleChildScrollView(
       child: Container(
+        color: Theme.of(context).backgroundColor,
         child: Column(
           children: [
             addressBuilder(),
@@ -187,7 +187,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
               child: Container(
                   child: Card(
                     elevation: 5,
-                    color: Colors.white,
+                    color: Theme.of(context).backgroundColor,
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width / 1.2,
                       child: Padding(
@@ -199,7 +199,6 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                           children: [
                             Text('Shipping Methods',
                                 style: TextStyle(
-                                    color: Colors.black,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14)),
@@ -210,176 +209,162 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                     ),
                   )),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 0.0, left: 30, right: 28, bottom: 10),
-              child: Container(
-                  child: Card(
-                    elevation: 10,
-                    color: Color(0xFFFEDBD0),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30.0, top: 8, right: 30, bottom: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Order Summary',
+            Container(
+                padding: const EdgeInsets.only(
+                    top: 0.0, left: 30, right: 28, bottom: 10),
+                child: Card(
+                  elevation: 10,
+                  color: Theme.of(context).canvasColor,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 1.2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 30.0, top: 8, right: 30, bottom: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Order Summary',
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14)),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Text('Subtotal :',
                                       style: TextStyle(
-                                          color: Colors.black,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Text(cart_subtotal.toString(),
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Text('Shipping Charges :',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Text(getShippingPrice() ,
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Text('Tax :',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Text(taxes.toString(),
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Text('Total Discount :',
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Text(discount_total.toString(),
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            child: Container(
+                              height: 0.9,
+                              color: accent_color,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  width: 70,
+                                  child: Text('Total :',
+                                      style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 14)),
-                                ],
-                              ),
+                                          fontSize: 12)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: Text("₹ $total",
+                                      style: TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 12)),
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Text('Subtotal :',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 20.0),
-                                    child: Text(cart_subtotal.toString(),
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Text('Shipping Charges :',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 20.0),
-                                    child: Text(getShippingPrice() ,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Text('Tax :',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 20.0),
-                                    child: Text(taxes.toString(),
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Text('Total Discount :',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 20.0),
-                                    child: Text(discount_total.toString(),
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                              child: Container(
-                                height: 0.9,
-                                color: accent_color,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    child: Text('Total :',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 20.0),
-                                    child: Text("₹ $total",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  )),
-            ),
-
+                  ),
+                )),
             Padding(
               padding: const EdgeInsets.only(top: 0.0, left: 30, right: 30),
               child: GestureDetector(
@@ -455,7 +440,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
         child:  Container(
           height: 100,
           decoration: BoxDecoration(
-            color: grey_200,
+            color: Theme.of(context).bottomAppBarColor,
             borderRadius: BorderRadius.all(
                 Radius.circular(4)),
           ),
@@ -475,7 +460,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                         radius: 30.0,
                         backgroundImage: model.avatarUrl !=null ? NetworkImage(
                             model.avatarUrl) : Image.asset(ic_bg_lock) ,
-                        backgroundColor: Colors.black,
+                        backgroundColor: Theme.of(context).highlightColor,
                       ),
                     ),
                   ),
@@ -488,15 +473,13 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                         model.firstName!=null && model.firstName!=""?
                         "Dear ${model.firstName.toUpperCase()}\n" : "Dear ${model.billing.firstName.toUpperCase()}\n" :
                             "Hi User\n",
-                        style: TextStyle(
-                            color: Colors.black, fontSize: 18, fontFamily: fontName, fontWeight: medium),
+                        style: TextStyle(color: Theme.of(context).accentColor,fontSize: 18, fontFamily: fontName, fontWeight: medium),
                         children: <TextSpan>[
-                          TextSpan(text: "Shipping Address:- ", style: TextStyle(
-                                color: Colors.black38, fontSize: 10),),
+                          TextSpan(text: "Shipping Address:- ", style: TextStyle(color: Theme.of(context).accentColor,
+                              fontSize: 10),),
                           TextSpan(text: model.billing.postcode!=null && model.billing.postcode!="" ?
                           "${model.billing.address1} ${model.billing.address2} ${model.billing.state} (${model.billing.postcode})" :"Address Not Found",
-                            style: TextStyle(
-                                color: Colors.black38, fontSize: 10),)
+                            style: TextStyle(color: Theme.of(context).accentColor,fontSize: 10),)
                         ]
                     ),
                   ),
@@ -505,7 +488,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                   padding: const EdgeInsets.only(right:20.0),
                   child: Icon(
                     Icons.arrow_forward_ios,
-                    color: Colors.black,
+                    color: Theme.of(context).accentColor,
                     size: 15,
                   ),
                 )
@@ -526,7 +509,6 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
         children: [
           Text('Payment Methods',
               style: TextStyle(
-                  color: Colors.black,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 14)),
@@ -549,10 +531,10 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        color: accent_color,
-                        border:Border.all(color: checked ? accent_color : accent_color),
+                        color: Theme.of(context).canvasColor,
+                        border:Border.all(color: checked ? Theme.of(context).primaryColor: Theme.of(context).canvasColor ),
                         boxShadow: [
-                          BoxShadow(color: checked ? accent_color : accent_color, spreadRadius: 1)
+                          BoxShadow(color: checked ? Theme.of(context).primaryColor:Theme.of(context).canvasColor , spreadRadius: 1)
                         ],
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -560,8 +542,8 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                         children: [
                           Container(
                               width: 60,
-                              child: Image.asset(ic_money)),
-                          Text(gateway[index].gatewayTitle, style: styleProvider(fontWeight: medium, size: 13, color: black),)
+                              child: Image.asset(ic_money, color: Theme.of(context).accentColor,)),
+                          Text(gateway[index].gatewayTitle, style: styleProvider(fontWeight: medium, size: 13,),)
                         ],
                       ),
                     ),
