@@ -18,6 +18,8 @@ class _JoinWidgetState extends State<JoinWidget> {
   void initState() {
     meetingIdController = TextEditingController();
     meetingPasswordController = TextEditingController();
+    meetingIdController.text = "96083144496";
+    meetingPasswordController.text = "w8yDtx";
     super.initState();
   }
 
