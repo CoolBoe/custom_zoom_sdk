@@ -16,16 +16,16 @@ class StartMeetingWidget extends StatelessWidget {
 
   StartMeetingWidget({Key? key, meetingId}) : super(key: key) {
     this.zoomOptions = new CustomZoomOptions(
-      domain: "zoom.us",
-      appKey: "0hOLo5oUgjNtcy0keTNDc6hfoNumJs2eebOk",
-      appSecret: "RLqYcfqrzkWp3Xm4TW1isJpybnVv9683yH0q",
+        domain: "zoom.us",
+        appKey: "0hOLo5oUgjNtcy0keTNDc6hfoNumJs2eebOk",
+        appSecret: "RLqYcfqrzkWp3Xm4TW1isJpybnVv9683yH0q",
     );
     this.meetingOptions = new CustomZoomMeetingOptions(
-        userId: '<zoom_user_id>',
-        displayName: 'Example display Name',
-        meetingId: meetingId,
-        zoomAccessToken: "<User zak>",
-        zoomToken: "<user_token>",
+        userId: 'prashantinagdeve@gmail.com',
+        displayName: 'Rahul Sharma ',
+        meetingId: "89482898887",
+        zoomToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5LWE5MEk3alFSYTlqdzNDYkphZlNRIiwiZXhwIjoxNjI5ODY1OTA2fQ.SFBddK9T2X_fMkVGtQfuLp_vVzZfjZ4qaeAUib2gCt8",
+        zoomAccessToken: "W7-buFfTKvNoCC47DjeGjxfAwMTqFZqomunRsdDxBTo.BgYsM0M0K2JaVm9ub0syTjlSSjNFU2RRc0w0ckk5Q0FXS21qZndzMVZQSmVDST1AMmE2ZDI3NDZjM2FkYWM2NGY5NTMwMzBiYzVhMzQxNTAxOWMwNTRiZmM1YjY2NTI1ZmQ4NDQ4MTAwMmE3NTA4ZgAgMGZBeEY1YVV2ODZoZE4vR2N2eUhGZTZ1SEJCQjlRV0cAAAAAAXt7kyfAABJ1AAAA",
         disableDialIn: "true",
         disableDrive: "true",
         disableInvite: "true",
