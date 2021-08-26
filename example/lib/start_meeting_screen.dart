@@ -10,21 +10,20 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class StartMeetingWidget extends StatelessWidget {
 
-  late CustomZoomOptions zoomOptions;
+  late ZoomInitilaizedWithToken zoomOptions;
   late CustomZoomMeetingOptions meetingOptions;
 
   late Timer timer;
 
   StartMeetingWidget({Key? key, meetingId}) : super(key: key) {
-    this.zoomOptions = new CustomZoomOptions(
-        domain: "zoom.us",
-        appKey: Constants.APPKEY,
-        appSecret:Constants.APPSECRECT,
+    this.zoomOptions = new ZoomInitilaizedWithToken(
+        domain:Constants.DOMAIN,
+        jwtToken: Constants.JWTTOKEN
     );
     this.meetingOptions = new CustomZoomMeetingOptions(
         userId: Constants.USERID,
         displayName: Constants.DISPLAYNAME,
-        meetingId: Constants.MEETINGID,
+        meetingId: meetingId,
         zoomToken: Constants.USERTOKEN,
         zoomAccessToken: Constants.ACCESSTOKEN,
         disableDialIn: "true",
@@ -60,7 +59,7 @@ class StartMeetingWidget extends StatelessWidget {
 
           print("Created the view");
 
-          controller.initZoom(this.zoomOptions)
+          controller.zoomInitializedWithToken(this.zoomOptions)
               .then((results) {
 
             print("initialised");

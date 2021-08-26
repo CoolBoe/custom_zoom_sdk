@@ -6,25 +6,27 @@ import 'package:custom_zoom_sdk/custom_zoom_view.dart';
 
 import 'package:flutter/material.dart';
 
+import 'constants.dart';
+
 
 
 // ignore: must_be_immutable
 class MeetingWidget extends StatelessWidget {
 
- late CustomZoomOptions zoomOptions;
+ late ZoomInitilaizedWithOutToken zoomOptions;
  late CustomZoomMeetingOptions meetingOptions;
  late Timer timer;
 
 
 
   MeetingWidget({Key? key, meetingId, meetingPassword}) : super(key: key) {
-    this.zoomOptions = new CustomZoomOptions(
+    this.zoomOptions = new ZoomInitilaizedWithOutToken(
       domain: "zoom.us",
-      appKey: "",
-      appSecret: "",
+      appKey: Constants.APPKEY,
+      appSecret:Constants.APPSECRECT,
     );
     this.meetingOptions = new CustomZoomMeetingOptions(
-        userId: 'example',
+        userId: Constants.DISPLAYNAME,
         meetingId: meetingId,
         meetingPassword: meetingPassword,
         disableDialIn: "true",
@@ -60,7 +62,7 @@ class MeetingWidget extends StatelessWidget {
 
           print("Created the view");
 
-          controller.initZoom(this.zoomOptions)
+          controller.zoomInitializedWithOutToken(this.zoomOptions)
               .then((results) {
 
             print("initialised");

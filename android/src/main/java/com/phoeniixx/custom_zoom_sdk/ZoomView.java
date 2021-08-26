@@ -46,12 +46,12 @@ import us.zoom.sdk.ZoomSDKAuthenticationListener;
 import us.zoom.sdk.ZoomSDKInitParams;
 import us.zoom.sdk.ZoomSDKInitializeListener;
 
-public class ZoomView implements PlatformView,
+public class ZoomView  implements PlatformView,
         MethodChannel.MethodCallHandler,
         PreMeetingServiceListener, ActivityAware {
     private final TextView textView;
-    private final MethodChannel methodChannel;
     private final Context context;
+    private final MethodChannel methodChannel;
     private final EventChannel meetingStatusChannel;
     private Calendar mDateFrom;
     private Calendar mDateTo;
@@ -64,7 +64,7 @@ public class ZoomView implements PlatformView,
         textView = new TextView(context);
         this.context = context;
 
-        methodChannel = new MethodChannel(messenger, "custom_zoom_sdk");
+      methodChannel = new MethodChannel(messenger, "custom_zoom_sdk");
         methodChannel.setMethodCallHandler(this);
 
         meetingStatusChannel = new EventChannel(messenger, "custom_zoom_event");
@@ -76,7 +76,7 @@ public class ZoomView implements PlatformView,
     }
 
     @Override
-    public void onMethodCall(MethodCall methodCall, @NonNull MethodChannel.Result result) {
+    public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
         switch (methodCall.method) {
             case "init":
                 init(methodCall, result);
@@ -93,11 +93,11 @@ public class ZoomView implements PlatformView,
             case "start":
                 startMeeting(methodCall, result);
                 break;
-            case "schedule":
-                scheduleMeeting(methodCall, result);
-                break;
             case "meeting_status":
                 meetingStatus(result);
+                break;
+            case "schedule":
+                scheduleMeeting(methodCall, result);
                 break;
             default:
                 result.notImplemented();
@@ -108,20 +108,26 @@ public class ZoomView implements PlatformView,
     private void init(final MethodCall methodCall, final MethodChannel.Result result) {
 
         Map<String, String> options = methodCall.arguments();
-
         ZoomSDK zoomSDK = ZoomSDK.getInstance();
+
 
         if(zoomSDK.isInitialized()) {
             List<Integer> response = Arrays.asList(0, 0);
             result.success(response);
             return;
         }
-
         ZoomSDKInitParams initParams = new ZoomSDKInitParams();
-        initParams.appKey = options.get("appKey");
-        initParams.appSecret = options.get("appSecret");
-        initParams.domain = options.get("domain");
-        initParams.enableLog = true;
+
+        if(options.get("jwtToken")!=null){
+            initParams.jwtToken = options.get("jwtToken");
+            initParams.enableLog = true;
+            initParams.domain= options.get("domain");
+        }else{
+            initParams.appKey = options.get("appKey");
+            initParams.appSecret = options.get("appSecret");
+            initParams.domain = options.get("domain");
+            initParams.enableLog = true;
+        }
         final InMeetingNotificationHandle handle=new InMeetingNotificationHandle() {
 
             @Override
@@ -141,6 +147,7 @@ public class ZoomView implements PlatformView,
         data.setLargeIconId(R.drawable.zm_mm_type_emoji);
         data.setSmallIconId(R.drawable.zm_mm_type_emoji);
         data.setSmallIconForLorLaterId(R.drawable.zm_mm_type_emoji);;
+
         ZoomSDKInitializeListener listener = new ZoomSDKInitializeListener() {
             /**
              * @param errorCode {@link us.zoom.sdk.ZoomError#ZOOM_ERROR_SUCCESS} if the SDK has been initialized successfully.
@@ -219,7 +226,6 @@ public class ZoomView implements PlatformView,
             }
         }
     }
-
     private void joinMeeting(MethodCall methodCall, MethodChannel.Result result) {
 
         Map<String, String> options = methodCall.arguments();
@@ -276,49 +282,20 @@ public class ZoomView implements PlatformView,
         opts.no_audio = parseBoolean(options, "noAudio", false);
 
         StartMeetingParamsWithoutLogin params = new StartMeetingParamsWithoutLogin();
-
-		params.userId = options.get("userId");
-        params.displayName = options.get("displayName");
+        params.userId =  options.get("userId");
+        params.displayName =  options.get("displayName");
         params.meetingNo = options.get("meetingId");
-		params.userType = MeetingService.USER_TYPE_API_USER;
-		params.zoomToken = options.get("zoomToken");
-		params.zoomAccessToken = options.get("zoomAccessToken");
-		
+        params.userType = MeetingService.USER_TYPE_API_USER;
+        params.zoomToken =  options.get("zoomToken");
+        params.zoomAccessToken = options.get("zoomAccessToken");
+
         meetingService.startMeetingWithParams(context, params, opts);
 
         result.success(true);
     }
-    private void initDateAndTime() {
-        mTimeZoneId = TimeZone.getDefault().getID();
-//        mTxtTimeZoneName.setText(ZmTimeZoneUtils.getFullName(mTimeZoneId));
 
-        Date timeFrom = new Date(System.currentTimeMillis() + 3600 * 1000);
-        Date timeTo = new Date(System.currentTimeMillis() + 7200 * 1000);
-
-        mDateFrom = Calendar.getInstance();
-        mDateFrom.setTime(timeFrom);
-        mDateFrom.set(Calendar.MINUTE, 0);
-        mDateFrom.set(Calendar.SECOND, 0);
-
-        mDateTo = Calendar.getInstance();
-        mDateTo.setTime(timeTo);
-        mDateTo.set(Calendar.MINUTE, 0);
-        mDateTo.set(Calendar.SECOND, 0);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateStr = sdf.format(mDateFrom.getTime());
-
-//        mTxtDate.setText(dateStr);
-//        if (mDateFrom.get(Calendar.MINUTE) < 10) {
-//            mTxtTimeFrom.setText(mDateFrom.get(Calendar.HOUR_OF_DAY) + ":0" + mDateFrom.get(Calendar.MINUTE));
-//        } else {
-//            mTxtTimeFrom.setText(mDateFrom.get(Calendar.HOUR_OF_DAY) + ":" + mDateFrom.get(Calendar.MINUTE));
-//        }
-//        if (mDateFrom.get(Calendar.MINUTE) < 10) {
-//            mTxtTimeTo.setText(mDateTo.get(Calendar.HOUR_OF_DAY) + ":0" + mDateTo.get(Calendar.MINUTE));
-//        } else {
-//            mTxtTimeTo.setText(mDateTo.get(Calendar.HOUR_OF_DAY) + ":" + mDateTo.get(Calendar.MINUTE));
-//        }
+    private boolean parseBoolean(Map<String, String> options, String property, boolean defaultValue) {
+        return options.get(property) == null ? defaultValue : Boolean.parseBoolean(options.get(property));
     }
     private void scheduleMeeting(MethodCall methodCall, MethodChannel.Result result) {
         Map<String, String> options = methodCall.arguments();
@@ -385,11 +362,6 @@ public class ZoomView implements PlatformView,
         }
     }
 
-    private boolean parseBoolean(Map<String, String> options, String property, boolean defaultValue) {
-        return options.get(property) == null ? defaultValue : Boolean.parseBoolean(options.get(property));
-    }
-
-
     private void meetingStatus(MethodChannel.Result result) {
 
         ZoomSDK zoomSDK = ZoomSDK.getInstance();
@@ -410,30 +382,62 @@ public class ZoomView implements PlatformView,
         MeetingStatus status = meetingService.getMeetingStatus();
         result.success(status != null ? Arrays.asList(status.name(), "") :  Arrays.asList("MEETING_STATUS_UNKNOWN", "No status available"));
     }
+
+    private void initDateAndTime() {
+        mTimeZoneId = TimeZone.getDefault().getID();
+//        mTxtTimeZoneName.setText(ZmTimeZoneUtils.getFullName(mTimeZoneId));
+
+        Date timeFrom = new Date(System.currentTimeMillis() + 3600 * 1000);
+        Date timeTo = new Date(System.currentTimeMillis() + 7200 * 1000);
+
+        mDateFrom = Calendar.getInstance();
+        mDateFrom.setTime(timeFrom);
+        mDateFrom.set(Calendar.MINUTE, 0);
+        mDateFrom.set(Calendar.SECOND, 0);
+
+        mDateTo = Calendar.getInstance();
+        mDateTo.setTime(timeTo);
+        mDateTo.set(Calendar.MINUTE, 0);
+        mDateTo.set(Calendar.SECOND, 0);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = sdf.format(mDateFrom.getTime());
+
+//        mTxtDate.setText(dateStr);
+//        if (mDateFrom.get(Calendar.MINUTE) < 10) {
+//            mTxtTimeFrom.setText(mDateFrom.get(Calendar.HOUR_OF_DAY) + ":0" + mDateFrom.get(Calendar.MINUTE));
+//        } else {
+//            mTxtTimeFrom.setText(mDateFrom.get(Calendar.HOUR_OF_DAY) + ":" + mDateFrom.get(Calendar.MINUTE));
+//        }
+//        if (mDateFrom.get(Calendar.MINUTE) < 10) {
+//            mTxtTimeTo.setText(mDateTo.get(Calendar.HOUR_OF_DAY) + ":0" + mDateTo.get(Calendar.MINUTE));
+//        } else {
+//            mTxtTimeTo.setText(mDateTo.get(Calendar.HOUR_OF_DAY) + ":" + mDateTo.get(Calendar.MINUTE));
+//        }
+    }
+
     @Override
     public void dispose() {
         if (mPreMeetingService != null) {
             mPreMeetingService.removeListener(this);
         }
     }
+    private int getDurationInMinutes() {
+        return (int) ((mDateTo.getTimeInMillis() - mDateFrom.getTimeInMillis()) / 60000);
+    }
     private Date getBeginTime() {
         Date date = mDateFrom.getTime();
         date.setSeconds(0);
         return date;
     }
-    private int getDurationInMinutes() {
-        return (int) ((mDateTo.getTimeInMillis() - mDateFrom.getTimeInMillis()) / 60000);
-    }
-
     public boolean logout() {
         ZoomSDK zoomSDK = ZoomSDK.getInstance();
         return zoomSDK.logoutZoom();
     }
 
-
     @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        activity = (FlutterActivity) binding.getActivity();
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding activityPluginBinding) {
+        activity = (FlutterActivity) activityPluginBinding.getActivity();
     }
 
     @Override

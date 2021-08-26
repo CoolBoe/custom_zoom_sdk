@@ -1,18 +1,25 @@
 
-class CustomZoomOptions {
-
+class ZoomInitilaizedWithToken {
   String? domain;
-  String? appKey;
-  String? appSecret;
   String? jwtToken;
 
-  CustomZoomOptions({
+  ZoomInitilaizedWithToken({
     this.domain,
-    this.appKey,
-    this.appSecret,
     this.jwtToken
   });
 }
+class ZoomInitilaizedWithOutToken {
+  String? domain;
+  String? appKey;
+  String? appSecret;
+
+  ZoomInitilaizedWithOutToken({
+    this.domain,
+    this.appKey,
+    this.appSecret,
+  });
+}
+
 
 class CustomZoomMeetingOptions {
 

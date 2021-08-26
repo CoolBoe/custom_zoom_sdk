@@ -10,13 +10,15 @@ typedef void ZoomViewCreatedCallback(ZoomViewController controller);
 class CustomZoomView extends StatefulWidget {
   const CustomZoomView({
     Key? key,
-    this.zoomOptions,
+    this.zoomInitilaizedWithToken,
+    this.zoomInitilaizedWithOutToken,
      this.meetingOptions,
     this.onViewCreated,
   }) : super(key: key);
 
   final ZoomViewCreatedCallback? onViewCreated;
-  final CustomZoomOptions? zoomOptions;
+  final ZoomInitilaizedWithToken? zoomInitilaizedWithToken;
+  final ZoomInitilaizedWithOutToken? zoomInitilaizedWithOutToken;
   final CustomZoomMeetingOptions? meetingOptions;
 
   @override
@@ -69,7 +71,13 @@ class ZoomViewController {
   final MethodChannel _methodChannel;
   final EventChannel _zoomStatusEventChannel;
 
-  Future<dynamic> initZoom(CustomZoomOptions options) async {
+  Future<dynamic> zoomInitializedWithToken(ZoomInitilaizedWithToken options) async {
+    var optionMap = new Map<String, String?>();
+    optionMap.putIfAbsent("jwtToken", () => options.jwtToken);
+    optionMap.putIfAbsent("domain", () => options.domain);
+    return _methodChannel.invokeMethod('init', optionMap);
+  }
+  Future<dynamic> zoomInitializedWithOutToken(ZoomInitilaizedWithOutToken options) async {
 
     var optionMap = new Map<String, String?>();
     optionMap.putIfAbsent("appKey", () => options.appKey);
