@@ -87,8 +87,16 @@ const String Thumbnail_User =
 //     "https://www.evnox.com/wp-content/uploads/2018/08/hompage-header-01.jpg";
 
 /*------------------------bizzon.com----------------------------*/
-const String CategoryThumbnailUrl="https://bizzon.in/wp-content/uploads/2021/01/lycs-architecture-U2BI3GMnSSE-unsplash-320x320.jpg?v=1610700194";
-const String BannerThumbnailUrl= "https://bizzon.in/wp-content/uploads/2020/09/BizzonSale-2-1024x858.jpg?v=1599248859";
+// const String CategoryThumbnailUrl="https://bizzon.in/wp-content/uploads/2021/01/lycs-architecture-U2BI3GMnSSE-unsplash-320x320.jpg?v=1610700194";
+// const String BannerThumbnailUrl= "https://bizzon.in/wp-content/uploads/2020/09/BizzonSale-2-1024x858.jpg?v=1599248859";
+
+// /*------------------------https://ecommerceshopindia.com/----------------------------*/
+// const String CategoryThumbnailUrl="https://ecommerceshopindia.com/wp-content/uploads/2016/08/dummy-prod-1-4-500x500.jpg";
+// const String BannerThumbnailUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuFt4g6oKhnuMGQ7uaUA6fvEHujf28PedLOQ&usqp=CAU";
+
+/*------------------------https://ecommerceshopindia.com/----------------------------*/
+const String CategoryThumbnailUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjGcrB3L2RVYdjYnYoXmhIQjX5I3otbr6Yrw&usqp=CAU";
+const String BannerThumbnailUrl = "https://www.paatisuttapalakaram.com/wp-content/uploads/2021/10/cropped-Logo-Main-8-1.jpg";
 
 const String ic_facebook = "assets/icons/ic_facebook.svg";
 const String ic_backpack = "assets/icons/ic_backpack.svg";

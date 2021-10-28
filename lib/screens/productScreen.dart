@@ -22,7 +22,7 @@ import 'package:wooapp/widgets/loading.dart';
 import 'package:wooapp/widgets/widget_related_products.dart';
 
 class ProductScreen extends StatefulWidget {
-  ProductModel productModel;
+  final ProductModel productModel;
   ProductScreen({Key key, this.productModel}) : super(key: key);
   @override
   ProductScreenState createState() => ProductScreenState();
@@ -548,8 +548,6 @@ class ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget OptionClassBuilder() {}
-
   @override
   Widget build(BuildContext context) {
     if (BasePrefs.getString(WISHLIST) != null &&
@@ -575,10 +573,12 @@ class ProductScreenState extends State<ProductScreen> {
       ),
       bottomNavigationBar: Container(
         height: 50,
-        decoration: BoxDecoration(color: Theme.of(context).bottomAppBarColor, boxShadow: [
-          BoxShadow(
-              color: Colors.grey, offset: Offset(0.0, 1.0), blurRadius: 6.0)
-        ]),
+        decoration: BoxDecoration(
+            color: Theme.of(context).bottomAppBarColor,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey, offset: Offset(0.0, 1.0), blurRadius: 6.0)
+            ]),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
@@ -855,7 +855,8 @@ class ProductScreenState extends State<ProductScreen> {
                                       padding: const EdgeInsets.all(40.0),
                                       child: SvgPicture.asset(
                                         ic_shoppingcart,
-                                        color: Theme.of(context).backgroundColor,
+                                        color:
+                                            Theme.of(context).backgroundColor,
                                       ),
                                     ),
                                   ),

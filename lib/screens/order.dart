@@ -160,8 +160,7 @@ class OrderHistoryState extends BasePageState<OrderHistory>{
                             padding: EdgeInsets.only(right: 30),
                             child: GestureDetector(
                               onTap: () {
-                                setState(() {});
-                              },
+                                setState(() {});},
                               child: Container(
                                   height: 35,
                                   margin: EdgeInsets.zero,

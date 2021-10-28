@@ -19,7 +19,6 @@ class WidgetRelatedProducts extends StatefulWidget{
   WidgetRelatedProducts({this.labelName,this.products});
 }
 class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
-  int _page =1;
   @override
   void initState() {
     var productList = Provider.of<ProductsProvider>(context, listen: false);
@@ -48,7 +47,6 @@ class _WidgetRelatedProductsState extends State<WidgetRelatedProducts>{
     return new Consumer<ProductsProvider>(builder: (context, productModel, child){
       if(productModel.allproductListByRelated!=null &&
           productModel.allproductListByRelated.length>0){
-        printLog("hjghghjgh",productModel.allproductListByRelated);
         return _buildproductList(productModel.allproductListByRelated);
       }else{if(productModel.loader){
         return ShimmerList(listType: "List",);

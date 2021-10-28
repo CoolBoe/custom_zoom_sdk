@@ -6,7 +6,7 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     accentColor: Color(0xffF29239),
     backgroundColor: Colors.black,
     textTheme: TextTheme(
-      title: TextStyle(
+      headline1: TextStyle(
           fontSize: 14.0,
           fontFamily: "Poppins",
           fontWeight: FontWeight.w400,
@@ -17,7 +17,7 @@ ThemeData lightTheme = ThemeData.light().copyWith(
     accentColor: Color(0xffF29239),
     backgroundColor: Colors.white,
     textTheme: TextTheme(
-      title: TextStyle(
+      headline1: TextStyle(
           fontSize: 14.0,
           fontFamily: "Poppins",
           fontWeight: FontWeight.w400,

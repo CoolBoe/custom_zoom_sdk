@@ -12,7 +12,6 @@ import 'package:wooapp/models/category.dart';
 import 'package:wooapp/models/homeLayout.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/providers/app.dart';
-import 'package:wooapp/providers/category.dart';
 import 'package:wooapp/providers/product.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/screens/category.dart';
@@ -50,18 +49,6 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
     return Container(
       child: pageUi(),
     );
-  }
-
-  Widget _categoriesList(){
-    return new Consumer<AppProvider>(builder: (context, app, child){
-      if(app.getHomeLayout.categories!=null &&
-          app.getHomeLayout.categories.length>0
-      ){
-        return _buildCategoryList(app.getHomeLayout.categories);
-      }else{
-        return ShimmerList(listType: "Category",);
-      }
-    });
   }
 
   Widget _buildCategoryList(List<HomeLayoutCategory> items) {
@@ -122,7 +109,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
               ),
             );
           },
-          itemCount:4,
+          itemCount:items.length>3 ? 4 : items.length,
         )
     );
   }
@@ -231,8 +218,7 @@ class _WidgetCategoriesState extends State<WidgetCategories>{
           itemBuilder: (BuildContext context, int index){
             return GestureDetector(
                 onTap: () {
-                  changeScreen(
-                      context, ProductScreen(productModel: productList[index]));
+                  changeScreen(context, ProductScreen(productModel: productList[index]));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

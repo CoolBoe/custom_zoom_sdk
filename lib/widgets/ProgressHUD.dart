@@ -14,13 +14,13 @@ class ProgressHUD extends StatelessWidget {
 
   ProgressHUD({
     Key key,
-    @required this.inAsyncCall,
+    this.inAsyncCall,
     this.opacity = 0.3,
     this.color = grey,
     this.progressIndicator = const CircularProgressIndicator(),
     this.offset,
     this.dismissible = false,
-    @required this.child,
+    this.child,
   })  : assert(child != null),
         assert(inAsyncCall != null),
         super(key: key);

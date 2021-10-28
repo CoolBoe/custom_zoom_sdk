@@ -11,6 +11,7 @@ import 'package:wooapp/screens/category.dart';
 import 'package:wooapp/screens/privacy.dart';
 import 'package:wooapp/screens/productBuilder.dart';
 import 'package:wooapp/screens/termOfUse.dart';
+import 'package:wooapp/widgets/loading.dart';
 
 class ItemDrawerBuilder extends StatefulWidget {
   final int num;
@@ -61,7 +62,7 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                             changeScreen(context, CategoriesScreen());
                             break;
                           case 3:
-                            changeScreen(context, TermsOfUseScreen());
+                            changeScreen(context, ChatScreen());
                             break;
                           case 4:
                             contactUsDialog();
@@ -178,54 +179,70 @@ class ItemDrawerBuilderState extends State<ItemDrawerBuilder> {
                           ],
                         ),
                       ),
-                      Padding(
-                          padding:
-                              EdgeInsets.only(left: 20, top: 10, right: 20),
-                          child: Container(
-                              color: Colors.transparent,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: accent_color,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                      InkWell(
+                        onTap: (){
+                          toast("Service Not Available");
+                          setState(() {
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: Padding(
+                            padding:
+                                EdgeInsets.only(left: 20, top: 10, right: 20),
+                            child: Container(
+                                color: Colors.transparent,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: accent_color,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    child: Center(
+                                      child: Text('EMAIL',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14)),
+                                    ),
                                   ),
-                                  child: Center(
-                                    child: Text('EMAIL',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14)),
+                                ))),
+                      ),
+                      InkWell(
+                        onTap: (){
+                          toast("Service Not Available");
+                          setState(() {
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 20, top: 0, right: 20),
+                            child: Container(
+                                padding: EdgeInsets.zero,
+                                color: Colors.transparent,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).accentColor,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    child: Center(
+                                      child: Text('CALL',
+                                          style: TextStyle(
+                                              color: Theme.of(context).backgroundColor,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14)),
+                                    ),
                                   ),
-                                ),
-                              ))),
-                      Padding(
-                          padding: EdgeInsets.only(left: 20, top: 0, right: 20),
-                          child: Container(
-                              padding: EdgeInsets.zero,
-                              color: Colors.transparent,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).accentColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: Center(
-                                    child: Text('CALL',
-                                        style: TextStyle(
-                                            color: Theme.of(context).backgroundColor,
-                                            fontFamily: 'Poppins',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14)),
-                                  ),
-                                ),
-                              ))),
+                                ))),
+                      ),
                     ],
                   ),
                 ),

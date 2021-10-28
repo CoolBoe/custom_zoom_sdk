@@ -313,8 +313,6 @@ class RegisterScreenState extends BasePageState<RegisterScreen> {
                                                     }
                                                     else {
                                                       user.registerUser(user.name.text, user.email.text, user.password.text).then((value) {
-                                                        loader.setLoadingStatus(false);
-                                                        loader.setLoadingStatus(true);
                                                         user.logIn(user.email.text,user.password.text).then((value) {
                                                           loader.setLoadingStatus(false);
                                                           if(value!=null){

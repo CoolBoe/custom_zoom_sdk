@@ -5,11 +5,32 @@ class WebRequestConstants {
 
   static const String getBaseUrl = "https://app.democontentphoeniixx.com";
   /*--------------------------Woo APP------------------------*/
-  static const String getWPBaseUrl = "https://wooapp.themiixx.com";
+  // static const String getWPBaseUrl = "https://wooapp.themiixx.com";
+  // static const String BaseAuthId =
+  //     "ck_182712e047bc83b22974476388360fca763c0005";
+  // static const String BaseAuthPass =
+  //     "cs_3351fba7577bb78534600af478007e73f8babd4e";
+
+  // /*--------------------------ecommerceshopindia.com------------------------*/
+  // static const String getWPBaseUrl = "https://ecommerceshopindia.com";
+  // static const String BaseAuthId =
+  //     "ck_34a7b4000dac5102d089ca5a4b20159773d8a9e9";
+  // static const String BaseAuthPass =
+  //     "cs_4bfe6bde11d0eafa8ddcac0d9fbd91c1323daf4f";
+
+  // /*--------------------------ecommerceshopindia.com------------------------*/
+  // static const String getWPBaseUrl = "https://www.lightinghours.com";
+  // static const String BaseAuthId =
+  //     "ck_d0667aae3f9a02568ef6a9775cd8244a35e72198";
+  // static const String BaseAuthPass =
+  //     "cs_eca04b32c8a5e36241b79fd67d0034317a014653";
+
+  /*--------------------------ecommerceshopindia.com------------------------*/
+  static const String getWPBaseUrl = "https://paatisuttapalakaram.com";
   static const String BaseAuthId =
-      "ck_182712e047bc83b22974476388360fca763c0005";
+      "ck_5b1bbae0bd41a58a0d800cb72868137df2bdbea0";
   static const String BaseAuthPass =
-      "cs_3351fba7577bb78534600af478007e73f8babd4e";
+      "cs_342ec51665a46fb86cf56edb6176e74f5a547ffc";
 
   /*-------------------https://www.evnox.com/----------------*/
   // static const String getWPBaseUrl = "https://www.evnox.com";

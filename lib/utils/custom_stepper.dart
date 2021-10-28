@@ -8,10 +8,10 @@ class CustomStepper extends StatefulWidget {
   final ValueChanged<dynamic> onchanged;
 
   CustomStepper(
-      {@required this.stepValue,
-      @required this.iconSize,
-      @required this.value,
-      @required this.onchanged});
+      { this.stepValue,
+       this.iconSize,
+       this.value,
+       this.onchanged});
   @override
   _CustomStepperState createState() => _CustomStepperState();
 }

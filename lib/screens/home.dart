@@ -31,10 +31,13 @@ class HomeView extends StatefulWidget {
 class HomeState extends State<HomeView> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isLight = true;
+  AppProvider _appProvider;
   @override
   void initState() {
     BasePrefs.init();
     AppProvider.initialize();
+    _appProvider= Provider.of<AppProvider>(context, listen: false);
+    _appProvider.fetchHomeLayout();
     BasePrefs.init();
     if(BasePrefs.getString(app_Theme)!=null && BasePrefs.getString(app_Theme)==dark_Mode){
       printLog("ghghjgjhs", BasePrefs.getString(app_Theme));

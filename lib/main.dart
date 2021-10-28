@@ -48,7 +48,7 @@ void main()async{
           builder: (context, child){
             return ScrollConfiguration(behavior: MyBehavior(), child: child);
           },
-          theme: data.getTheme() !=null ? data.getTheme() : data.lightTheme ,
+          theme: data.lightTheme ,
           title: "Woo App",
           debugShowCheckedModeBanner: false,
           home: ScreensController(),
@@ -82,7 +82,6 @@ class ScreensController extends StatelessWidget {
     String version = packageInfo.version;
     if(appStatus=="under-maintenance"){
       return "Maintenance";
-
     }else if(appVersion!=version){
       return "Update";
     }else{

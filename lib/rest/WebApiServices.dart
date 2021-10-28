@@ -82,6 +82,7 @@ class WebApiServices {
         options: new Options(headers: headers),
         data: params,
       );
+      printLog("hjhjjknjkn", response.data);
       Map<String, dynamic> result = response.data;
       if (result['status'] == '0') {
         return false;
@@ -402,10 +403,9 @@ class WebApiServices {
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
           WebRequestConstants.ADD_CART;
-      printLog("dtdtdtdt", url);
-      printLog("hgjhgjghvg", params);
       var response = await dio.post(url,
           options: new Options(headers: headers), data: params);
+      printLog("getAddToCart", response.data);
       if (response.statusCode == HTTP_CODE_200 ||
           response.statusCode == HTTP_CODE_201) {
         WebResponseModel model = WebResponseModel.fromJson(response.data);
@@ -426,13 +426,13 @@ class WebApiServices {
       CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       printLog("dfdfdfdfd", variableProduct.toJson());
-
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
           WebRequestConstants.ADD_CART;
       var response = await dio.post(url,
           options: new Options(headers: headers),
           data: variableProduct.toJson());
+      printLog("dfdfdfdfd", response.data);
       if (response.statusCode == HTTP_CODE_200 ||
           response.statusCode == HTTP_CODE_201) {
         WebResponseModel model = WebResponseModel.fromJson(response.data);
@@ -956,6 +956,7 @@ class WebApiServices {
         return null;
       }
     } on DioError catch (e) {
+      printLog("fetchHomeApiError", e.message);
       return null;
     }
   }

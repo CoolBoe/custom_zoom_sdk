@@ -7,50 +7,52 @@ import 'package:wooapp/utils/widget_helper.dart';
 
 class FormHelper {
   static Widget textInput(
-      BuildContext context,
-      Object initialValue,
-      Function onChanged,
-      {
-        Color focusColor,
-        Color borderColor,
-        double size,
-        FontWeight fontWeight,
-        Color textColor,
-        bool isTextArea = false,
-        bool isNumberInput = false,
-        obscureText: false,
-        Function onValidate,
-        Widget prefixIcon,
-        Widget suffixIcon,
-      }) {
+    BuildContext context,
+    Object initialValue,
+    Function onChanged, {
+    Color focusColor,
+    Color borderColor,
+    double size,
+    FontWeight fontWeight,
+    Color textColor,
+    bool isTextArea = false,
+    bool isNumberInput = false,
+    obscureText: false,
+    Function onValidate,
+    Widget prefixIcon,
+    Widget suffixIcon,
+  }) {
     return TextFormField(
-        initialValue: initialValue != null ? initialValue.toString() : "",
-        decoration: InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: borderColor!=null ? borderColor: grey),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: focusColor!=null ? focusColor: accent_color),
-            ),
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(color: accent_color),
-            ),
+      initialValue: initialValue != null ? initialValue.toString() : "",
+      decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            borderSide:
+                BorderSide(color: borderColor != null ? borderColor : grey),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: focusColor != null ? focusColor : accent_color),
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: accent_color),
+          ),
           suffix: suffixIcon,
           hintText: initialValue,
-          hintStyle: styleProvider(fontWeight: regular, size: dp15, color: black)
-        ),
-        style: styleProvider(fontWeight: fontWeight, size: size, color: textColor),
-        obscureText: obscureText,
-        maxLines: !isTextArea ? 1 : 1,
-        keyboardType: isNumberInput ? TextInputType.number : TextInputType.text,
-        onChanged: (String value) {
-          return onChanged(value);
-        },
-        validator: (value) {
-          printLog("dsfsafdgdgd", value);
-          return onValidate(value);
-        },
-      );
+          hintStyle:
+              styleProvider(fontWeight: regular, size: dp15, color: black)),
+      style:
+          styleProvider(fontWeight: fontWeight, size: size, color: textColor),
+      obscureText: obscureText,
+      maxLines: !isTextArea ? 1 : 1,
+      keyboardType: isNumberInput ? TextInputType.number : TextInputType.text,
+      onChanged: (String value) {
+        return onChanged(value);
+      },
+      validator: (value) {
+        printLog("dsfsafdgdgd", value);
+        return onValidate(value);
+      },
+    );
   }
 
   static InputDecoration fieldDecoration(
@@ -81,7 +83,8 @@ class FormHelper {
     );
   }
 
-  static Widget fieldLabel(String labelName, FontWeight fontWeight, double size,{Widget suffixIcon, Widget prefixIcon, Color color}) {
+  static Widget fieldLabel(String labelName, FontWeight fontWeight, double size,
+      {Widget suffixIcon, Widget prefixIcon, Color color}) {
     return new Padding(
       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
@@ -95,11 +98,10 @@ class FormHelper {
             style: new TextStyle(
                 fontWeight: fontWeight,
                 fontSize: size,
-                color: color!=null ? color: null
-            ),
+                color: color != null ? color : null),
           ),
           Padding(
-            padding: const EdgeInsets.only(left:3.0, bottom: 7),
+            padding: const EdgeInsets.only(left: 3.0, bottom: 7),
             child: prefixIcon,
           ),
         ],
@@ -235,7 +237,7 @@ class FormHelper {
   }
 }
 
-Widget circularImageView ({String imageUrl, Function onCallback}){
+Widget circularImageView({String imageUrl, Function onCallback}) {
   return Padding(
     padding: const EdgeInsets.only(left: 20.0, right: 15),
     child: Card(
@@ -253,32 +255,31 @@ Widget circularImageView ({String imageUrl, Function onCallback}){
   );
 }
 
-class customButton extends StatelessWidget{
+class customButton extends StatelessWidget {
   final GestureTapCallback onPressed;
   String title;
   Color color;
-  customButton({@required this.onPressed, this.title, this.color});
+  customButton({ this.onPressed, this.title, this.color});
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).backgroundColor,
       child: RawMaterialButton(
           child: Container(
-              padding:
-              EdgeInsets.only(left: 20, top: 10, right: 20),
+              padding: EdgeInsets.only(left: 20, top: 10, right: 20),
               color: Colors.transparent,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   height: 40,
                   decoration: BoxDecoration(
-                    color: color!=null ? color: accent_color,
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(10)),
+                    color: color != null ? color : accent_color,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   child: Center(
                     child: Text(title,
-                        style: styleProvider(fontWeight: regular, size: 14, color: white)),
+                        style: styleProvider(
+                            fontWeight: regular, size: 14, color: white)),
                   ),
                 ),
               )),
@@ -286,9 +287,3 @@ class customButton extends StatelessWidget{
     );
   }
 }
-
-  class EditHelper{
-
-}
-
-

@@ -43,7 +43,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
   String taxes;
   String paymentMethod = '';
   String shippingMethod = '';
-  int checkedIndex ;
+  int checkedIndex;
   bool checked = false;
   bool razorchecked = false;
   String total;
@@ -62,14 +62,14 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
     order = ReviewOrder();
     model = Details();
     cart = Provider.of<CartProvider>(context, listen: false);
-     cart.getReviewOrder();
+    cart.getReviewOrder();
     loader = Provider.of<LoaderProvider>(context, listen: false);
     _razorpay = new Razorpay();
     super.initState();
   }
 
   @override
-  Widget pageUi(){
+  Widget pageUi() {
     return Scaffold(
       appBar: BaseAppBar(context, "Check Out"),
       body: UiBuilder(),
@@ -77,8 +77,8 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
     );
   }
 
-  Widget bottomBar(){
-   return Container(
+  Widget bottomBar() {
+    return Container(
       color: Theme.of(context).backgroundColor,
       child: Container(
         height: 50,
@@ -88,49 +88,50 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                 topRight: Radius.circular(20), topLeft: Radius.circular(20)),
             boxShadow: [
               BoxShadow(
-                  color: Colors.grey,
-                  offset: Offset(0.0, 1.0),
-                  blurRadius: 6.0)
+                  color: Colors.grey, offset: Offset(0.0, 1.0), blurRadius: 6.0)
             ]),
         child: Padding(
-          padding: const EdgeInsets.only(
-              top: 10.0, left: 20, bottom: 10, right: 20),
+          padding:
+              const EdgeInsets.only(top: 10.0, left: 20, bottom: 10, right: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text("${widget.total}",
-                  style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24)),
+                  style: styleProvider(fontWeight: FontWeight.w600, size: 24)),
               Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: GestureDetector(
-                      onTap: () async{
-                        var loader = Provider.of<LoaderProvider>(context, listen: false);
+                      onTap: () async {
+                        var loader =
+                            Provider.of<LoaderProvider>(context, listen: false);
                         loader.setLoadingStatus(true);
                         BasePrefs.init();
                         Details model;
-                        if( BasePrefs.getString(USER_MODEL)!=null){
-                          var value= BasePrefs.getString(USER_MODEL);
-                          printLog("datdatd",value.toString());
+                        if (BasePrefs.getString(USER_MODEL) != null) {
+                          var value = BasePrefs.getString(USER_MODEL);
+                          printLog("datdatd", value.toString());
                           model = Details.fromJson(jsonDecode(value));
                         }
-                        WebApiServices().updateBilling(user_id:model.id.toString(),shipping: model.billing).then((value){
-                          if(value){
-                            changeScreen(context, CheckOutScreen(total:widget.total));
+                        WebApiServices()
+                            .updateBilling(
+                                user_id: model.id.toString(),
+                                shipping: model.billing)
+                            .then((value) {
+                          if (value) {
+                            changeScreen(
+                                context, CheckOutScreen(total: widget.total));
                           }
                           // _saveForNextUse(title, model);
                           loader.setLoadingStatus(false);
-                          createOrder(userId: model.id, paymentMethod: paymentMethod);
+                          createOrder(
+                              userId: model.id, paymentMethod: paymentMethod);
                         });
-
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color:accent_color,
+                          color: accent_color,
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                         child: Padding(
@@ -157,23 +158,31 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
 
   Widget UiBuilder() {
     return Container(
-      child:  new Consumer<CartProvider>(builder: (context, cartModel, child){
-        if(cartModel.reviewOrder!=null){
-          return reviewOrder(cartModel.reviewOrder);
-        }else{
-          return progressBar(context, accent_color);
-        }
-      })
-    );
+        child: new Consumer<CartProvider>(builder: (context, cartModel, child) {
+      if (cartModel.reviewOrder != null) {
+        return reviewOrder(cartModel.reviewOrder);
+      } else {
+        return progressBar(context, accent_color);
+      }
+    }));
   }
-  Widget reviewOrder(ReviewOrder order){
+
+  Widget reviewOrder(ReviewOrder order) {
     BasePrefs.init();
     discount_total = getValidString(order.discountTotal);
     cart_subtotal = getValidString(order.cartSubtotal);
-    taxes  =order.cartTaxTotal!=null ? getValidString(order.cartTaxTotal.s12IGST) : "";
+    taxes = order.cartTaxTotal != null
+        ? getValidString(order.cartTaxTotal.s12IGST)
+        : "";
     total = order.cartOrderTotalWithoutSymbol;
-    shipping_Flat= order.shippingMethod!=null && order.shippingMethod.length>0 ? getValidString(order.shippingMethod[0].shippingMethodPrice) : "00.00";
-    shipping_Free= order.shippingMethod!=null && order.shippingMethod.length>1 ? getValidString(order.shippingMethod[1].shippingMethodPrice) : "00.00";
+    shipping_Flat =
+        order.shippingMethod != null && order.shippingMethod.length > 0
+            ? getValidString(order.shippingMethod[0].shippingMethodPrice)
+            : "00.00";
+    shipping_Free =
+        order.shippingMethod != null && order.shippingMethod.length > 1
+            ? getValidString(order.shippingMethod[1].shippingMethodPrice)
+            : "00.00";
     printLog("ghjghjgh", order.toJson());
     return SingleChildScrollView(
       child: Container(
@@ -186,28 +195,32 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                   top: 0.0, left: 30, right: 28, bottom: 10),
               child: Container(
                   child: Card(
-                    elevation: 5,
-                    color: Theme.of(context).backgroundColor,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.2,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 30.0, top: 8, right: 30, bottom: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Shipping Methods',
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14)),
-                            order.shippingMethod!=null ? widgetShippingCart(shippingMethod: order.shippingMethod, choosenMethod: order.chosenShippingMethod) : Container(),
-                          ],
-                        ),
-                      ),
+                elevation: 5,
+                color: Theme.of(context).backgroundColor,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 30.0, top: 8, right: 30, bottom: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Shipping Methods',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14)),
+                        order.shippingMethod != null
+                            ? widgetShippingCart(
+                                shippingMethod: order.shippingMethod,
+                                choosenMethod: order.chosenShippingMethod)
+                            : Container(),
+                      ],
                     ),
-                  )),
+                  ),
+                ),
+              )),
             ),
             Container(
                 padding: const EdgeInsets.only(
@@ -274,7 +287,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20.0),
-                                  child: Text(getShippingPrice() ,
+                                  child: Text(getShippingPrice(),
                                       style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w400,
@@ -377,7 +390,10 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                        color: order.cartDiscountCoupon!=null && order.cartDiscountCoupon.length>0 ? green : black,
+                        color: order.cartDiscountCoupon != null &&
+                                order.cartDiscountCoupon.length > 0
+                            ? green
+                            : black,
                         borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     child: new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -394,7 +410,10 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: Text(
-                                  order.cartDiscountCoupon!=null && order.cartDiscountCoupon.length>0 ? "Coupon Applied" : "Apply Promo Code/Voucher",
+                                  order.cartDiscountCoupon != null &&
+                                          order.cartDiscountCoupon.length > 0
+                                      ? "Coupon Applied"
+                                      : "Apply Promo Code/Voucher",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 14,
@@ -407,7 +426,10 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20.0),
                             child: Icon(
-                              order.cartDiscountCoupon!=null && order.cartDiscountCoupon.length>0 ?  Icons.check_circle : Icons.arrow_forward_ios,
+                              order.cartDiscountCoupon != null &&
+                                      order.cartDiscountCoupon.length > 0
+                                  ? Icons.check_circle
+                                  : Icons.arrow_forward_ios,
                               color: Colors.white,
                               size: 20,
                             ),
@@ -423,26 +445,32 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
       ),
     );
   }
+
   String getShippingPrice() {
-    return value==0 ? shipping_Flat.toString():shipping_Free.toString();
+    return value == 0 ? shipping_Flat.toString() : shipping_Free.toString();
   }
 
-  Widget addressBuilder(){
+  Widget addressBuilder() {
     BasePrefs.init();
-    userData= BasePrefs.getString(USER_MODEL);
-    model = userData !=null ? Details.fromJson(jsonDecode(userData)) : new Details();
+    userData = BasePrefs.getString(USER_MODEL);
+    model = userData != null
+        ? Details.fromJson(jsonDecode(userData))
+        : new Details();
     return Padding(
-      padding: const EdgeInsets.only( top:10, bottom: 10),
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: GestureDetector(
-        onTap: (){
-          changeScreen(context, DeliveryScreen(total: widget.total,));
+        onTap: () {
+          changeScreen(
+              context,
+              DeliveryScreen(
+                total: widget.total,
+              ));
         },
-        child:  Container(
+        child: Container(
           height: 100,
           decoration: BoxDecoration(
             color: Theme.of(context).bottomAppBarColor,
-            borderRadius: BorderRadius.all(
-                Radius.circular(4)),
+            borderRadius: BorderRadius.all(Radius.circular(4)),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -450,7 +478,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left:20.0),
+                  padding: const EdgeInsets.only(left: 20.0),
                   child: Card(
                     elevation: 10,
                     shape: CircleBorder(side: BorderSide.none),
@@ -458,8 +486,9 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                       padding: const EdgeInsets.all(5.0),
                       child: CircleAvatar(
                         radius: 30.0,
-                        backgroundImage: model.avatarUrl !=null ? NetworkImage(
-                            model.avatarUrl) : Image.asset(ic_bg_lock) ,
+                        backgroundImage: model.avatarUrl != null
+                            ? NetworkImage(model.avatarUrl)
+                            : Image.asset(ic_bg_lock),
                         backgroundColor: Theme.of(context).highlightColor,
                       ),
                     ),
@@ -469,23 +498,38 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                   width: 200,
                   child: RichText(
                     text: TextSpan(
-                        text: model.firstName!=null && model.billing.firstName!="" ?
-                        model.firstName!=null && model.firstName!=""?
-                        "Dear ${model.firstName.toUpperCase()}\n" : "Dear ${model.billing.firstName.toUpperCase()}\n" :
-                            "Hi User\n",
-                        style: TextStyle(color: Theme.of(context).accentColor,fontSize: 18, fontFamily: fontName, fontWeight: medium),
+                        text: model.firstName != null &&
+                                model.billing.firstName != ""
+                            ? model.firstName != null && model.firstName != ""
+                                ? "Dear ${model.firstName.toUpperCase()}\n"
+                                : "Dear ${model.billing.firstName.toUpperCase()}\n"
+                            : "Hi User\n",
+                        style: TextStyle(
+                            color: Theme.of(context).accentColor,
+                            fontSize: 18,
+                            fontFamily: fontName,
+                            fontWeight: medium),
                         children: <TextSpan>[
-                          TextSpan(text: "Shipping Address:- ", style: TextStyle(color: Theme.of(context).accentColor,
-                              fontSize: 10),),
-                          TextSpan(text: model.billing.postcode!=null && model.billing.postcode!="" ?
-                          "${model.billing.address1} ${model.billing.address2} ${model.billing.state} (${model.billing.postcode})" :"Address Not Found",
-                            style: TextStyle(color: Theme.of(context).accentColor,fontSize: 10),)
-                        ]
-                    ),
+                          TextSpan(
+                            text: "Shipping Address:- ",
+                            style: TextStyle(
+                                color: Theme.of(context).accentColor,
+                                fontSize: 10),
+                          ),
+                          TextSpan(
+                            text: model.billing.postcode != null &&
+                                    model.billing.postcode != ""
+                                ? "${model.billing.address1} ${model.billing.address2} ${model.billing.state} (${model.billing.postcode})"
+                                : "Address Not Found",
+                            style: TextStyle(
+                                color: Theme.of(context).accentColor,
+                                fontSize: 10),
+                          )
+                        ]),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right:20.0),
+                  padding: const EdgeInsets.only(right: 20.0),
                   child: Icon(
                     Icons.arrow_forward_ios,
                     color: Theme.of(context).accentColor,
@@ -500,7 +544,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
     );
   }
 
-  Widget paymentGatwayBuilder(List<PaymentGateway> gateway){
+  Widget paymentGatwayBuilder(List<PaymentGateway> gateway) {
     return Container(
       padding: EdgeInsets.only(top: 10, left: 30, right: 30, bottom: 20),
       child: Column(
@@ -518,23 +562,30 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 checked = index == checkedIndex;
-                return GestureDetector(onTap: (){
-                  setState(() {
-                    razorchecked= false;
-                    checkedIndex = index;
-                    paymentMethod = gateway[index].gatewayId;
-                  });
-
-                },
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      razorchecked = false;
+                      checkedIndex = index;
+                      paymentMethod = gateway[index].gatewayId;
+                    });
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).canvasColor,
-                        border:Border.all(color: checked ? Theme.of(context).primaryColor: Theme.of(context).canvasColor ),
+                        border: Border.all(
+                            color: checked
+                                ? Theme.of(context).primaryColor
+                                : Theme.of(context).canvasColor),
                         boxShadow: [
-                          BoxShadow(color: checked ? Theme.of(context).primaryColor:Theme.of(context).canvasColor , spreadRadius: 1)
+                          BoxShadow(
+                              color: checked
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).canvasColor,
+                              spreadRadius: 1)
                         ],
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -542,54 +593,79 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                         children: [
                           Container(
                               width: 60,
-                              child: Image.asset(ic_money, color: Theme.of(context).accentColor,)),
-                          Text(gateway[index].gatewayTitle, style: styleProvider(fontWeight: medium, size: 13,),)
+                              child: Image.asset(
+                                ic_money,
+                                color: Theme.of(context).accentColor,
+                              )),
+                          Text(
+                            gateway[index].gatewayTitle,
+                            style: styleProvider(
+                              fontWeight: medium,
+                              size: 13,
+                            ),
+                          )
                         ],
                       ),
                     ),
-                  ),);
+                  ),
+                );
               }),
         ],
       ),
     );
   }
-  String totalPrice(){
+
+  String totalPrice() {
     printLog("getshipp", getShippingPrice());
-    double price = getValidDecimalInDouble(discount_total)+getValidDecimalInDouble(taxes)+getValidDecimalInDouble(cart_subtotal)+getValidDecimalInDouble(getShippingPrice());
+    double price = getValidDecimalInDouble(discount_total) +
+        getValidDecimalInDouble(taxes) +
+        getValidDecimalInDouble(cart_subtotal) +
+        getValidDecimalInDouble(getShippingPrice());
     return getValidDecimalFormat(price);
   }
 
   void createOrder({int userId, String paymentMethod, String shippingMethod}) {
     var cart = Provider.of<CartProvider>(context, listen: false);
-    if(paymentMethod!=null && paymentMethod!=""){
-      cart.getNewOrder(userId: userId, paymentMethod: paymentMethod).then((value){
-        OrderModel orderModel =value;
-        switch(paymentMethod){
+    if (paymentMethod != null && paymentMethod != "") {
+      cart
+          .getNewOrder(userId: userId, paymentMethod: paymentMethod)
+          .then((value) {
+        OrderModel orderModel = value;
+        switch (paymentMethod) {
           case "bacs":
-            cart.getUpdateOrder(order_id: orderModel.id.toString(), status: "on-hold").then((value){
-              if(value){
+            cart
+                .getUpdateOrder(
+                    order_id: orderModel.id.toString(), status: "on-hold")
+                .then((value) {
+              if (value) {
                 thankyouDialog("For Your Orders");
-              }else{
+              } else {
                 toast("Order Placed");
               }
             });
             break;
           case "cheque":
-            cart.getUpdateOrder(order_id: orderModel.id.toString(), status: "processing").then((value){
-              if(value){
+            cart
+                .getUpdateOrder(
+                    order_id: orderModel.id.toString(), status: "processing")
+                .then((value) {
+              if (value) {
                 toast("Order Placed");
                 thankyouDialog("For Your Orders");
-              }else{
+              } else {
                 toast("Order Placed");
               }
             });
             break;
           case "cod":
-            cart.getUpdateOrder(order_id: orderModel.id.toString(), status: "processing").then((value){
-              if(value){
+            cart
+                .getUpdateOrder(
+                    order_id: orderModel.id.toString(), status: "processing")
+                .then((value) {
+              if (value) {
                 toast("Order ");
                 thankyouDialog("For Your Orders");
-              }else{
+              } else {
                 toast("Order Placed");
               }
             });
@@ -605,9 +681,13 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
             break;
           case "razorpay":
             RazorPaymentService razorPaymentService = new RazorPaymentService();
-            razorPaymentService.initPaymentGatway(context, orderModel.id.toString());
+            razorPaymentService.initPaymentGatway(
+                context, orderModel.id.toString());
             printLog("ddsakabj", orderModel.id.toString());
-            razorPaymentService.getPayment(context: context, amount: widget.total, name: model.billing.firstName,
+            razorPaymentService.getPayment(
+                context: context,
+                amount: widget.total,
+                name: model.billing.firstName,
                 email: model.billing.email,
                 mobile: model.billing.phone,
                 orderId: orderModel.orderKey);
@@ -617,21 +697,22 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
             break;
         }
       });
-    }else{
+    } else {
       toast(PAY_METHOD_NOT_FOUND);
     }
   }
-  void thankyouDialog(String msg){
+
+  void thankyouDialog(String msg) {
     showGeneralDialog(
         barrierLabel: "label",
         barrierDismissible: false,
         barrierColor: Colors.black.withOpacity(0.5),
         transitionDuration: Duration(milliseconds: 700),
         context: context,
-        pageBuilder:(context, anim1, anim2){
+        pageBuilder: (context, anim1, anim2) {
           return Material(
             type: MaterialType.transparency,
-            child:Padding(
+            child: Padding(
               padding: const EdgeInsets.all(30.0),
               child: Align(
                 alignment: Alignment.center,
@@ -643,8 +724,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                       BoxShadow(
                           color: Colors.grey,
                           offset: Offset(0.0, 1.0),
-                          blurRadius: 6.0
-                      )
+                          blurRadius: 6.0)
                     ],
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
@@ -657,21 +737,24 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.only(right: 30),
-                              child:  GestureDetector(
-                                onTap: (){setState(() {
-                                  Navigator.pop(context);
-                                });},
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    Navigator.pop(context);
+                                  });
+                                },
                                 child: Container(
                                     height: 35,
                                     margin: EdgeInsets.zero,
                                     child: Icon(
                                       Icons.close,
-                                      color: Colors.black ,
+                                      color: Colors.black,
                                       size: 15,
                                     )),
                               ),
                             ),
-                          ],),
+                          ],
+                        ),
                       ),
                       Stack(
                         children: <Widget>[
@@ -684,16 +767,14 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                                 width: 150,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(100)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100)),
                                     boxShadow: [
                                       BoxShadow(
                                           color: Colors.grey,
                                           offset: Offset(0.0, 1.0),
-                                          blurRadius: 6.0
-                                      )
-                                    ]
-                                ),
+                                          blurRadius: 6.0)
+                                    ]),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
@@ -707,13 +788,14 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                                           BoxShadow(
                                               color: Colors.grey,
                                               offset: Offset(0.0, 1.0),
-                                              blurRadius: 6.0
-                                          )
-                                        ]
-                                    ),
+                                              blurRadius: 6.0)
+                                        ]),
                                     child: Padding(
                                       padding: const EdgeInsets.all(40.0),
-                                      child: SvgPicture.asset(ic_likee, color: Colors.white,),
+                                      child: SvgPicture.asset(
+                                        ic_likee,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -726,7 +808,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                               left: 120,
                               child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child:  CircleAvatar(
+                                  child: CircleAvatar(
                                     radius: 15.0,
                                     backgroundColor: Colors.green,
                                     child: Icon(
@@ -734,37 +816,60 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                                       color: Colors.white,
                                       size: 20,
                                     ),
-                                  )
-                              ))
-
+                                  )))
                         ],
                       ),
-
                       Padding(
-                        padding: const EdgeInsets.only(top:10.0),
-                        child: Text('Thank You', style: TextStyle(color: Colors.black, fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 20),),
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Text(
+                          'Thank You',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20),
+                        ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top:10.0),
-                        child: Text(msg, style: TextStyle(color: Colors.black, fontFamily: 'Poppins', fontWeight: FontWeight.w500, fontSize: 12),),
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Text(
+                          msg,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12),
+                        ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top:20.0, left: 20, right:20, bottom: 20),
-                        child: customButton(title :"Continue Shopping", onPressed: (){
-                         changeScreen(context, MainPageScreen(currentTab: 0,));
-                        }),
+                        padding: const EdgeInsets.only(
+                            top: 20.0, left: 20, right: 20, bottom: 20),
+                        child: customButton(
+                            title: "Continue Shopping",
+                            onPressed: () {
+                              changeScreen(
+                                  context,
+                                  MainPageScreen(
+                                    currentTab: 0,
+                                  ));
+                            }),
                       )
                     ],
                   ),
                 ),
               ),
-            ) ,
+            ),
           );
         },
-        transitionBuilder: (context, anim1, anim2, child){
-          return SlideTransition(position: Tween(begin: Offset(0,1), end: Offset(0,0)).animate(anim1),child: child,);
+        transitionBuilder: (context, anim1, anim2, child) {
+          return SlideTransition(
+            position:
+                Tween(begin: Offset(0, 1), end: Offset(0, 0)).animate(anim1),
+            child: child,
+          );
         });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

@@ -36,6 +36,16 @@ Color blueGrey = Colors.blueGrey;
 // Color accent_color = Color(0xFFFA785C);
 
 // /*-------------------bizzon-------------------*/
-Color accent_color_50 = Color(0xFF5D83F7);
-Color accent_color_300 = Color(0xFF4868CA );
-Color accent_color = Color(0xFF1e2d7d);
+// Color accent_color_50 = Color(0xFF5D83F7);
+// Color accent_color_300 = Color(0xFF4868CA );
+// Color accent_color = Color(0xFF1e2d7d);
+//
+// // /*-------------------ecommerceshopindia.com-------------------*/
+// Color accent_color_50 = Color(0xff3d8ec2);
+// Color accent_color_300 = Color(0xff1d7fbd);
+// Color accent_color = Color(0xFF0274be);
+
+/*----------------WooApp-------------------*/
+Color accent_color_50 =Colors.blue.shade200;
+Color accent_color_300 = Colors.blue.shade300;
+Color accent_color = Colors.blue;

@@ -70,7 +70,7 @@ class CategoriesScreenState extends State<CategoriesScreen> {
   }
   Widget _categoriesListBuilder(List<CategoryModel> items){
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 2.2;
+    final double itemHeight = (size.height / 1.32 - kToolbarHeight - 34) / 2;
     final double itemWidth = size.width / 2;
     return SingleChildScrollView(
       child:

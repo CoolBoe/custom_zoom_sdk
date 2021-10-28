@@ -183,6 +183,7 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
     final double itemWidth = size.width / 2;
     return Container(
        margin: EdgeInsets.symmetric(vertical: 5),
+        alignment: Alignment.center,
         padding: EdgeInsets.all(1),
         child:GridView.builder(
           physics: BouncingScrollPhysics(),
@@ -239,7 +240,7 @@ class _MokeHomeLayoutState extends State<MokeHomeLayout> {
               ),
             );
           },
-          itemCount:4,
+          itemCount:items.length>3 ? 4 : items.length,
         )
     );
   }
