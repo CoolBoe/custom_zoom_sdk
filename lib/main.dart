@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/helper/shared_perference.dart';
-import 'package:wooapp/models/app_setting.dart';
 import 'package:wooapp/providers/LoadProvider.dart';
 import 'package:wooapp/providers/ThemeProvider.dart';
 import 'package:wooapp/providers/app.dart';

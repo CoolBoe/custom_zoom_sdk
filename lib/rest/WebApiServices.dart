@@ -41,7 +41,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = new FormData.fromMap({'email': email, 'password': password});
       String url = WebRequestConstants.getWPBaseUrl +
@@ -71,7 +71,7 @@ class WebApiServices {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
       CookieJar cookies =
-          new PersistCookieJar(dir: tempPath, persistSession: true);
+          new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(cookies));
       var params = new FormData.fromMap(
           {'fname': name, 'email': email, 'password': password});
@@ -98,7 +98,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -126,7 +126,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -159,7 +159,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -203,7 +203,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -289,7 +289,7 @@ class WebApiServices {
 
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -322,7 +322,7 @@ class WebApiServices {
       }
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -349,7 +349,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -371,7 +371,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = new FormData.fromMap({
         'id': id,
@@ -397,9 +397,11 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = {'id': id, 'quantity': quantity};
+      printLog("getAddToCartVariationProduct-Params", params);
+
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
           WebRequestConstants.ADD_CART;
@@ -423,16 +425,16 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
-      printLog("dfdfdfdfd", variableProduct.toJson());
+      printLog("getAddToCartVariationProduct-Params", variableProduct.toJson());
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
           WebRequestConstants.ADD_CART;
       var response = await dio.post(url,
           options: new Options(headers: headers),
           data: variableProduct.toJson());
-      printLog("dfdfdfdfd", response.data);
+      printLog("getAddToCartVariationProduct-Response", response.data);
       if (response.statusCode == HTTP_CODE_200 ||
           response.statusCode == HTTP_CODE_201) {
         WebResponseModel model = WebResponseModel.fromJson(response.data);
@@ -449,7 +451,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String params = "";
       if (cartItemKey != null) {
@@ -481,7 +483,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = new FormData.fromMap({
         WebRequestConstants.CART_ITEM_KEY: cartItemKey,
@@ -508,7 +510,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       https: //gist.github.com/mayur19/26417eeba02f5e5ced8138f4d9040d6a
       String url = WebRequestConstants.getWPBaseUrl +
@@ -534,7 +536,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -556,7 +558,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -582,7 +584,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -608,7 +610,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = new FormData.fromMap({
         'code': coupon_code,
@@ -635,7 +637,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = new FormData.fromMap({
         'code': coupon_code,
@@ -663,7 +665,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -687,7 +689,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = {'user_id': userId, 'payment_method': paymentMethod};
       String url = WebRequestConstants.getWPBaseUrl +
@@ -712,7 +714,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = {
         'order_id': "$order_id",
@@ -744,7 +746,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
 
       String url = WebRequestConstants.getWPBaseUrl +
@@ -771,7 +773,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url =
           WebRequestConstants.getPlaceUrl + WebRequestConstants.COUNTRIES;
@@ -794,7 +796,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getPlaceUrl +
           WebRequestConstants.STATES +
@@ -820,7 +822,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = new FormData.fromMap({
         WebRequestConstants.PLACE_FILTER: state,
@@ -845,7 +847,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       var params = {
         "user_id": "$user_id",
@@ -889,7 +891,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url =
           "${WebRequestConstants.getWPBaseUrl}${WebRequestConstants.getDomainUrl}${WebRequestConstants.CUSTOM_ATTRIBUTES}"
@@ -916,7 +918,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -940,7 +942,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +
@@ -965,7 +967,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url =
           "${WebRequestConstants.getWPBaseUrl}${WebRequestConstants.getDomainUrl}"
@@ -990,7 +992,7 @@ class WebApiServices {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url =
           "https://schoolmegamart.com/wp-json/wc/v2/testserver";
@@ -1016,7 +1018,7 @@ class WebApiServices {
       printLog("bhchddjdjdj", "msg");
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
-      CookieJar sj = new PersistCookieJar(dir: tempPath, persistSession: true);
+      CookieJar sj = new PersistCookieJar(storage: FileStorage(tempPath), persistSession: true);
       dio.interceptors.add(CookieManager(sj));
       String url = WebRequestConstants.getWPBaseUrl +
           WebRequestConstants.getDomainUrl +

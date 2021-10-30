@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:wooapp/helper/color.dart';
-import 'package:wooapp/helper/constants.dart';
-import 'package:wooapp/screens/basePage.dart';
 import 'package:wooapp/services/paypal.dart';
 import 'package:wooapp/widgets/app_bar.dart';
 import 'package:wooapp/widgets/loading.dart';
@@ -16,7 +13,6 @@ class PaypalPayment extends StatefulWidget{
   PaypalPaymentState createState()=>PaypalPaymentState();
 }
 class PaypalPaymentState extends State<PaypalPayment>{
-  InAppWebViewController webView;
   String url = "";
   double progress = 0;
   GlobalKey<ScaffoldState> scaffoldKey;
@@ -58,40 +54,40 @@ class PaypalPaymentState extends State<PaypalPayment>{
         appBar: BaseAppBar(context, "PayPal Payment"),
         body: Stack(
           children: [
-            InAppWebView(
-              initialUrl: checkoutURL,
-              initialOptions: new InAppWebViewGroupOptions(
-                  android: AndroidInAppWebViewOptions(
-                      textZoom: 120
-                  )
-              ),
-              onWebViewCreated: (InAppWebViewController controller){
-                webView = controller;
-              },
-              onLoadStart: (InAppWebViewController controller, String requestURL)async{
-                if(requestURL.contains(returnURL)){
-                  final url = Uri.parse(requestURL);
-                  final payerId =url.queryParameters['PayerID'];
-                  if(payerId!=null){
-                      await paypalServices.executePayment(executeURL, payerId, accessToken).then((value) => 
-                      printLog("executePayment", value));
-                      Navigator.of(context).pop();
-                  }else{
-                    Navigator.of(context).pop();
-                  }
-                }else{
-                  Navigator.of(context).pop();
-                }
-                if(requestURL.contains(cancelURL)){
-                  Navigator.of(context).pop();
-                }
-              },
-              onProgressChanged:(InAppWebViewController controller, int progress){
-                setState(() {
-                  this.progress = progress / 100 ;
-                });
-              },
-            ),
+            // InAppWebView(
+            //   initialOptions: new InAppWebViewGroupOptions(
+            //       android: AndroidInAppWebViewOptions(
+            //           textZoom: 120
+            //       )
+            //   ),
+            //   onWebViewCreated: (InAppWebViewController controller){
+            //     webView = controller;
+            //   },
+            //   onLoadStart: (InAppWebViewController controller, String requestURL)async{
+            //     if(requestURL.contains(returnURL)){
+            //       final url = Uri.parse(requestURL);
+            //       final payerId =url.queryParameters['PayerID'];
+            //       if(payerId!=null){
+            //           await paypalServices.executePayment(executeURL, payerId, accessToken).then((value) =>
+            //           printLog("executePayment", value));
+            //           Navigator.of(context).pop();
+            //       }else{
+            //         Navigator.of(context).pop();
+            //       }
+            //     }else{
+            //       Navigator.of(context).pop();
+            //     }
+            //     if(requestURL.contains(cancelURL)){
+            //       Navigator.of(context).pop();
+            //     }
+            //   },
+            //   onProgressChanged:(InAppWebViewController controller, int progress){
+            //     setState(() {
+            //       this.progress = progress / 100 ;
+            //     });
+            //   },
+            // ),
+
             progress <1 ? SizedBox(height: 3,child: LinearProgressIndicator(value: progress, backgroundColor: Theme.of(context).accentColor.withOpacity(0.2), )) :
             SizedBox()
           ],
@@ -99,7 +95,8 @@ class PaypalPaymentState extends State<PaypalPayment>{
       );
 
     }else{
-      return Scaffold(key: scaffoldKey, appBar: BaseAppBar(context, "PayPal Payment"), body: Container(child: progressBar(context, accent_color),),);
+      return Scaffold(key: scaffoldKey, appBar: BaseAppBar(context, "PayPal Payment"),
+        body: Container(child: progressBar(context, accent_color),),);
     }
       }
 }

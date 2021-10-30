@@ -65,8 +65,8 @@ class UserProvider with ChangeNotifier {
       case FacebookLoginStatus.loggedIn:
         printLog('FacebookLoginResult', result.errorMessage);
         final String token = result.accessToken.token;
-        final response = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,picture.height(200),email&access_token=${token}');
+
+        final response = await http.get(Uri.parse("https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,picture.height(200),email&access_token=${token}"));
         final profile = JSON.jsonDecode(response.body);
         if (profile != null) {
           BasePrefs.init();
@@ -136,8 +136,8 @@ class UserProvider with ChangeNotifier {
       case FacebookLoginStatus.loggedIn:
         printLog('FacebookLoginResult', result.errorMessage);
         final String token = result.accessToken.token;
-        final response = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
+
+        final response = await http.get(Uri.parse("https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}"));
         final profile = JSON.jsonDecode(response.body);
         if (profile != null) {
           SocialLogin socialLogin = new SocialLogin();

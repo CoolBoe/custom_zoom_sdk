@@ -437,6 +437,7 @@ class ProductScreenState extends State<ProductScreen> {
   }
 
   Widget variableBuilder(int itemIndex, Attribute attribute) {
+    printLog("AttributeParams", attribute.toJson());
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -514,7 +515,7 @@ class ProductScreenState extends State<ProductScreen> {
                           setState(() {
                             listIndex[attribute.name] = index;
                             variation[attribute.slug] =
-                                model[itemIndex].taxonomy;
+                                model[itemIndex].slug;
                             variationId = model[index].termId;
                           });
                         },

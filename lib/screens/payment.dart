@@ -146,8 +146,9 @@ class PaymentScreenState extends BasePageState<PaymentScreen>{
   }
   Future<Map<String, dynamic>> startPayment() async {
     // Generating hash from php server
+
     Response res =
-    await post("https://PayUMoneyServer.codedivinedivin.repl.co", body: {
+    await post(Uri.parse("https://PayUMoneyServer.codedivinedivin.repl.co"), body: {
       "txnid": txnID,
       "phone": phone,
       "email": email,

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class WebRequestConstants {
-  static const String getDomainUrl = "/wp-json/wc/v2/";
+    static const String getDomainUrl = "/wp-json/wc/v2/";
 
   static const String getBaseUrl = "https://app.democontentphoeniixx.com";
   /*--------------------------Woo APP------------------------*/

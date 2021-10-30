@@ -14,6 +14,7 @@ import 'package:wooapp/providers/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:wooapp/screens/login.dart';
 import 'package:wooapp/screens/splesh.dart';
 import 'package:wooapp/widgets/item_DrawerBuilder.dart';
 import 'package:wooapp/widgets/loading.dart';
@@ -222,8 +223,9 @@ class HomeState extends State<HomeView> {
                         child: Padding(
                           padding: const EdgeInsets.only(
                               top: 10.0, left: 30, bottom: 10),
-                          child: GestureDetector(
+                          child: InkWell(
                             onTap: () {
+                            if(model!=null){
                               BasePrefs.init();
                               BasePrefs.clearPrefs().then((value) => {
                                 setState(() {
@@ -233,6 +235,9 @@ class HomeState extends State<HomeView> {
                                   }
                                 })
                               });
+                            }else{
+                              changeScreen(context, LoginScreen());
+                            }
                             },
                             child: Row(
                               children: <Widget>[
@@ -245,7 +250,7 @@ class HomeState extends State<HomeView> {
                                     color: white,
                                   ),
                                 ),
-                                Text('Logout',
+                                Text('${model!=null? "Login": "Login"}',
                                     style: TextStyle(
                                         color: white,
                                         fontFamily: 'Poppins',

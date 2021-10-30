@@ -298,7 +298,7 @@ class LoginScreenState extends BasePageState<LoginScreen> {
                                 // Navigator.pushNamed(context, routes.MainPage_Route);
                               },
                               child: Container(
-                                height: 50.0,
+                                height: 40.0,
                                 color: Colors.transparent,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -319,74 +319,74 @@ class LoginScreenState extends BasePageState<LoginScreen> {
                               ),
                             ),
                           ),
-                          Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  var loader = Provider.of<LoaderProvider>(
-                                      context,
-                                      listen: false);
-                                  user
-                                      .social_login(context: context)
-                                      .then((value) {
-                                    setState(() {
-                                      loader.setLoadingStatus(false);
-                                    });
-                                    if (value != null) {
-                                      toast(LOGIN_STATUS_TRUE);
-                                      BasePrefs.setString(
-                                          USER_MODEL, jsonEncode(value));
-                                      printLog("responsesara",
-                                          value.toJson().toString());
-                                      user.clearController();
-                                      changeScreenReplacement(
-                                          context,
-                                          MainPageScreen(
-                                            currentTab: 0,
-                                          ));
-                                    } else {
-                                      toast(LOGIN_STATUS_FALSE);
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  height: 50.0,
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        border: Border.all(
-                                            color: Colors.white, width: 2.0),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5.0))),
-                                    child: new Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                          ic_facebook,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(width: 10),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: new Text(
-                                              "CONTINUE WITH FACEBOOK",
-                                              style: TextStyle(
-                                                  fontFamily: 'Poppins',
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.white)),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )),
+                          // Padding(
+                          //     padding: const EdgeInsets.only(top: 10.0),
+                          //     child: GestureDetector(
+                          //       onTap: () {
+                          //         var loader = Provider.of<LoaderProvider>(
+                          //             context,
+                          //             listen: false);
+                          //         user
+                          //             .social_login(context: context)
+                          //             .then((value) {
+                          //           setState(() {
+                          //             loader.setLoadingStatus(false);
+                          //           });
+                          //           if (value != null) {
+                          //             toast(LOGIN_STATUS_TRUE);
+                          //             BasePrefs.setString(
+                          //                 USER_MODEL, jsonEncode(value));
+                          //             printLog("responsesara",
+                          //                 value.toJson().toString());
+                          //             user.clearController();
+                          //             changeScreenReplacement(
+                          //                 context,
+                          //                 MainPageScreen(
+                          //                   currentTab: 0,
+                          //                 ));
+                          //           } else {
+                          //             toast(LOGIN_STATUS_FALSE);
+                          //           }
+                          //         });
+                          //       },
+                          //       child: Container(
+                          //         height: 50.0,
+                          //         color: Colors.transparent,
+                          //         child: Container(
+                          //           decoration: BoxDecoration(
+                          //               color: Colors.transparent,
+                          //               border: Border.all(
+                          //                   color: Colors.white, width: 2.0),
+                          //               borderRadius: BorderRadius.all(
+                          //                   Radius.circular(5.0))),
+                          //           child: new Row(
+                          //             mainAxisAlignment:
+                          //                 MainAxisAlignment.center,
+                          //             children: <Widget>[
+                          //               SvgPicture.asset(
+                          //                 ic_facebook,
+                          //                 color: Colors.white,
+                          //               ),
+                          //               SizedBox(width: 10),
+                          //               GestureDetector(
+                          //                 onTap: () {},
+                          //                 child: new Text(
+                          //                     "CONTINUE WITH FACEBOOK",
+                          //                     style: TextStyle(
+                          //                         fontFamily: 'Poppins',
+                          //                         fontSize: 12.0,
+                          //                         fontWeight: FontWeight.w500,
+                          //                         color: Colors.white)),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     )),
                           Padding(
                             padding: const EdgeInsets.only(top: dp10),
                             child: Container(
-                              height: dp50,
+                              height: 40,
                               color: transparent,
                               child: Container(
                                   decoration: BoxDecoration(
@@ -419,6 +419,8 @@ class LoginScreenState extends BasePageState<LoginScreen> {
                                         } else {
                                           toast(LOGIN_STATUS_FALSE);
                                         }
+                                      }).onError((error, stackTrace){
+                                        printLog("mklmklmklm", error.toString());
                                       });
                                     },
                                     child: Row(

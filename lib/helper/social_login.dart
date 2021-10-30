@@ -31,8 +31,7 @@ class FBLogin {
       case FacebookLoginStatus.loggedIn:
         printLog('FacebookLoginResult', result.errorMessage);
         final String token = result.accessToken.token;
-        final response = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}');
+        final response = await http.get(Uri.parse("https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${token}"));
         final profile = JSON.jsonDecode(response.body);
         if (profile != null) {
           SocialLogin socialLogin = new SocialLogin();
