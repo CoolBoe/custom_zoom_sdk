@@ -1,6 +1,6 @@
 name: custom_zoom_sdk
 description: A new Flutter plugin for zoom customization.
-version: 0.0.5
+version: 0.0.6
 homepage: https://github.com/CoolBoe/custom_zoom_sdk
 
 environment:
