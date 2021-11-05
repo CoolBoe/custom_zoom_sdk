@@ -7,7 +7,7 @@ public class SwiftCustomZoomSdkPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
     
     let factory = ZoomViewHandler(messager:register.messager())
-    registrar.register(factory, withId:"custom_zoom_plugin")
+    registrar.register(factory, withId:"custom_zoom_sdk")
   }
 
   public class ZoomViewHandler:NSObject, FlutterPlatfornViewFactory{
