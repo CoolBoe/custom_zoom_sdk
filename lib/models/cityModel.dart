@@ -11,35 +11,35 @@ String cityModelToJson(List<CityModel> data) => json.encode(List<dynamic>.from(d
 class CityModel {
   CityModel({
     this.id,
-    this.sortname,
+    this.sortName,
     this.name,
-    this.phonecode,
+    this.code,
     this.countryId,
     this.stateId,
   });
 
-  String id;
-  String sortname;
-  String name;
-  String phonecode;
-  String countryId;
-  String stateId;
+  String? id;
+  String? sortName;
+  String? name;
+  String? code;
+  String? countryId;
+  String? stateId;
 
   factory CityModel.fromJson(Map<String, dynamic> json) => CityModel(
     id: json["id"],
-    sortname: json["sortname"],
+    sortName: json["sort_name"],
     name: json["name"],
-    phonecode: json["phonecode"],
-    countryId: json["country_id"] == null ? null : json["country_id"],
-    stateId: json["state_id"] == null ? null : json["state_id"],
+    code: json["code"],
+    countryId:json["country_id"],
+    stateId: json["state_id"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "sortname": sortname,
+    "sort_name": sortName,
     "name": name,
-    "phonecode": phonecode,
-    "country_id": countryId == null ? null : countryId,
-    "state_id": stateId == null ? null : stateId,
+    "code": code,
+    "country_id": countryId,
+    "state_id":  stateId,
   };
 }

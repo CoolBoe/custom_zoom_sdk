@@ -12,7 +12,6 @@ import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/app.dart';
 import 'package:wooapp/models/category.dart';
-import 'package:wooapp/models/mockdata/item_model.dart';
 import 'package:wooapp/models/mockdata/item_sortby.dart';
 import 'package:wooapp/models/product.dart';
 import 'package:wooapp/models/sort_by.dart';

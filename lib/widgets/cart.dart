@@ -7,7 +7,7 @@ import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/models/WebResponseModel.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/product.dart';
-import 'package:wooapp/providers/LoadProvider.dart';
+import 'package:wooapp/providers/loader_provider.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/utils/custom_stepper.dart';
 import 'package:wooapp/widgets/loading.dart';

@@ -1,14 +1,11 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:math' as math;
-import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/user.dart';
-import 'package:wooapp/providers/ThemeProvider.dart';
+import 'package:wooapp/providers/theme_provider.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:flutter/cupertino.dart';

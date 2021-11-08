@@ -86,7 +86,7 @@ bool validMobilePattern(String mobile) {
   return true;
 }
 
-bool isValidString(String data) {
+bool isValidString(String? data) {
   return data != null && data.isNotEmpty;
 }
 bool isValidpassword(String data) {

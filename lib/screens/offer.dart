@@ -8,7 +8,7 @@ import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/coupons.dart';
-import 'package:wooapp/providers/LoadProvider.dart';
+import 'package:wooapp/providers/loader_provider.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 import 'package:wooapp/screens/basePage.dart';

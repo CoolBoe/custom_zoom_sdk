@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'link.dart';
+
 List<Coupons> couponsFromJson(String str) => List<Coupons>.from(json.decode(str).map((x) => Coupons.fromJson(x)));
 
 String couponsToJson(List<Coupons> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -40,43 +42,43 @@ class Coupons {
     this.links,
   });
 
-  int id;
-  String code;
-  String amount;
-  DateTime dateCreated;
-  DateTime dateCreatedGmt;
-  DateTime dateModified;
-  DateTime dateModifiedGmt;
-  String discountType;
-  String description;
+  int? id;
+  String? code;
+  String? amount;
+  DateTime? dateCreated;
+  DateTime? dateCreatedGmt;
+  DateTime? dateModified;
+  DateTime? dateModifiedGmt;
+  String? discountType;
+  String? description;
   dynamic dateExpires;
   dynamic dateExpiresGmt;
-  int usageCount;
-  bool individualUse;
-  List<dynamic> productIds;
-  List<dynamic> excludedProductIds;
+  int? usageCount;
+  bool? individualUse;
+  List<dynamic>? productIds;
+  List<dynamic>? excludedProductIds;
   dynamic usageLimit;
   dynamic usageLimitPerUser;
   dynamic limitUsageToXItems;
-  bool freeShipping;
-  List<dynamic> productCategories;
-  List<dynamic> excludedProductCategories;
-  bool excludeSaleItems;
-  String minimumAmount;
-  String maximumAmount;
-  List<dynamic> emailRestrictions;
-  List<dynamic> usedBy;
-  List<dynamic> metaData;
-  Links links;
+  bool? freeShipping;
+  List<dynamic>? productCategories;
+  List<dynamic>? excludedProductCategories;
+  bool? excludeSaleItems;
+  String? minimumAmount;
+  String? maximumAmount;
+  List<dynamic>? emailRestrictions;
+  List<dynamic>? usedBy;
+  List<dynamic>? metaData;
+  Links? links;
 
   factory Coupons.fromJson(Map<String, dynamic> json) => Coupons(
     id: json["id"],
     code: json["code"],
     amount: json["amount"],
-    dateCreated: DateTime.parse(json["date_created"]),
-    dateCreatedGmt: DateTime.parse(json["date_created_gmt"]),
-    dateModified: DateTime.parse(json["date_modified"]),
-    dateModifiedGmt: DateTime.parse(json["date_modified_gmt"]),
+    dateCreated: json["date_created"]!=null ? DateTime.parse(json["date_created"]) : null,
+    dateCreatedGmt: json["date_created_gmt"]!=null ? DateTime.parse(json["date_created_gmt"]) : null,
+    dateModified: json["date_modified"]!=null ? DateTime.parse(json["date_modified"]) : null,
+    dateModifiedGmt: json["date_modified_gmt"]!=null ? DateTime.parse(json["date_modified_gmt"]) : null,
     discountType: json["discount_type"],
     description: json["description"],
     dateExpires: json["date_expires"],
@@ -104,66 +106,32 @@ class Coupons {
     "id": id,
     "code": code,
     "amount": amount,
-    "date_created": dateCreated.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt.toIso8601String(),
-    "date_modified": dateModified.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt.toIso8601String(),
+    "date_created": dateCreated!=null ? dateCreated!.toIso8601String() : null,
+    "date_created_gmt": dateCreatedGmt!=null ? dateCreatedGmt!.toIso8601String() : null,
+    "date_modified": dateModified!=null  ? dateModified!.toIso8601String(): null,
+    "date_modified_gmt": dateModifiedGmt!=null ? dateModifiedGmt!.toIso8601String() : null,
     "discount_type": discountType,
     "description": description,
     "date_expires": dateExpires,
     "date_expires_gmt": dateExpiresGmt,
     "usage_count": usageCount,
     "individual_use": individualUse,
-    "product_ids": List<dynamic>.from(productIds.map((x) => x)),
-    "excluded_product_ids": List<dynamic>.from(excludedProductIds.map((x) => x)),
+    "product_ids": productIds!=null ? List<dynamic>.from(productIds!.map((x) => x)) : null,
+    "excluded_product_ids": excludedProductIds!=null ?
+    List<dynamic>.from(excludedProductIds!.map((x) => x)) : null,
     "usage_limit": usageLimit,
     "usage_limit_per_user": usageLimitPerUser,
     "limit_usage_to_x_items": limitUsageToXItems,
     "free_shipping": freeShipping,
-    "product_categories": List<dynamic>.from(productCategories.map((x) => x)),
-    "excluded_product_categories": List<dynamic>.from(excludedProductCategories.map((x) => x)),
+    "product_categories": productCategories!=null ? List<dynamic>.from(productCategories!.map((x) => x)) : null,
+    "excluded_product_categories": excludedProductCategories!=null ? List<dynamic>.from(excludedProductCategories!.map((x) => x)): null,
     "exclude_sale_items": excludeSaleItems,
     "minimum_amount": minimumAmount,
     "maximum_amount": maximumAmount,
-    "email_restrictions": List<dynamic>.from(emailRestrictions.map((x) => x)),
-    "used_by": List<dynamic>.from(usedBy.map((x) => x)),
-    "meta_data": List<dynamic>.from(metaData.map((x) => x)),
-    "_links": links.toJson(),
+    "email_restrictions": emailRestrictions!=null ? List<dynamic>.from(emailRestrictions!.map((x) => x)) : null,
+    "used_by": usedBy!=null ? List<dynamic>.from(usedBy!.map((x) => x)) : null,
+    "meta_data": metaData!=null ? List<dynamic>.from(metaData!.map((x) => x)) : null,
+    "_links": links!=null ? links!.toJson() : null,
   };
 }
 
-class Links {
-  Links({
-    this.self,
-    this.collection,
-  });
-
-  List<Collection> self;
-  List<Collection> collection;
-
-  factory Links.fromJson(Map<String, dynamic> json) => Links(
-    self: List<Collection>.from(json["self"].map((x) => Collection.fromJson(x))),
-    collection: List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "self": List<dynamic>.from(self.map((x) => x.toJson())),
-    "collection": List<dynamic>.from(collection.map((x) => x.toJson())),
-  };
-}
-
-class Collection {
-  Collection({
-    this.href,
-  });
-
-  String href;
-
-  factory Collection.fromJson(Map<String, dynamic> json) => Collection(
-    href: json["href"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "href": href,
-  };
-}

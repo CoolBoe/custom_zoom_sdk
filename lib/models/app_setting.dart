@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'app.dart';
+
 AppSetting appSettingFromJson(String str) => AppSetting.fromJson(json.decode(str));
 
 String appSettingToJson(AppSetting data) => json.encode(data.toJson());
@@ -25,35 +27,35 @@ class AppSetting {
     this.currentAppVersion,
     this.appStatus,
     this.googleProjectNumber,
-    this.referearn,
+    this.referEarn,
     this.walletActive,
-    this.pincodeActive,
+    this.pinCodeActive,
     this.price,
     this.enableTermCondition,
     this.enableFaq,
   });
 
-  String secondaryTextColor;
-  String primaryTextColor;
-  String accentColor;
-  String primaryColorText;
-  String primaryColorLight;
-  String primaryColorDark;
-  String primaryColor;
-  String contactEmail;
-  String contactPhone;
-  String googleAnalyticsTrackerId;
-  String directTawkId;
-  String oneSignalAppId;
-  String currentAppVersion;
-  String appStatus;
-  String googleProjectNumber;
-  bool referearn;
-  bool walletActive;
-  bool pincodeActive;
-  Price price;
-  bool enableTermCondition;
-  bool enableFaq;
+  String? secondaryTextColor;
+  String? primaryTextColor;
+  String? accentColor;
+  String? primaryColorText;
+  String? primaryColorLight;
+  String? primaryColorDark;
+  String? primaryColor;
+  String? contactEmail;
+  String? contactPhone;
+  String? googleAnalyticsTrackerId;
+  String? directTawkId;
+  String? oneSignalAppId;
+  String? currentAppVersion;
+  String? appStatus;
+  String? googleProjectNumber;
+  bool? referEarn;
+  bool? walletActive;
+  bool? pinCodeActive;
+  PriceRangeModel? price;
+  bool? enableTermCondition;
+  bool? enableFaq;
 
   factory AppSetting.fromJson(Map<String, dynamic> json) => AppSetting(
     secondaryTextColor: json["secondary_text_color"],
@@ -71,10 +73,10 @@ class AppSetting {
     currentAppVersion: json["current_app_version"],
     appStatus: json["app_status"],
     googleProjectNumber: json["google_project_number"],
-    referearn: json["referearn"],
+    referEarn: json["referearn"],
     walletActive: json["wallet_active"],
-    pincodeActive: json["pincode_active"],
-    price: Price.fromJson(json["price"]),
+    pinCodeActive: json["pincode_active"],
+    price: PriceRangeModel.fromJson(json["price"]),
     enableTermCondition: json["enable_term_condition"] is bool ? json["enable_term_condition"] : false,
     enableFaq: json["enable_faq"],
   );
@@ -95,39 +97,12 @@ class AppSetting {
     "current_app_version": currentAppVersion,
     "app_status": appStatus,
     "google_project_number": googleProjectNumber,
-    "referearn": referearn,
+    "referearn": referEarn,
     "wallet_active": walletActive,
-    "pincode_active": pincodeActive,
-    "price": price.toJson(),
+    "pincode_active": pinCodeActive,
+    "price": price!=null ? price!.toJson() : null,
     "enable_term_condition": enableTermCondition,
     "enable_faq": enableFaq,
   };
 }
 
-class Price {
-  Price({
-    this.min,
-    this.max,
-    this.minWithSymbol,
-    this.maxWithSymbol,
-  });
-
-  int min;
-  int max;
-  String minWithSymbol;
-  String maxWithSymbol;
-
-  factory Price.fromJson(Map<String, dynamic> json) => Price(
-    min: json["min"],
-    max: json["max"],
-    minWithSymbol: json["min_with_symbol"],
-    maxWithSymbol: json["max_with_symbol"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "min": min,
-    "max": max,
-    "min_with_symbol": minWithSymbol,
-    "max_with_symbol": maxWithSymbol,
-  };
-}

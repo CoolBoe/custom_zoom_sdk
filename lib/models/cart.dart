@@ -4,6 +4,10 @@
 
 import 'dart:convert';
 
+import 'coupon_data.dart';
+import 'pin_code_delivery.dart';
+import 'shipping_method.dart';
+
 CartModel cartModelFromJson(String str) => CartModel.fromJson(json.decode(str));
 
 String cartModelToJson(CartModel data) => json.encode(data.toJson());
@@ -20,14 +24,14 @@ class CartModel {
     this.cartData,
   });
 
-  String chosenShippingMethod;
-  List<ShippingMethod> shippingMethod;
-  String discountTotal;
-  String cartSubtotal;
-  List<Coupon> coupon;
-  String taxes;
-  String total;
-  List<CartDatum> cartData;
+  String? chosenShippingMethod;
+  List<ShippingMethod>? shippingMethod;
+  String? discountTotal;
+  String? cartSubtotal;
+  List<Coupon>? coupon;
+  String? taxes;
+  String? total;
+  List<CartDatum>? cartData;
 
   factory CartModel.fromJson(Map<String, dynamic> json) => CartModel(
     chosenShippingMethod: json["chosen_shipping_method"],
@@ -42,13 +46,13 @@ class CartModel {
 
   Map<String, dynamic> toJson() => {
     "chosen_shipping_method": chosenShippingMethod,
-    "shipping_method": List<dynamic>.from(shippingMethod.map((x) => x.toJson())),
+    "shipping_method": List<dynamic>.from(shippingMethod!.map((x) => x.toJson())),
     "discount_total": discountTotal,
     "cart_subtotal": cartSubtotal,
-    "coupon": List<dynamic>.from(coupon.map((x) => x.toJson())),
+    "coupon": List<dynamic>.from(coupon!.map((x) => x.toJson())),
     "taxes": taxes,
     "total": total,
-    "cart_data": List<dynamic>.from(cartData.map((x) => x.toJson())),
+    "cart_data": List<dynamic>.from(cartData!.map((x) => x.toJson())),
   };
 }
 
@@ -57,44 +61,44 @@ class CartDatum {
     this.name,
     this.image,
     this.cartItemKey,
-    this.varitions,
+    this.variation,
     this.price,
-    this.pincodeDelivery,
+    this.pinCodeDelivery,
     this.productDesc,
     this.shippingClass,
     this.soldInd,
     this.manageStock,
-    this.stockQuanity,
+    this.stockQuantity,
     this.quantity,
     this.subtotal,
   });
 
-  String name;
-  String image;
-  String cartItemKey;
-  String varitions;
-  String price;
-  PincodeDelivery pincodeDelivery;
-  String productDesc;
-  int shippingClass;
-  String soldInd;
-  bool manageStock;
-  dynamic stockQuanity;
-  String quantity;
-  String subtotal;
+  String? name;
+  String? image;
+  String? cartItemKey;
+  String? variation;
+  String? price;
+  PinCodeDelivery? pinCodeDelivery;
+  String? productDesc;
+  int? shippingClass;
+  String? soldInd;
+  bool? manageStock;
+  dynamic stockQuantity;
+  String? quantity;
+  String? subtotal;
 
   factory CartDatum.fromJson(Map<String, dynamic> json) => CartDatum(
     name: json["name"],
     image: json["image"],
     cartItemKey: json["cart_item_key"],
-    varitions: json["varitions"],
+    variation: json["varitions"],
     price: json["price"],
-    pincodeDelivery: PincodeDelivery.fromJson(json["pincode_delivery"]),
+    pinCodeDelivery: PinCodeDelivery.fromJson(json["pincode_delivery"]),
     productDesc: json["product_desc"],
     shippingClass: json["shipping_class"],
     soldInd: json["sold_ind"],
     manageStock: json["manage_stock"],
-    stockQuanity: json["stock_quanity"],
+    stockQuantity: json["stock_quanity"],
     quantity: json["quantity"].toString(),
     subtotal: json["subtotal"],
   );
@@ -103,83 +107,15 @@ class CartDatum {
     "name": name,
     "image": image,
     "cart_item_key": cartItemKey,
-    "varitions": varitions,
+    "varitions": variation,
     "price": price,
-    "pincode_delivery": pincodeDelivery.toJson(),
+    "pincode_delivery": pinCodeDelivery!=null ? pinCodeDelivery!.toJson() : null,
     "product_desc": productDesc,
     "shipping_class": shippingClass,
     "sold_ind": soldInd,
     "manage_stock": manageStock,
-    "stock_quanity": stockQuanity,
+    "stock_quanity": stockQuantity,
     "quantity": quantity,
     "subtotal": subtotal,
-  };
-}
-
-class PincodeDelivery {
-  PincodeDelivery({
-    this.delivery,
-  });
-
-  bool delivery;
-
-  factory PincodeDelivery.fromJson(Map<String, dynamic> json) => PincodeDelivery(
-    delivery: json["delivery"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "delivery": delivery,
-  };
-}
-
-class Coupon {
-  Coupon({
-    this.code,
-    this.discount,
-  });
-
-  String code;
-  String discount;
-
-  factory Coupon.fromJson(Map<String, dynamic> json) => Coupon(
-    code: json["code"],
-    discount: json["discount"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "code": code,
-    "discount": discount,
-  };
-}
-
-class ShippingMethod {
-  ShippingMethod({
-    this.id,
-    this.methodId,
-    this.shippingMethodName,
-    this.shippingMethodPrice,
-    this.shippingMethodPriceWithoutSymbol,
-  });
-
-  String id;
-  String methodId;
-  String shippingMethodName;
-  String shippingMethodPrice;
-  String shippingMethodPriceWithoutSymbol;
-
-  factory ShippingMethod.fromJson(Map<String, dynamic> json) => ShippingMethod(
-    id: json["id"],
-    methodId: json["method_id"],
-    shippingMethodName: json["shipping_method_name"],
-    shippingMethodPrice: json["shipping_method_price"],
-    shippingMethodPriceWithoutSymbol: json["shipping_method_price_without_symbol"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "method_id": methodId,
-    "shipping_method_name": shippingMethodName,
-    "shipping_method_price": shippingMethodPrice,
-    "shipping_method_price_without_symbol": shippingMethodPriceWithoutSymbol,
   };
 }

@@ -5,7 +5,7 @@ import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/category.dart';
 import 'package:wooapp/models/cityModel.dart';
-import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/models/item_categories.dart';
 import 'package:wooapp/utils/widget_helper.dart';
 import 'package:wooapp/widgets/loading.dart';
 

@@ -1,83 +1,22 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wooapp/models/user.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class BasePrefs {
-  static SharedPreferences _preferences;
+  static FlutterSecureStorage storage = new FlutterSecureStorage();
 
-  static Future<SharedPreferences> get _instance async =>
-      _preferences ?? await SharedPreferences.getInstance();
-
-  static Future<SharedPreferences> init() async {
-    _preferences = await SharedPreferences.getInstance();
-
-    return _preferences;
+  static Future<bool> setString(String key, dynamic value) async {
+    bool status=false;
+    storage.write(key: key, value: value.toString()).then((value) => status= true).
+    onError((error, stackTrace) =>  status= false);
+    return status;
   }
 
-  static void saveData(String key, dynamic value) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (value is int) {
-      prefs.setInt(key, value);
-    } else if (value is String) {
-      prefs.setString(key, value);
-    } else if (value is bool) {
-      prefs.setBool(key, value);
-    } else {
-      print("Invalid Type");
-    }
-  }
-
-  static Future<dynamic> readData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    dynamic obj = prefs.get(key);
+  static Future<dynamic> getString(String key) async {
+    dynamic obj = storage.read(key: key);
     return obj;
   }
 
-  static Future<bool> deleteData(String key) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.remove(key);
-  }
+  static Future<void> clearPrefs() async {
+    await storage.deleteAll();
 
-
-  static String getString(String key, {String defValue}) {
-    return _preferences.getString(key)!=null ?_preferences.getString(key) : defValue;
-  }
-
-  static Future<bool> setString(String key, String value) async {
-    var prefs = await _instance;
-    return prefs?.setString(key, value) ?? Future.value(false);
-  }
-
-  static Future<bool> clearPrefs() async {
-    var prefs = await _instance;
-    return prefs.clear();
-  }
-}
-
-class UserPrefs {
-  SharedPreferences _preferences;
-
-  Future<SharedPreferences> get _instance async =>
-      _preferences ?? await SharedPreferences.getInstance();
-
-  Future<SharedPreferences> init() async {
-    _preferences = await SharedPreferences.getInstance();
-
-    return _preferences;
-  }
-
-  String getString(String key, [String defValue]) {
-    return _preferences.getString(key);
-  }
-
-  Future<bool> setString(String key, String value) async {
-    var prefs = await _instance;
-    return prefs?.setString(key, value) ?? Future.value(false);
-  }
-
-  Future<bool> clearPrefs() async {
-    var prefs = await _instance;
-    return prefs.clear();
   }
 }

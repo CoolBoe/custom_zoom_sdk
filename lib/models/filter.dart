@@ -18,12 +18,12 @@ class ColorSizeModel {
     this.options,
   });
 
-  int id;
-  String name;
-  String slug;
-  String type;
-  bool hasArchives;
-  List<Option> options;
+  int? id;
+  String? name;
+  String? slug;
+  String? type;
+  bool? hasArchives;
+  List<Option>? options;
 
   factory ColorSizeModel.fromJson(Map<String, dynamic> json) => ColorSizeModel(
     id: json["id"],
@@ -31,7 +31,7 @@ class ColorSizeModel {
     slug: json["slug"],
     type: json["type"],
     hasArchives: json["has_archives"],
-    options: List<Option>.from(json["options"].map((x) => Option.fromJson(x))),
+    options:json["options"]!=null ?  List<Option>.from(json["options"].map((x) => Option.fromJson(x))) : null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -40,7 +40,7 @@ class ColorSizeModel {
     "slug": slug,
     "type": type,
     "has_archives": hasArchives,
-    "options": List<dynamic>.from(options.map((x) => x.toJson())),
+    "options": options!=null ? List<dynamic>.from(options!.map((x) => x.toJson())) : null,
   };
 }
 
@@ -54,12 +54,12 @@ class Option {
     this.checked,
   });
 
-  int id;
-  String name;
-  String slug;
-  String description;
-  int count;
-  bool checked;
+  int? id;
+  String? name;
+  String? slug;
+  String? description;
+  int? count;
+  bool? checked;
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
     id: json["id"],
@@ -77,9 +77,4 @@ class Option {
     "count": count,
     "checked": checked,
   };
-}
-
-
-class Filters {
-
 }

@@ -18,12 +18,12 @@ class PaymentGateway {
     this.gatewayDescription,
   });
 
-  String gatewayTitle;
-  String gatewayId;
-  String gatewayOrderButtonText;
+  String? gatewayTitle;
+  String? gatewayId;
+  String? gatewayOrderButtonText;
   dynamic gatewayChosen;
-  String gatewayIcon;
-  String gatewayDescription;
+  String? gatewayIcon;
+  String? gatewayDescription;
 
   factory PaymentGateway.fromJson(Map<String, dynamic> json) => PaymentGateway(
     gatewayTitle: json["gateway_title"],

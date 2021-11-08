@@ -1,6 +1,6 @@
 class WebResponseModel {
-  String code;
-  String message;
+  String? code;
+  String? message;
 
   WebResponseModel({this.code, this.message});
 

@@ -11,7 +11,7 @@ import 'package:wooapp/models/order.dart';
 import 'package:wooapp/models/paymentGateway.dart';
 import 'package:wooapp/models/revieworder.dart';
 import 'package:wooapp/models/user.dart';
-import 'package:wooapp/providers/LoadProvider.dart';
+import 'package:wooapp/providers/loader_provider.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
@@ -71,6 +71,7 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
   @override
   Widget pageUi() {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: BaseAppBar(context, "Check Out"),
       body: UiBuilder(),
       bottomNavigationBar: bottomBar(),
@@ -556,24 +557,22 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 14)),
-          ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: gateway.length,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                checked = index == checkedIndex;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      razorchecked = false;
-                      checkedIndex = index;
-                      paymentMethod = gateway[index].gatewayId;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
+          Container(
+            child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: gateway.length,
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  checked = index == checkedIndex;
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        razorchecked = false;
+                        checkedIndex = index;
+                        paymentMethod = gateway[index].gatewayId;
+                      });
+                    },
                     child: Container(
-                      height: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).canvasColor,
                         border: Border.all(
@@ -592,24 +591,29 @@ class _CheckOutScreenrState extends BasePageState<CheckOutScreen> {
                       child: Row(
                         children: [
                           Container(
-                              width: 60,
+                              width: 45,
+                              height: 45,
                               child: Image.asset(
                                 ic_money,
                                 color: Theme.of(context).accentColor,
                               )),
-                          Text(
-                            gateway[index].gatewayTitle,
-                            style: styleProvider(
-                              fontWeight: medium,
-                              size: 13,
+                          Container(
+                            width: MediaQuery.of(context).size.width-125,
+                            child: Text(
+                              "${gateway[index].gatewayTitle}",
+                              textAlign: TextAlign.start,
+                              style: styleProvider(
+                                fontWeight: medium,
+                                size: 12,
+                              ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+          ),
         ],
       ),
     );

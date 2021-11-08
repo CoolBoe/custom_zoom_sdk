@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
-import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/models/item_categories.dart';
 import 'package:wooapp/screens/chatsupport.dart';
 import 'package:wooapp/screens/mainpage.dart';
 import 'package:wooapp/screens/category.dart';

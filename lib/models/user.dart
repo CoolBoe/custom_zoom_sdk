@@ -1,11 +1,11 @@
 class UserModel {
-  String code;
-  String msg;
-  int status;
-  String userId;
-  String referEarn;
-  String error;
-  Details details;
+  String? code;
+  String? msg;
+  int? status;
+  String? userId;
+  String? referEarn;
+  String? error;
+  Details? details;
 
   UserModel(
       {this.code,
@@ -35,29 +35,29 @@ class UserModel {
     data['refer_earn'] = this.referEarn;
     data['error'] = this.error;
     if (this.details != null) {
-      data['details'] = this.details.toJson();
+      data['details'] = this.details!.toJson();
     }
     return data;
   }
 }
 
 class Details {
-  int id;
-  String dateCreated;
-  String dateCreatedGmt;
-  String dateModified;
-  String dateModifiedGmt;
-  String email;
-  String firstName;
-  String lastName;
-  String role;
-  String username;
-  Shipping shipping;
-  Billing billing;
-  bool isPayingCustomer;
-  int ordersCount;
-  String totalSpent;
-  String avatarUrl;
+  int? id;
+  String? dateCreated;
+  String? dateCreatedGmt;
+  String? dateModified;
+  String? dateModifiedGmt;
+  String? email;
+  String? firstName;
+  String? lastName;
+  String? role;
+  String? username;
+  Shipping? shipping;
+  Billing? billing;
+  bool? isPayingCustomer;
+  int? ordersCount;
+  String? totalSpent;
+  String? avatarUrl;
 
   Details(
       {this.id,
@@ -114,10 +114,10 @@ class Details {
     data['role'] = this.role;
     data['username'] = this.username;
     if (this.billing != null) {
-      data['billing'] = this.billing.toJson();
+      data['billing'] = this.billing!.toJson();
     }
     if (this.shipping != null) {
-      data['shipping'] = this.shipping.toJson();
+      data['shipping'] = this.shipping!.toJson();
     }
     data['is_paying_customer'] = this.isPayingCustomer;
     data['orders_count'] = this.ordersCount;
@@ -129,17 +129,17 @@ class Details {
 }
 
 class Shipping {
-  String firstName;
-  String lastName;
-  String company;
-  String address1;
-  String address2;
-  String city;
-  String postcode;
-  String country;
-  String state;
-  String email;
-  String phone;
+  String? firstName;
+  String? lastName;
+  String? company;
+  String? address1;
+  String? address2;
+  String? city;
+  String? postcode;
+  String? country;
+  String? state;
+  String? email;
+  String? phone;
 
   Shipping(
       {this.firstName,
@@ -186,17 +186,17 @@ class Shipping {
 }
 
 class Billing {
-  String firstName;
-  String lastName;
-  String company;
-  String address1;
-  String address2;
-  String city;
-  String postcode;
-  String country;
-  String state;
-  String email;
-  String phone;
+  String? firstName;
+  String? lastName;
+  String? company;
+  String? address1;
+  String? address2;
+  String? city;
+  String? postcode;
+  String? country;
+  String? state;
+  String? email;
+  String? phone;
 
   Billing(
       {this.firstName,
@@ -243,29 +243,24 @@ class Billing {
 }
 
 class SocialLogin{
-  // BasePrefs.saveData(USER_NAME, profile['name']);
-  //           BasePrefs.saveData(USER_LAST_NAME, profile['last_name']);
-  //           BasePrefs.saveData(USER_EMAIL, profile['email']);
-  //           BasePrefs.saveData(USER_FB_ID, profile['id']);
-  //           BasePrefs.saveData(SOCIAL_LOGIN_MODE, 'facebook');
-  String mode;
-  String id;
-  String email;
-  String name;
-  String last_name;
+  String? mode;
+  String? id;
+  String? email;
+  String? name;
+  String? lastName;
   SocialLogin(
       {this.mode,
         this.id,
         this.email,
         this.name,
-        this.last_name});
+        this.lastName});
 
   SocialLogin.fromJson(Map<String, dynamic> json) {
     mode = json['mode'];
     id = json['id'];
     email = json['email'];
     name = json['name'];
-    last_name = json['last_name'];
+    lastName = json['last_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -274,7 +269,7 @@ class SocialLogin{
     data['id'] = this.id;
     data['email'] = this.email;
     data['name'] = this.name;
-    data['last_name'] = this.last_name;
+    data['last_name'] = this.lastName;
 
     return data;
   }

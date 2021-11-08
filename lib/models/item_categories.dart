@@ -1,10 +1,10 @@
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ByCatgories{
+class ItemBuilder{
+  final int index;
   final String name;
-  final int Index;
   final String icon;
- const ByCatgories(
-      this.name, this.Index, this.icon
+ const ItemBuilder(
+     this.index,this.name, this.icon
       );
 }

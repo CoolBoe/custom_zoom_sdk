@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wooapp/models/product.dart';
-import 'package:wooapp/providers/LoadProvider.dart';
+import 'package:wooapp/providers/loader_provider.dart';
 import 'package:wooapp/widgets/ProgressHUD.dart';
 import 'package:wooapp/widgets/loading.dart';
 

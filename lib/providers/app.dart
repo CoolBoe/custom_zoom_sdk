@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:package_info/package_info.dart';
 import 'package:wooapp/models/app.dart';
 import 'package:wooapp/models/app_setting.dart';
 import 'package:wooapp/models/category.dart';
@@ -10,32 +7,34 @@ import 'package:wooapp/models/filter.dart';
 import 'package:wooapp/models/homeLayout.dart';
 import 'package:wooapp/models/paymentGateway.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
-import 'package:wooapp/widgets/loading.dart';
 
 class AppProvider with ChangeNotifier {
-  WebApiServices _webApiServices = new WebApiServices();
-  List<PaymentGateway> _paymentGateway ;
+  late WebApiServices _webApiServices ;
+  late List<PaymentGateway> _paymentGateway ;
   List<PaymentGateway> get getPaymentGateway => _paymentGateway;
-  List<CategoryModel> categories ;
+  late List<CategoryModel> categories ;
   List<CategoryModel> get allCategories=> categories;
-  PriceRangeModel _priceRangeModel = new PriceRangeModel();
+  late PriceRangeModel _priceRangeModel ;
   PriceRangeModel get priceRange => _priceRangeModel;
-  HomeLayout _homeLayout = new HomeLayout();
+  late HomeLayout _homeLayout;
   HomeLayout get getHomeLayout => _homeLayout;
-  AppSetting _appSetting;
-  String _appStatus;
+  late AppSetting _appSetting;
+  late String _appStatus;
   String get appStatus=>_appStatus;
   AppSetting get getAppSetting  => _appSetting;
-  List<Option> _sizeList;
-  List<Option> _colorList;
+  late List<Option> _sizeList;
+  late List<Option> _colorList;
   List<Option> get getSizeList =>_sizeList;
   List<Option> get getColorList=>_colorList;
-  List<ColorSizeModel> colorSizelist;
-  List<ColorSizeModel> get getColorSizelist=> colorSizelist;
+  late List<ColorSizeModel> colorSizeList;
+  List<ColorSizeModel> get getColorSizeList=> colorSizeList;
 
-  List<CityModel> get getCityList => _citylist;
-  List<CityModel> _citylist ;
+  List<CityModel> get getCityList => _cityList;
+  late List<CityModel> _cityList ;
   AppProvider.initialize(){
+    _webApiServices = new WebApiServices();
+    _priceRangeModel = new PriceRangeModel();
+    _homeLayout = new HomeLayout();
     fetchAppSetting();
     fetchHomeLayout();
     fetchPriceRange();
@@ -64,24 +63,22 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
   fetchColorSize()async{
-    colorSizelist  = await WebApiServices().getColorSizeList(id: "1");
-    if(colorSizelist!=null && colorSizelist.length>0){
+    colorSizeList  = await WebApiServices().getColorSizeList(id: "1");
+    if(colorSizeList.length>0){
 
-      for(int i =0; i<colorSizelist.length; i++){
-        if(colorSizelist[i].name=="Color"){
-          _colorList = colorSizelist[i].options;
-        }else if (colorSizelist[i].name=="Size"){
-         _sizeList = colorSizelist[i].options;
+      for(int i =0; i<colorSizeList.length; i++){
+        if(colorSizeList[i].name=="Color"){
+          _colorList = colorSizeList[i].options!;
+        }else if (colorSizeList[i].name=="Size"){
+         _sizeList = colorSizeList[i].options!;
         }
       }
     }
     notifyListeners();
   }
 
-  fetchStateLIst({String states})async{
-    printLog("responsee", states);
-    _citylist = await _webApiServices.getStates(countryCode: states);
-    printLog("fetchStateLIst", _citylist);
+  fetchStateList({String? states})async{
+    _cityList = await _webApiServices.getStates(countryCode: states??"In");
     notifyListeners();
   }
   fetchPaymentMethod()async{

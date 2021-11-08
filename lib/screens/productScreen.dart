@@ -48,7 +48,7 @@ class ProductScreenState extends State<ProductScreen> {
     variation = new Map<dynamic, dynamic>();
     for (var value in widget.productModel.attributes) {
       listIndex[value.name] = 0;
-      variation[value.slug] = null;
+      variation[value.name] = null;
     }
     super.initState();
   }
@@ -269,7 +269,7 @@ class ProductScreenState extends State<ProductScreen> {
                         child: widget.productModel.attributes != null &&
                                 widget.productModel.attributes.length > 0 &&
                                 widget.productModel.type != Type.SIMPLE
-                            ? varibleProvider(widget.productModel.attributes)
+                            ? varibleProvider(widget.productModel.attributes, widget.productModel.variations)
                             : SizedBox(
                                 height: 0,
                               ),
@@ -420,23 +420,23 @@ class ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  Widget varibleProvider(List<Attribute> attributeList) {
+  Widget varibleProvider(List<Attribute> attributeList, List<int> variations) {
     return Container(
         child: ListView.builder(
-      padding: EdgeInsets.zero,
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
+        padding: EdgeInsets.zero,
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
         return Padding(
             padding: const EdgeInsets.only(top: 15.0),
             child: variableBuilder(
-                listIndex[attributeList[index].name], attributeList[index]));
+                listIndex[attributeList[index].name], attributeList[index], variations));
       },
       itemCount: attributeList.length,
     ));
   }
 
-  Widget variableBuilder(int itemIndex, Attribute attribute) {
+  Widget variableBuilder(int itemIndex, Attribute attribute,List<int> variations) {
     printLog("AttributeParams", attribute.toJson());
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -460,12 +460,12 @@ class ProductScreenState extends State<ProductScreen> {
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    variation[attribute.slug] = attribute.options[index];
+                    variation[attribute.name] = attribute.options[index];
                     return GestureDetector(
                         onTap: () {
                           setState(() {
                             listIndex[attribute.name] = index;
-                            variation[attribute.slug] =
+                            variation[attribute.name] =
                                 attribute.options[index];
                           });
                         },
@@ -508,15 +508,15 @@ class ProductScreenState extends State<ProductScreen> {
                     Iterable l = attribute.options;
                     List<OptionClass> model = List<OptionClass>.from(
                         l.map((model) => OptionClass.fromJson(model)));
-                    variation[attribute.slug] = model[itemIndex].slug;
-                    variationId = model[itemIndex].termId;
+                    variation[attribute.name] = model[itemIndex].name;
+                    variationId = variations[index];
                     return GestureDetector(
                         onTap: () {
                           setState(() {
                             listIndex[attribute.name] = index;
-                            variation[attribute.slug] =
-                                model[itemIndex].slug;
-                            variationId = model[index].termId;
+                            variation[attribute.name] =
+                                model[itemIndex].name;
+                            variationId = variations[index];
                           });
                         },
                         child: Container(

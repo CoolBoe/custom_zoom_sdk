@@ -10,7 +10,7 @@ import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/cart.dart';
 import 'package:wooapp/models/cityModel.dart';
 import 'package:wooapp/models/user.dart';
-import 'package:wooapp/providers/LoadProvider.dart';
+import 'package:wooapp/providers/loader_provider.dart';
 import 'package:wooapp/providers/app.dart';
 import 'package:wooapp/providers/cart.dart';
 import 'package:wooapp/providers/user.dart';

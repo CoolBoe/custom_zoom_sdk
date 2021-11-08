@@ -10,7 +10,7 @@ import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/cart.dart';
-import 'package:wooapp/providers/LoadProvider.dart';
+import 'package:wooapp/providers/loader_provider.dart';
 import 'package:wooapp/screens/basePage.dart';
 import 'package:wooapp/screens/checkout.dart';
 import 'package:wooapp/screens/login.dart';

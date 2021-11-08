@@ -9,7 +9,7 @@ Color grey_400 = Colors.grey.shade300;
 Color white_70 = Colors.white70;
 const Color transparent = Colors.transparent;
 const Color green = Colors.green;
- Color green_400 = Colors.green[400];
+Color? green_400 = Colors.green[400];
 const Color blue = Colors.purpleAccent;
 const Color amber_accent = Colors.amberAccent;
 const Color indgo = Colors.indigo;
@@ -19,10 +19,10 @@ Color grey_50 = Colors.grey.shade50;
 Color grey_100 = Colors.grey.shade100;
 const Color grey = Colors.grey;
 const Color amber = Colors.amber;
- Color pink_50 = Colors.pink[300];
-Color pink_10 = Colors.pink[50];
-Color orange_50 = Colors.orange[100];
-Color orange_300 = Colors.orange[300];
+Color? pink_50 = Colors.pink[300];
+Color? pink_10 = Colors.pink[50];
+Color? orange_50 = Colors.orange[100];
+Color? orange_300 = Colors.orange[300];
 Color blueGrey = Colors.blueGrey;
 
 /*----------------WooApp-------------------*/

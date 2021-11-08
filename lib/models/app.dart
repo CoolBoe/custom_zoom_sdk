@@ -1,10 +1,10 @@
 class AppModel {}
 
 class PriceRangeModel {
-  int min;
-  int max;
-  String minWithSymbol;
-  String maxWithSymbol;
+  int? min;
+  int? max;
+  String? minWithSymbol;
+  String? maxWithSymbol;
 
   PriceRangeModel({this.min, this.max, this.minWithSymbol, this.maxWithSymbol});
 

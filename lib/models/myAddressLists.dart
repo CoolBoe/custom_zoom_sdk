@@ -5,8 +5,8 @@ List<MyAddressList> myAddressFromJson(String str) => List<MyAddressList>.from(js
 
 String myAddressToJson(List<MyAddressList> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 class MyAddressList{
-  String title;
-  UserModel userModel;
+  String? title;
+  UserModel? userModel;
   MyAddressList(
       {
         this.title,
@@ -21,7 +21,7 @@ class MyAddressList{
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['title'] = this.title;
     if (this.userModel != null) {
-      data['details'] = this.userModel.toJson();
+      data['details'] = this.userModel!.toJson();
     }
     return data;
   }

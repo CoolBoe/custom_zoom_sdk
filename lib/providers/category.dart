@@ -1,15 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/models/category.dart';
 import 'package:wooapp/rest/WebApiServices.dart';
 
 class CategoriesProvider with ChangeNotifier {
 
-  List<CategoryModel> categories ;
+  late List<CategoryModel> categories ;
   List<CategoryModel> get allCategories=> categories;
 
   CategoriesProvider.initialize(){

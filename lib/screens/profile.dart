@@ -7,7 +7,7 @@ import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
-import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/models/item_categories.dart';
 import 'package:wooapp/models/user.dart';
 import 'package:wooapp/providers/user.dart';
 import 'package:wooapp/screens/delivery.dart';

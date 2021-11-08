@@ -6,7 +6,7 @@ import 'package:wooapp/helper/color.dart';
 import 'package:wooapp/helper/constants.dart';
 import 'package:wooapp/helper/screen_navigator.dart';
 import 'package:wooapp/helper/shared_perference.dart';
-import 'package:wooapp/providers/ThemeProvider.dart';
+import 'package:wooapp/providers/theme_provider.dart';
 import 'package:wooapp/screens/searchProduct.dart';
 
   Widget BaseAppBar (BuildContext context, String pageName,{Widget prefixIcon, Widget suffixIcon, Color backgroundColor}) {

@@ -2,8 +2,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:wooapp/models/cityModel.dart';
-import 'package:wooapp/models/sort_by.dart';
-
 const String appName = 'Woo App';
 const String fontName = 'Poppins';
 const String app_Theme = 'app_theme';
@@ -180,65 +178,57 @@ const FontWeight dark = FontWeight.w900;
 
 /*--------------------SortBy List-------------------------------*/
 
-List<SortBy> _sortByOptions = [
-  SortBy('default', "Default", "asc"),
-  SortBy('popularity', "Popularity", "asc"),
-  SortBy('rating', "Average Rating", "asc"),
-  SortBy("date", "What's New", "asc"),
-  SortBy("price_asc", "Price: Low to High", "asc"),
-  SortBy("price_desc", "Price: high to low", "desc")
-];
 List<CityModel> countryList = [
-  CityModel(id: "101", sortname: "IN", name: "India", phonecode: "91")
+  CityModel(id: "101", sortName: "IN", name: "India", code: "91")
 ];
 
 List<CityModel> stateList = [
   CityModel(
       id: "1",
-      sortname: "",
+      sortName: "",
       name: "Andaman and Nicobar Islands",
-      phonecode: "91"),
-  CityModel(id: "2", sortname: "", name: "Andhra Pradesh", phonecode: "91"),
-  CityModel(id: "3", sortname: "", name: "Arunachal Pradesh", phonecode: "91"),
-  CityModel(id: "4", sortname: "", name: "Assam", phonecode: "91"),
-  CityModel(id: "5", sortname: "", name: "Bihar", phonecode: "91"),
-  CityModel(id: "5", sortname: "", name: "Chandigarh", phonecode: "91"),
-  CityModel(id: "6", sortname: "", name: "Chhattisgarh", phonecode: "91"),
+      code: "91"),
+  CityModel(id: "2", sortName: "", name: "Andhra Pradesh", code: "91"),
+  CityModel(id: "3", sortName: "", name: "Arunachal Pradesh", code: "91"),
+  CityModel(id: "4", sortName: "", name: "Assam", code: "91"),
+  CityModel(id: "5", sortName: "", name: "Bihar", code: "91"),
+  CityModel(id: "5", sortName: "", name: "Chandigarh", code: "91"),
+  CityModel(id: "6", sortName: "", name: "Chhattisgarh", code: "91"),
   CityModel(
-      id: "7", sortname: "", name: "Dadra and Nagar Haveli", phonecode: "91"),
-  CityModel(id: "8", sortname: "", name: "Daman and Diu", phonecode: "91"),
-  CityModel(id: "9", sortname: "", name: "Delhi", phonecode: "91"),
-  CityModel(id: "9", sortname: "", name: "Goa", phonecode: "91"),
-  CityModel(id: "10", sortname: "", name: "Gujarat", phonecode: "91"),
-  CityModel(id: "11", sortname: "", name: "Haryana", phonecode: "91"),
-  CityModel(id: "12", sortname: "", name: "Himachal Pradesh", phonecode: "91"),
-  CityModel(id: "13", sortname: "", name: "Jammu and Kashmir", phonecode: "91"),
-  CityModel(id: "14", sortname: "", name: "Jharkhand", phonecode: "91"),
-  CityModel(id: "15", sortname: "", name: "Karnataka", phonecode: "91"),
-  CityModel(id: "16", sortname: "", name: "Kenmore", phonecode: "91"),
-  CityModel(id: "17", sortname: "", name: "Kerala", phonecode: "91"),
-  CityModel(id: "18", sortname: "", name: "Lakshadweep", phonecode: "91"),
-  CityModel(id: "19", sortname: "", name: "Madhya Pradesh", phonecode: "91"),
-  CityModel(id: "20", sortname: "", name: "Maharashtra", phonecode: "91"),
-  CityModel(id: "21", sortname: "", name: "Manipur", phonecode: "91"),
-  CityModel(id: "22", sortname: "", name: "Meghalaya", phonecode: "91"),
-  CityModel(id: "23", sortname: "", name: "Mizoram", phonecode: "91"),
-  CityModel(id: "24", sortname: "", name: "Nagaland", phonecode: "91"),
-  CityModel(id: "25", sortname: "", name: "Narora", phonecode: "91"),
-  CityModel(id: "26", sortname: "", name: "Natwar", phonecode: "91"),
-  CityModel(id: "27", sortname: "", name: "Odisha", phonecode: "91"),
-  CityModel(id: "28", sortname: "", name: "Paschim Medinipu", phonecode: "91"),
-  CityModel(id: "29", sortname: "", name: "Pondicherry", phonecode: "91"),
-  CityModel(id: "30", sortname: "", name: "Punjab", phonecode: "91"),
-  CityModel(id: "31", sortname: "", name: "Rajasthan", phonecode: "91"),
-  CityModel(id: "32", sortname: "", name: "Sikkim", phonecode: "91"),
-  CityModel(id: "33", sortname: "", name: "Tamil Nadu", phonecode: "91"),
-  CityModel(id: "34", sortname: "", name: "Telangana", phonecode: "91"),
-  CityModel(id: "35", sortname: "", name: "Tripura", phonecode: "91"),
-  CityModel(id: "36", sortname: "", name: "Uttar Pradesh", phonecode: "91"),
-  CityModel(id: "37", sortname: "", name: "Uttarakhand", phonecode: "91"),
-  CityModel(id: "38", sortname: "", name: "Vaishali", phonecode: "91"),
-  CityModel(id: "39", sortname: "", name: "West Bengal", phonecode: "91"),
+      id: "7", sortName: "", name: "Dadra and Nagar Haveli", code: "91"),
+  CityModel(id: "8", sortName: "", name: "Daman and Diu", code: "91"),
+  CityModel(id: "9", sortName: "", name: "Delhi", code: "91"),
+  CityModel(id: "9", sortName: "", name: "Goa", code: "91"),
+  CityModel(id: "10", sortName: "", name: "Gujarat", code: "91"),
+  CityModel(id: "11", sortName: "", name: "Haryana", code: "91"),
+  CityModel(id: "12", sortName: "", name: "Himachal Pradesh", code: "91"),
+  CityModel(id: "13", sortName: "", name: "Jammu and Kashmir", code: "91"),
+  CityModel(id: "14", sortName: "", name: "Jharkhand", code: "91"),
+  CityModel(id: "15", sortName: "", name: "Karnataka", code: "91"),
+  CityModel(id: "16", sortName: "", name: "Kenmore", code: "91"),
+  CityModel(id: "17", sortName: "", name: "Kerala", code: "91"),
+  CityModel(id: "18", sortName: "", name: "Lakshadweep", code: "91"),
+  CityModel(id: "19", sortName: "", name: "Madhya Pradesh", code: "91"),
+  CityModel(id: "20", sortName: "", name: "Maharashtra", code: "91"),
+  CityModel(id: "21", sortName: "", name: "Manipur", code: "91"),
+  CityModel(id: "22", sortName: "", name: "Meghalaya", code: "91"),
+  CityModel(id: "23", sortName: "", name: "Mizoram", code: "91"),
+  CityModel(id: "24", sortName: "", name: "Nagaland", code: "91"),
+  CityModel(id: "25", sortName: "", name: "Narora", code: "91"),
+  CityModel(id: "26", sortName: "", name: "Natwar", code: "91"),
+  CityModel(id: "27", sortName: "", name: "Odisha", code: "91"),
+  CityModel(id: "28", sortName: "", name: "Paschim Medinipu", code: "91"),
+  CityModel(id: "29", sortName: "", name: "Pondicherry", code: "91"),
+  CityModel(id: "30", sortName: "", name: "Punjab", code: "91"),
+  CityModel(id: "31", sortName: "", name: "Rajasthan", code: "91"),
+  CityModel(id: "32", sortName: "", name: "Sikkim", code: "91"),
+  CityModel(id: "33", sortName: "", name: "Tamil Nadu", code: "91"),
+  CityModel(id: "34", sortName: "", name: "Telangana", code: "91"),
+  CityModel(id: "35", sortName: "", name: "Tripura", code: "91"),
+  CityModel(id: "36", sortName: "", name: "Uttar Pradesh", code: "91"),
+  CityModel(id: "37", sortName: "", name: "Uttarakhand", code: "91"),
+  CityModel(id: "38", sortName: "", name: "Vaishali", code: "91"),
+  CityModel(id: "39", sortName: "", name: "West Bengal", code: "91"),
 ];
 
 /*-------------------------payment--------------------------------*/

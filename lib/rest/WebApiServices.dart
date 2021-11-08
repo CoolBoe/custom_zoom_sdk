@@ -2,11 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:wooapp/helper/constants.dart';
-import 'package:wooapp/helper/shared_perference.dart';
 import 'package:wooapp/models/app.dart';
 import 'package:wooapp/models/app_setting.dart';
 import 'package:wooapp/models/cart.dart';
@@ -27,9 +24,9 @@ import 'package:wooapp/screens/productScreen.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class WebApiServices {
-  var dio = Dio();
-  Response response;
-  String BaseAuth = 'Basic ' +
+ var dio = Dio();
+ late Response response;
+  String baseAuth = 'Basic ' +
       base64Encode(utf8.encode(
           '${WebRequestConstants.BaseAuthId}:${WebRequestConstants.BaseAuthPass}'));
   Map<String, String> cookies = {};
@@ -52,16 +49,13 @@ class WebApiServices {
       if (response.statusCode == HTTP_CODE_200 ||
           response.statusCode == HTTP_CODE_201) {
         UserModel userModel = UserModel.fromJson(response.data);
-        if (userModel.code == '1') {
-          Details model = userModel.details;
-          return model;
-        } else {
-          return null;
-        }
+        Details? model = userModel.details ?? null ;
+        return model;
       } else {
         return null;
       }
     } on DioError catch (e) {
+      printLog("userLogin-E", e.message);
       return null;
     }
   }
@@ -82,7 +76,6 @@ class WebApiServices {
         options: new Options(headers: headers),
         data: params,
       );
-      printLog("hjhjjknjkn", response.data);
       Map<String, dynamic> result = response.data;
       if (result['status'] == '0') {
         return false;
@@ -90,6 +83,7 @@ class WebApiServices {
         return true;
       }
     } on DioError catch (e) {
+      printLog("userRegister-E", e.message);
       return false;
     }
   }
@@ -118,11 +112,12 @@ class WebApiServices {
         return false;
       }
     } on DioError catch (e) {
+      printLog("forgetPassword-E", e.message);
       return false;
     }
   }
 
-  Future<bool> changePassword(String user_id) async {
+  Future<bool> changePassword(String userId) async {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
@@ -131,7 +126,7 @@ class WebApiServices {
       String url = WebRequestConstants.getBaseUrl +
           WebRequestConstants.getDomainUrl +
           WebRequestConstants.CHANGE_PASSWORD;
-      var params = new FormData.fromMap({'user_id': user_id});
+      var params = new FormData.fromMap({'user_id': userId});
       var response = await dio.post(url,
           options: new Options(headers: headers), data: params);
       if (response.statusCode == HTTP_CODE_200 ||
@@ -146,16 +141,17 @@ class WebApiServices {
         return false;
       }
     } on DioError catch (e) {
+      printLog("changePassword-E", e.message);
       return false;
     }
   }
 
-  Future<Details> socialLogin(
-      {String mode,
-      String name,
-      String email,
-      String firstName,
-      String lastName}) async {
+  Future<Details?> socialLogin(
+      { required String mode,
+        required String name,
+        required String email,
+        required String firstName,
+        required String lastName}) async {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
@@ -185,21 +181,18 @@ class WebApiServices {
       if (response.statusCode == HTTP_CODE_200 ||
           response.statusCode == HTTP_CODE_201) {
         UserModel userModel = UserModel.fromJson(response.data);
-        if (userModel.code == '1') {
-          Details model = userModel.details;
-          return model;
-        } else {
-          return null;
-        }
+        Details? model = userModel.details;
+        return model;
       } else {
         return null;
       }
     } on DioError catch (e) {
+      printLog("socialLogin-E", e.message);
       return null;
     }
   }
 
-  Future<List<CategoryModel>> getCategories() async {
+  Future<List<CategoryModel>?> getCategories() async {
     try {
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
@@ -222,26 +215,25 @@ class WebApiServices {
         return null;
       }
     } on DioError catch (e) {
-      printLog("getCategoryError=>", e.response);
+      printLog("getCategories-E", e.message);
       return null;
     }
   }
 
   Future<List<ProductModel>> getProducts(
-      {String sort,
-      int page,
-      String per_page,
-      String category_id,
-      String str_search,
-      String brand,
-      String max_price,
-      String min_price,
-      bool on_sale,
-      bool featured,
-      List<int> productIDs,
-      String colorList,
-      String sizeList}) async {
-    printLog("ghjghjghjgh", page);
+      {String? sort,
+      int? page,
+      String? perPage,
+      String? categoryId,
+      String? strSearch,
+      String? brand,
+      String? maxPrice,
+      String? minPrice,
+      bool? onSale,
+      bool? featured,
+      List<int>? productIds,
+      String? colorList,
+      String? sizeList}) async {
     List<ProductModel> list = [];
     try {
       String parameter = "";
@@ -251,32 +243,32 @@ class WebApiServices {
       if (featured != null) {
         parameter += "&featured=$featured";
       }
-      if (on_sale != null) {
-        parameter += "&on_sale=$on_sale";
+      if (onSale != null) {
+        parameter += "&on_sale=$onSale";
       }
-      if (min_price != null) {
-        parameter += "&min_price=$min_price";
+      if (minPrice != null) {
+        parameter += "&min_price=$minPrice";
       }
-      if (max_price != null) {
-        parameter += "&max_price=$max_price";
+      if (maxPrice != null) {
+        parameter += "&max_price=$maxPrice";
       }
       if (brand != null) {
         parameter += "&brand=$brand";
       }
-      if (str_search != null) {
-        parameter += "&search=$str_search";
+      if (strSearch != null) {
+        parameter += "&search=$strSearch";
       }
-      if (per_page != null) {
-        parameter += "&per_page=$per_page";
+      if (perPage != null) {
+        parameter += "&per_page=$perPage";
       }
       if (page != null) {
         parameter += "&page=$page";
       }
-      if (category_id != null) {
-        parameter += "&category=$category_id";
+      if (categoryId != null) {
+        parameter += "&category=$categoryId";
       }
-      if (productIDs != null) {
-        parameter += "&include=${productIDs.join(",").toString()}";
+      if (productIds != null) {
+        parameter += "&include=${productIds.join(",").toString()}";
       }
       if (colorList != null) {
         var value = "pa_color:$colorList";

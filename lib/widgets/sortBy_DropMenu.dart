@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wooapp/models/category.dart';
-import 'package:wooapp/models/mockdata/item_categories.dart';
+import 'package:wooapp/models/item_categories.dart';
 import 'package:wooapp/widgets/loading.dart';
 
 class sortByDropMenu extends StatefulWidget {

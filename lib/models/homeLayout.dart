@@ -13,55 +13,55 @@ String homeLayoutToJson(HomeLayout data) => json.encode(data.toJson());
 class HomeLayout {
   HomeLayout({
     this.topSeller,
-    this.tspnumber,
+    this.pNumber,
     this.featuredProducts,
-    this.fpnumber,
+    this.fNumber,
     this.saleProducts,
-    this.salepnumber,
+    this.saleNumber,
     this.topRatedProducts,
-    this.topRatedPnumber,
+    this.topRatedNumber,
     this.sectionBanners,
     this.banners,
     this.categories,
   });
 
-  List<ProductModel> topSeller;
-  int tspnumber;
-  List<ProductModel> featuredProducts;
-  int fpnumber;
-  List<ProductModel> saleProducts;
-  int salepnumber;
-  List<ProductModel> topRatedProducts;
-  int topRatedPnumber;
-  List<SectionBanner> sectionBanners;
-  List<HomeLayoutBanner> banners;
-  List<HomeLayoutCategory> categories;
+  List<ProductModel>? topSeller;
+  int? pNumber;
+  List<ProductModel>? featuredProducts;
+  int? fNumber;
+  List<ProductModel>? saleProducts;
+  int? saleNumber;
+  List<ProductModel>? topRatedProducts;
+  int? topRatedNumber;
+  List<SectionBanner>? sectionBanners;
+  List<HomeLayoutBanner>? banners;
+  List<HomeLayoutCategory>? categories;
 
   factory HomeLayout.fromJson(Map<String, dynamic> json) => HomeLayout(
     topSeller:json["top_seller"] ==null || json["top_seller"]==false ? null: List<ProductModel>.from(json["top_seller"].map((x) => ProductModel.fromJson(x))),
-    tspnumber: json["tspnumber"],
+    pNumber: json["tspnumber"],
     featuredProducts: json["featured_products"] ==null || json["featured_products"]==false ? null: List<ProductModel>.from(json["featured_products"].map((x) => ProductModel.fromJson(x))),
-    fpnumber: json["fpnumber"],
+    fNumber: json["fpnumber"],
     saleProducts:json["sale_products"] ==null || json["sale_products"]==false ? null: List<ProductModel>.from(json["sale_products"].map((x) => ProductModel.fromJson(x))),
-    salepnumber: json["salepnumber"],
+    saleNumber: json["salepnumber"],
     topRatedProducts:json["top_rated_products"] ==null || json["top_rated_products"]==false ? null:  List<ProductModel>.from(json["top_rated_products"].map((x) => ProductModel.fromJson(x))),
-    topRatedPnumber: json["top_rated_pnumber"],
+    topRatedNumber: json["top_rated_pnumber"],
     sectionBanners: json["section_banners"]==null ?  null : List<SectionBanner>.from(json["section_banners"].map((x) => SectionBanner.fromJson(x))),
     banners:json["banners"]==null ?  null :  List<HomeLayoutBanner>.from(json["banners"].map((x) => HomeLayoutBanner.fromJson(x))),
     categories: List<HomeLayoutCategory>.from(json["categories"].map((x) => HomeLayoutCategory.fromJson(x))),
   );
   Map<String, dynamic> toJson() => {
-    "top_seller": topSeller !=null ? List<dynamic>.from(topSeller.map((x) => x.toJson())): null,
-    "tspnumber": tspnumber,
-    "featured_products": featuredProducts!=null && featuredProducts.length>0 ? List<dynamic>.from(featuredProducts.map((x) => x.toJson())) : null,
-    "fpnumber": fpnumber,
-    "sale_products": List<dynamic>.from(saleProducts.map((x) => x.toJson())),
-    "salepnumber": salepnumber,
-    "top_rated_products": List<dynamic>.from(topRatedProducts.map((x) => x.toJson())),
-    "top_rated_pnumber": topRatedPnumber,
-    "section_banners":sectionBanners ==null || sectionBanners.length<=0 ? null:  List<dynamic>.from(sectionBanners.map((x) => x.toJson())),
-    "banners":banners ==null || banners.length<=0 ? null:  List<dynamic>.from(banners.map((x) => x.toJson())),
-    "categories": List<dynamic>.from(categories.map((x) => x.toJson())),
+    "top_seller": topSeller !=null ? List<dynamic>.from(topSeller!.map((x) => x.toJson())): null,
+    "tspnumber": pNumber,
+    "featured_products": featuredProducts!=null && featuredProducts!.length>0 ? List<dynamic>.from(featuredProducts!.map((x) => x.toJson())) : null,
+    "fpnumber": fNumber,
+    "sale_products": List<dynamic>.from(saleProducts!.map((x) => x.toJson())),
+    "salepnumber": saleNumber,
+    "top_rated_products": List<dynamic>.from(topRatedProducts!.map((x) => x.toJson())),
+    "top_rated_pnumber": topRatedNumber,
+    "section_banners":sectionBanners ==null || sectionBanners!.length<=0 ? null:  List<dynamic>.from(sectionBanners!.map((x) => x.toJson())),
+    "banners":banners ==null || banners!.length<=0 ? null:  List<dynamic>.from(banners!.map((x) => x.toJson())),
+    "categories": List<dynamic>.from(categories!.map((x) => x.toJson())),
   };
 }
 
@@ -72,20 +72,21 @@ class HomeLayoutBanner {
     this.banner,
   });
 
-  String title;
-  String location;
-  List<BannerBanner> banner;
+  String? title;
+  String? location;
+  List<BannerBanner>? banner;
 
   factory HomeLayoutBanner.fromJson(Map<String, dynamic> json) => HomeLayoutBanner(
     title: json["title"],
     location: json["location"],
-    banner: List<BannerBanner>.from(json["banner"].map((x) => BannerBanner.fromJson(x))),
+    banner: json["banner"]!=null ?
+    List<BannerBanner>.from(json["banner"].map((x) => BannerBanner.fromJson(x))): null,
   );
 
   Map<String, dynamic> toJson() => {
     "title": title,
     "location": location,
-    "banner": List<dynamic>.from(banner.map((x) => x.toJson())),
+    "banner": banner!=null ? List<dynamic>.from(banner!.map((x) => x.toJson())): null,
   };
 }
 
@@ -96,9 +97,9 @@ class BannerBanner {
     this.bannerUrl,
   });
 
-  String bannerType;
-  String connectId;
-  String bannerUrl;
+  String? bannerType;
+  String? connectId;
+  String? bannerUrl;
 
   factory BannerBanner.fromJson(Map<String, dynamic> json) => BannerBanner(
     bannerType: json["banner_type"],
@@ -120,9 +121,9 @@ class HomeLayoutCategory {
     this.image,
   });
 
-  String name;
-  String id;
-  String image;
+  String? name;
+  String? id;
+  String? image;
 
   factory HomeLayoutCategory.fromJson(Map<String, dynamic> json) => HomeLayoutCategory(
     name: json["name"],
@@ -178,167 +179,10 @@ final categorySlugValues = EnumValues({
   "tshirts": CategorySlug.TSHIRTS
 });
 
-class Dimensions {
-  Dimensions({
-    this.length,
-    this.width,
-    this.height,
-  });
-
-  String length;
-  String width;
-  String height;
-
-  factory Dimensions.fromJson(Map<String, dynamic> json) => Dimensions(
-    length: json["length"],
-    width: json["width"],
-    height: json["height"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "length": length,
-    "width": width,
-    "height": height,
-  };
-}
-
-class Download {
-  Download({
-    this.id,
-    this.name,
-    this.file,
-  });
-
-  String id;
-  String name;
-  String file;
-
-  factory Download.fromJson(Map<String, dynamic> json) => Download(
-    id: json["id"],
-    name: json["name"],
-    file: json["file"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "file": file,
-  };
-}
-
-class Images {
-  Images({
-    this.id,
-    this.dateCreated,
-    this.dateCreatedGmt,
-    this.dateModified,
-    this.dateModifiedGmt,
-    this.src,
-    this.name,
-    this.alt,
-    this.position,
-  });
-
-  int id;
-  DateTime dateCreated;
-  DateTime dateCreatedGmt;
-  DateTime dateModified;
-  DateTime dateModifiedGmt;
-  String src;
-  String name;
-  String alt;
-  int position;
-
-  factory Images.fromJson(Map<String, dynamic> json) => Images(
-    id: json["id"],
-    dateCreated: DateTime.parse(json["date_created"]),
-    dateCreatedGmt: DateTime.parse(json["date_created_gmt"]),
-    dateModified: DateTime.parse(json["date_modified"]),
-    dateModifiedGmt: DateTime.parse(json["date_modified_gmt"]),
-    src: json["src"],
-    name: json["name"],
-    alt: json["alt"],
-    position: json["position"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "date_created": dateCreated.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt.toIso8601String(),
-    "date_modified": dateModified.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt.toIso8601String(),
-    "src": src,
-    "name": name,
-    "alt": alt,
-    "position": position,
-  };
-}
-
-class Links {
-  Links({
-    this.self,
-    this.collection,
-  });
-
-  List<Collection> self;
-  List<Collection> collection;
-
-  factory Links.fromJson(Map<String, dynamic> json) => Links(
-    self: List<Collection>.from(json["self"].map((x) => Collection.fromJson(x))),
-    collection: List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "self": List<dynamic>.from(self.map((x) => x.toJson())),
-    "collection": List<dynamic>.from(collection.map((x) => x.toJson())),
-  };
-}
-
-class Collection {
-  Collection({
-    this.href,
-  });
-
-  String href;
-
-  factory Collection.fromJson(Map<String, dynamic> json) => Collection(
-    href: json["href"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "href": href,
-  };
-}
 
 
 
 
-
-enum ShippingClass { RAJASTHAN }
-
-final shippingClassValues = EnumValues({
-  "rajasthan": ShippingClass.RAJASTHAN
-});
-
-enum ShortDescription { P_THIS_IS_A_SIMPLE_PRODUCT_P, P_THIS_IS_A_VARIABLE_PRODUCT_P, P_THIS_IS_A_SIMPLE_VIRTUAL_PRODUCT_P }
-
-final shortDescriptionValues = EnumValues({
-  "<p>This is a simple product.</p>\n": ShortDescription.P_THIS_IS_A_SIMPLE_PRODUCT_P,
-  "<p>This is a simple, virtual product.</p>\n": ShortDescription.P_THIS_IS_A_SIMPLE_VIRTUAL_PRODUCT_P,
-  "<p>This is a variable product.</p>\n": ShortDescription.P_THIS_IS_A_VARIABLE_PRODUCT_P
-});
-
-enum Status { PUBLISH }
-
-final statusValues = EnumValues({
-  "publish": Status.PUBLISH
-});
-
-enum TaxStatus { TAXABLE }
-
-final taxStatusValues = EnumValues({
-  "taxable": TaxStatus.TAXABLE
-});
 
 enum Type { SIMPLE, VARIABLE }
 
@@ -356,18 +200,19 @@ class SectionBanner {
     this.banner,
   });
 
-  String title;
-  String layoutType;
-  String backgroundColor;
-  String titleColor;
-  List<BannerBanner> banner;
+  String? title;
+  String? layoutType;
+  String? backgroundColor;
+  String? titleColor;
+  List<BannerBanner>? banner;
 
   factory SectionBanner.fromJson(Map<String, dynamic> json) => SectionBanner(
     title: json["title"],
     layoutType: json["layout_type"],
     backgroundColor: json["background_color"],
     titleColor: json["title_color"],
-    banner: List<BannerBanner>.from(json["banner"].map((x) => BannerBanner.fromJson(x))),
+    banner: json["banner"]!=null ?
+    List<BannerBanner>.from(json["banner"].map((x) => BannerBanner.fromJson(x))) : null,
   );
 
   Map<String, dynamic> toJson() => {
@@ -375,6 +220,7 @@ class SectionBanner {
     "layout_type": layoutType,
     "background_color": backgroundColor,
     "title_color": titleColor,
-    "banner": List<dynamic>.from(banner.map((x) => x.toJson())),
+    "banner": banner!=null ?
+    List<dynamic>.from(banner!.map((x) => x.toJson())): null,
   };
 }

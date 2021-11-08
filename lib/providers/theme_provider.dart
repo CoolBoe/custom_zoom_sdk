@@ -13,7 +13,7 @@ class ThemeProvider with ChangeNotifier{
     backgroundColor: Colors.black,
     canvasColor: Color(0xFF38464c),
     shadowColor: Color(0xFF313639) ,
-    accentColor: Colors.white,
+    primaryColorLight: Colors.white,
     unselectedWidgetColor: Colors.white,
     disabledColor: Colors.blue,
     focusColor:  Color(0xFF5A5E61),
@@ -32,17 +32,18 @@ class ThemeProvider with ChangeNotifier{
     bottomAppBarColor: Colors.white,
     highlightColor: Color(0xFF000000),
     backgroundColor:Color(0xFFFEFDFD),
-    accentColor: Colors.black,
+    primaryColorLight: Colors.black,
     dividerColor: Colors.black12,
   );
 
-  ThemeData _themeData;
+  late ThemeData _themeData;
+
   ThemeProvider.initialize(){
-    BasePrefs.init();
+    _themeData = darkTheme;
   }
 
-  ThemeNotifier() {
-    BasePrefs.readData(app_Theme).then((value) {
+  themeNotifier() {
+    BasePrefs.getString(app_Theme).then((value) {
       print('value read from storage: ' + value.toString());
       var themeMode = value ?? dark_Mode;
       if (themeMode == lightTheme) {
@@ -57,19 +58,19 @@ class ThemeProvider with ChangeNotifier{
 
   void setDarkMode() async {
     _themeData = darkTheme;
-    BasePrefs.saveData(app_Theme, dark_Mode);
+    BasePrefs.setString(app_Theme, dark_Mode);
     notifyListeners();
   }
 
   void setLightMode() async {
     _themeData = lightTheme;
-    BasePrefs.saveData(app_Theme, light_Mode);
+    BasePrefs.setString(app_Theme, light_Mode);
     notifyListeners();
   }
 
-  ThemeData getTheme(){
+  Future<ThemeData> getTheme()async{
 
-    if(BasePrefs!=null && BasePrefs.getString(app_Theme)!=null && BasePrefs.getString(app_Theme)== dark_Mode){
+    if(await BasePrefs.getString(app_Theme)!=null && await BasePrefs.getString(app_Theme)== dark_Mode){
       return darkTheme;
     }else{
       return lightTheme;
