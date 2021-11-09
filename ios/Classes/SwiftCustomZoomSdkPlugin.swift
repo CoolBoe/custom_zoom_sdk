@@ -7,12 +7,12 @@ public class SwiftCustomZoomSdkPlugin: NSObject, FlutterPlugin, FlutterStreamHan
   var authenticationDelegate: AuthenticationDelegate
   var eventSink: FlutterEventSink?
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let messenger = register.messanger()
-    let channel = FlutterMethodChannel(name: "custom_zoom_sdk", binaryMessanger: messanger)
+    let messenger = registrar.messanger()
+    let channel = FlutterMethodChannel(name: "custom_zoom_sdk", binaryMessanger: messenger)
     let instance = SwiftCustomZoomSdkPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
 
-    let eventChannel  = FlutterEventChannel(name: "custom_zoom_event", binaryMessanger: messanger)
+    let eventChannel  = FlutterEventChannel(name: "custom_zoom_event", binaryMessanger: messenger)
     eventChannel.setStreamHandler(instance)
   }
 
@@ -149,7 +149,7 @@ public class SwiftCustomZoomSdkPlugin: NSObject, FlutterPlugin, FlutterStreamHan
             user.userType = .apiUser
             user.meetingNumber = arguments["meetingId"]!!
             user.userName = arguments["displayName"]!!
-            user.userToken = arguments["zoomToken"]!!
+            // user.userToken = arguments["zoomToken"]!!
             user.userID = arguments["userId"]!!
             user.zak = arguments["zoomAccessToken"]!!
 
