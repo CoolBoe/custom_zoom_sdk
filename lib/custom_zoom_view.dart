@@ -12,7 +12,7 @@ class CustomZoomView extends StatefulWidget {
     Key? key,
     this.zoomInitilaizedWithToken,
     this.zoomInitilaizedWithOutToken,
-     this.meetingOptions,
+    this.meetingOptions,
     this.onViewCreated,
   }) : super(key: key);
 
@@ -117,7 +117,6 @@ class ZoomViewController {
     optionMap.putIfAbsent("noDisconnectAudio", () => options.noDisconnectAudio);
     optionMap.putIfAbsent("viewOptions", () => options.viewOptions);
     optionMap.putIfAbsent("noAudio", () => options.noAudio);
-
     return _methodChannel.invokeMethod('join', optionMap);
   }
 
@@ -153,7 +152,6 @@ class ZoomViewController {
     optionMap.putIfAbsent("viewOptions", () => options.viewOptions);
     optionMap.putIfAbsent("noDisconnectAudio", () => options.noDisconnectAudio);
     optionMap.putIfAbsent("noAudio", () => options.noAudio);
-
     return _methodChannel.invokeMethod('login', optionMap);
   }
 

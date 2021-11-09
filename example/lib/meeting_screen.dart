@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:custom_zoom_sdk/custom_zoom_options.dart';
 import 'package:custom_zoom_sdk/custom_zoom_view.dart';
 

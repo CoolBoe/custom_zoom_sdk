@@ -73,8 +73,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation "com.google.crypto.tink:tink-android:1.5.0"
     implementation "androidx.security:security-crypto:1.1.0-alpha03"
-    implementation fileTree(include: '*.aar', dir: '../../../android/libs/commonlib/')
-    implementation fileTree(include: '*.aar', dir: '../../../android/libs/mobilertc/')
+    implementation fileTree(include: '*.aar', dir: '../../../android/libs/')
+    implementation fileTree(include: '*.aar', dir: '../../../android/libs/')
 
 //    implementation fileTree(dir: '../../../android/libs/commonlib/', include: ["*.aar"])
 //    implementation fileTree(dir: '../../../android/libs/mobilertc/', include: ["*.aar"])
