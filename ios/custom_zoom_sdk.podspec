@@ -1,6 +1,5 @@
-#
+    #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint custom_zoom_sdk.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
   s.name             = 'custom_zoom_sdk'
@@ -17,12 +16,9 @@ A new Flutter plugin for zoom customization.
   s.dependency 'Flutter'
   s.platform = :ios, '8.0'
 
-  # Flutter.framework does not contain a i386 slice.
-  s.pod_target_xcconfig = { 'OTHER_LDFLAGS' => '-framework MobileRTC', 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
-  s.swift_version = '5.0'
   s.xcconfig = { 'OTHER_LDFLAGS' => '-framework MobileRTC' }
-  s.preserve_paths = 'MobileRTC.xcframework', 'MobileRTCResources.bundle'
-  s.vendored_frameworks = 'MobileRTC.xcframework'
+  s.preserve_paths = 'MobileRTC.framework', 'MobileRTCResources.bundle'
+  s.vendored_frameworks = 'MobileRTC.framework'
   s.resource = 'MobileRTCResources.bundle'
 
 end
