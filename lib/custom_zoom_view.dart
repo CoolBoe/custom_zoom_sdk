@@ -42,7 +42,10 @@ class _CustomZoomViewState extends State<CustomZoomView> {
       );
     }
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return Container();
+      return UiKitView(
+        viewType: 'custom_zoom_sdk',
+        onPlatformViewCreated: _onPlatformViewCreated,
+      );
     }
     return Text(
         '$defaultTargetPlatform is not yet supported by the custom_zoom_sdk plugin');
