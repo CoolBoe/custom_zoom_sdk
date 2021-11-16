@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:custom_zoom_sdk/custom_zoom_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'custom_zoom_options.dart';
 
-typedef void ZoomViewCreatedCallback(ZoomViewController controller);
+typedef ZoomViewCreatedCallback = void Function(ZoomViewController controller);
 
 class CustomZoomView extends StatefulWidget {
   const CustomZoomView({
@@ -32,6 +32,7 @@ class _CustomZoomViewState extends State<CustomZoomView> {
     print("platformView:- ");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     print("platformView:- $defaultTargetPlatform");
@@ -63,22 +64,22 @@ class _CustomZoomViewState extends State<CustomZoomView> {
 
 class ZoomViewController {
   ZoomViewController._(int id)
-      : _methodChannel =
-            new MethodChannel('custom_zoom_sdk'),
-        _zoomStatusEventChannel =
-            new EventChannel("custom_zoom_event");
+      : _methodChannel = new MethodChannel('custom_zoom_sdk'),
+        _zoomStatusEventChannel = new EventChannel("custom_zoom_event");
 
   final MethodChannel _methodChannel;
   final EventChannel _zoomStatusEventChannel;
 
-  Future<dynamic> zoomInitializedWithToken(ZoomInitilaizedWithToken options) async {
+  Future<dynamic> zoomInitializedWithToken(
+      ZoomInitilaizedWithToken options) async {
     var optionMap = new Map<String, String?>();
     optionMap.putIfAbsent("jwtToken", () => options.jwtToken);
     optionMap.putIfAbsent("domain", () => options.domain);
     return _methodChannel.invokeMethod('init', optionMap);
   }
-  Future<dynamic> zoomInitializedWithOutToken(ZoomInitilaizedWithOutToken options) async {
 
+  Future<dynamic> zoomInitializedWithOutToken(
+      ZoomInitilaizedWithOutToken options) async {
     var optionMap = new Map<String, String?>();
     optionMap.putIfAbsent("appKey", () => options.appKey);
     optionMap.putIfAbsent("appSecret", () => options.appSecret);
@@ -128,11 +129,15 @@ class ZoomViewController {
     optionMap.putIfAbsent("canJoinBeforeHost", () => options.canJoinBeforeHost);
     optionMap.putIfAbsent("setPassword", () => options.setPassword);
     optionMap.putIfAbsent("setHostVideoOff", () => options.setHostVideoOff);
-    optionMap.putIfAbsent("setAttendeeVideoOff", () => options.setAttendeeVideoOff);
+    optionMap.putIfAbsent(
+        "setAttendeeVideoOff", () => options.setAttendeeVideoOff);
     optionMap.putIfAbsent("setTimeZoneId", () => options.setTimeZoneId);
-    optionMap.putIfAbsent("setEnableMeetingToPublic", () => options.setEnableMeetingToPublic);
-    optionMap.putIfAbsent("setEnableLanguageInterpretation", () => options.setEnableLanguageInterpretation);
-    optionMap.putIfAbsent("setEnableWaitingRoom", () => options.setEnableWaitingRoom);
+    optionMap.putIfAbsent(
+        "setEnableMeetingToPublic", () => options.setEnableMeetingToPublic);
+    optionMap.putIfAbsent("setEnableLanguageInterpretation",
+        () => options.setEnableLanguageInterpretation);
+    optionMap.putIfAbsent(
+        "setEnableWaitingRoom", () => options.setEnableWaitingRoom);
     optionMap.putIfAbsent("enableAutoRecord", () => options.enableAutoRecord);
     optionMap.putIfAbsent("autoLocalRecord", () => options.autoLocalRecord);
     optionMap.putIfAbsent("autoCloudRecord", () => options.autoCloudRecord);
@@ -156,7 +161,6 @@ class ZoomViewController {
   }
 
   Future<dynamic> meetingStatus(String meetingId) async {
-
     var optionMap = new Map<String, String>();
     optionMap.putIfAbsent("meetingId", () => meetingId);
 

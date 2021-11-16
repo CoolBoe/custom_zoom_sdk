@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface CustomZoomSdkPlugin : NSObject<FlutterPlugin>
+@interface FlutterZoomPlugin : NSObject<FlutterPlugin>
 @end

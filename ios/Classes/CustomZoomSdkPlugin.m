@@ -3,6 +3,6 @@
 
 @implementation CustomZoomSdkPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [CustomZoomSdkPlugin registerWithRegistrar:registrar];
+   [CustomZoomSdkPlugin registerWithRegistrar:registrar];
 }
 @end
