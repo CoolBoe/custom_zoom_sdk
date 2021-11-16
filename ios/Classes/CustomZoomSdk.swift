@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import MobileRTC
 
-public class CustomZoomSdkPlugin: NSObject, FlutterPlugin {
+public class CustomZoomSdk: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
 
         let factory = ZoomViewFactory(messenger: registrar.messenger())

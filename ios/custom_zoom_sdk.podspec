@@ -17,7 +17,7 @@ A new Flutter plugin for zoom customization.
   s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
-  s.swift_version = '5.0'
+  # s.swift_version = '5.0'
 
   s.xcconfig = { 'OTHER_LDFLAGS' => '-framework MobileRTC' }
   s.preserve_paths = 'MobileRTC.framework', 'MobileRTCResources.bundle'
