@@ -38,23 +38,23 @@ void main(List<String> args) async {
 }
 
 Future<void> checkAndDownloadSDK(String location) async {
-  var iosSDKFile = location +
-      '/ios/MobileRTC.xcframework/ios-arm64_armv7/MobileRTC.framework/MobileRTC'';
+  var iosSDKFile = location + '/ios/MobileRTC.framework/MobileRTC';
   bool exists = await File(iosSDKFile).exists();
 
   if (!exists) {
     await downloadFile(
-        Uri.parse('https://www.dropbox.com/s/m8lcf3fmq5v87h3/MobileRTC.zip?dl=1'),
+        Uri.parse(
+            'https://www.dropbox.com/s/m8lcf3fmq5v87h3/MobileRTC.zip?dl=1'),
         iosSDKFile);
   }
 
-  var iosSimulateSDKFile = location +
-      '/ios/MobileRTC.xcframework/ios-i386_x86_64-simulator/MobileRTC.framework/MobileRTC';
+  var iosSimulateSDKFile = location + '/ios/MobileRTC.framework/MobileRTC';
   exists = await File(iosSimulateSDKFile).exists();
 
   if (!exists) {
     await downloadFile(
-        Uri.parse('https://www.dropbox.com/s/p2od2gqo7m9gtiu/MobileRTC.zip?dl=1'),
+        Uri.parse(
+            'https://www.dropbox.com/s/p2od2gqo7m9gtiu/MobileRTC.zip?dl=1'),
         iosSimulateSDKFile);
   }
 
